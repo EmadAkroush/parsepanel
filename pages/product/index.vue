@@ -27,36 +27,56 @@
       <!-- Header Section -->
       <template #header>
         <div class="flex flex-wrap items-center justify-between gap-2">
-          <span class="text-xl font-bold">محصولات</span> <!-- Persian Text -->
-          <Button icon="mdi mdi-refresh" rounded raised />
+          <div class="flex justify-between items-center mb-4">
+            <div class="flex items-center">
+              <!-- <img class="w-10 h-10 rounded-full ml-4" src="path/to/avatar.png" alt="User Avatar"> -->
+              <div class="relative">
+                <img
+                  src="/public/listbargiry/icons-Line-search.png"
+                  alt=""
+                  style="position: absolute; top: 8px; left: 10px"
+                />
+                <input
+                  type="text"
+                  placeholder="جستجوی محصول"
+                  class="border rounded-lg px-8 py-2"
+                />
+              </div>
+            </div>
+          </div>
+          <Button label="محصول جدید" severity="success" icon="mdi mdi-plus" iconPos="right" />
         </div>
       </template>
 
       <!-- Columns -->
-      <Column field="name" header="نام" />
-      <Column header="تصویر">
+      <Column field="name" header="نام" style="text-align: start;" />
+      <Column header="تصویر" style="text-align: start;">
         <template #body="slotProps">
           <img
-            :src="`https://primefaces.org/cdn/primevue/images/product/${slotProps.data.image}`"
-            :alt="slotProps.data.image"
+            src="/public/girbox.jpg"
+      
             class="w-24 rounded"
           />
         </template>
       </Column>
-      <Column field="price" header="قیمت">
+      <Column field="price" header="قیمت" style="text-align: start;">
         <template #body="slotProps">
           {{ formatCurrency(slotProps.data.price) }}
         </template>
       </Column>
-      <Column field="category" header="دسته‌بندی" />
-      <Column field="rating" header="نظرات">
+      <Column field="category" header="دسته‌بندی"  style="text-align: start;"/>
+      <Column field="code" header="کد محصول" style="text-align: start;">
+       
+      </Column>
+      <Column field="rating" header="ویرایش" style="text-align: start;">
         <template #body="slotProps">
-          <Rating :modelValue="slotProps.data.rating" readonly />
+          <i class="mdi mdi-pencil" style="font-size: 2.5rem"></i>
         </template>
       </Column>
-      <Column header="وضعیت">
+   
+      <Column header="حذف" style="text-align: start;">
         <template #body="slotProps">
-          <Tag :value="slotProps.data.inventoryStatus" :severity="getSeverity(slotProps.data)" />
+          <i class="mdi mdi-delete" style="font-size: 2.5rem"></i>
         </template>
       </Column>
 
@@ -104,43 +124,60 @@ export default {
     return {
       products: [
         {
-          name: "Laptop",
+          name: "گیربکس",
           image: "laptop.png",
           price: 999.99,
-          category: "Electronics",
-          rating: 4,
-          inventoryStatus: "In Stock",
+          category: "جلوبندی",
+          code: "ffff",
+    
         },
         {
-          name: "Headphones",
-          image: "headphones.png",
-          price: 199.99,
-          category: "Accessories",
-          rating: 3,
-          inventoryStatus: "Low Stock",
+          name: "گیربکس",
+          image: "laptop.png",
+          price: 999.99,
+          category: "جلوبندی",
+          code: "ffff",
+    
         },
         {
-          name: "Smartphone",
-          image: "smartphone.png",
-          price: 499.99,
-          category: "Electronics",
-          rating: 5,
-          inventoryStatus: "Out of Stock",
+          name: "گیربکس",
+          image: "laptop.png",
+          price: 999.99,
+          category: "جلوبندی",
+          code: "ffff",
+    
         },
         {
-          name: "Washing Machine",
-          image: "washing_machine.png",
-          price: 799.99,
-          category: "Home Appliances",
-          rating: 4,
-          inventoryStatus: "In Stock",
+          name: "گیربکس",
+          image: "laptop.png",
+          price: 999.99,
+          category: "جلوبندی",
+          code: "ffff",
+    
         },
+        {
+          name: "گیربکس",
+          image: "laptop.png",
+          price: 999.99,
+          category: "جلوبندی",
+          code: "ffff",
+    
+        },
+        {
+          name: "گیربکس",
+          image: "laptop.png",
+          price: 999.99,
+          category: "جلوبندی",
+          code: "ffff",
+    
+        },
+   
       ],
     };
   },
   methods: {
     formatCurrency(value) {
-      return `$${value.toFixed(2)}`;
+      return `${value.toFixed(3)}`;
     },
     getSeverity(product) {
       switch (product.inventoryStatus) {

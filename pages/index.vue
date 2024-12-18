@@ -30,11 +30,8 @@
             "
           >
             <div class="mx-auto p-6">
-              <h2 class="font-bold mb-4 text-right">سفر های انجام شده</h2>
-              <div>
-                <span> سفر های داخلی </span>
-                <span class="mr-6"> سفر های خارجی </span>
-              </div>
+              <h2 class="font-bold mb-4 text-right">فروش های های انجام شده</h2>
+          
               <Chart
                 type="line"
                 :data="chartData1"
@@ -56,7 +53,7 @@
           >
             <div class="p-6 mx-auto">
               <h2 class="text-2xl font-bold mb-4 text-right">
-                سفر های درحال انجام
+               فروش های انجام شده
               </h2>
               <Chart
                 type="bar"
@@ -163,17 +160,17 @@ export default {
         ],
         datasets: [
           {
-            label: "در انتظار بارگیری",
+            label: "درحال اماده سازی",
             backgroundColor: "rgba(34, 197, 94, 0.6)",
             data: [65, 59, 80, 81, 56, 55, 40, 65, 80, 35, 40, 85],
           },
           {
-            label: "در انتظار بارگیری",
+            label: "درحال ارسال",
             backgroundColor: "rgba(34, 197, 94, 0.4)",
             data: [28, 48, 40, 19, 86, 27, 90, 80, 100, 96, 45, 65],
           },
           {
-            label: "در انتظار بارگیری",
+            label: "ارسال شده",
             backgroundColor: "rgba(34, 197, 94, 0.2)",
             data: [18, 48, 77, 9, 100, 27, 40, 90, 20, 85, 96, 75],
           },

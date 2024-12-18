@@ -120,17 +120,17 @@ export default {
         },
         {
           label: "مدیریت محصولات",
-          to: "/operation",
+          to: "/product",
           id: 2,
         },
         {
           label: "مدیریت پست ها",
-          to: "/administrative",
+          to: "/",
           id: 3,
         },
         {
           label: "مدیریت سفارشات",
-          to: "/finance",
+          to: "/",
           id: 4,
         },
         {
