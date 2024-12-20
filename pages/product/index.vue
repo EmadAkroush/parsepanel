@@ -44,7 +44,9 @@
               </div>
             </div>
           </div>
+          <nuxt-link to="/product/new">
           <Button label="محصول جدید" severity="success" icon="mdi mdi-plus" iconPos="right" />
+        </nuxt-link>
         </div>
       </template>
 
