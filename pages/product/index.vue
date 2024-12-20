@@ -21,74 +21,136 @@
 
     <div>
       <div class="flex flex-row mt-6">
-        <div class="p-6 bg-white rounded-lg shadow-md rtl " style="width: 100%;">
-    <!-- Data Table -->
-    <DataTable :value="products" style="width: 100%;" paginator :rows="10" :rowsPerPageOptions="[5, 10, 20, 50]">
-      <!-- Header Section -->
-      <template #header>
-        <div class="flex flex-wrap items-center justify-between gap-2">
-          <div class="flex justify-between items-center mb-4">
-            <div class="flex items-center">
-              <!-- <img class="w-10 h-10 rounded-full ml-4" src="path/to/avatar.png" alt="User Avatar"> -->
-              <div class="relative">
-                <img
-                  src="/public/listbargiry/icons-Line-search.png"
-                  alt=""
-                  style="position: absolute; top: 8px; left: 10px"
-                />
-                <input
-                  type="text"
-                  placeholder="جستجوی محصول"
-                  class="border rounded-lg px-8 py-2"
-                />
-              </div>
-            </div>
+        <div class="p-6 bg-white rounded-lg shadow-md rtl" style="width: 100%">
+          <!-- Data Table -->
+          <div class="flex  items-center mb-4 gap-4">
+            <nuxt-link to="/product/new">
+                  <Button
+                    label="دسته بندی ها"
+                    severity="success"
+                    icon="mdi mdi-plus"
+                    iconPos="right"
+                  />
+                </nuxt-link>
+                <nuxt-link to="/product/new">
+                  <Button
+                    label="خودرو ها"
+                    severity="success"
+                    icon="mdi mdi-plus"
+                    iconPos="right"
+                  />
+                </nuxt-link>
+                <nuxt-link to="/product/new">
+                  <Button
+                    label="بخش های خودرو"
+                    severity="success"
+                    icon="mdi mdi-plus"
+                    iconPos="right"
+                  />
+                </nuxt-link>
+                <nuxt-link to="/product/new">
+                  <Button
+                    label="شرکت های سازنده"
+                    severity="success"
+                    icon="mdi mdi-plus"
+                    iconPos="right"
+                  />
+                </nuxt-link>
+                <nuxt-link to="/product/new">
+                  <Button
+                    label="برند ها"
+                    severity="success"
+                    icon="mdi mdi-plus"
+                    iconPos="right"
+                  />
+                </nuxt-link>
+                <nuxt-link to="/product/new">
+                  <Button
+                    label="برچسب ها"
+                    severity="success"
+                    icon="mdi mdi-plus"
+                    iconPos="right"
+                  />
+                </nuxt-link>
           </div>
-          <nuxt-link to="/product/new">
-          <Button label="محصول جدید" severity="success" icon="mdi mdi-plus" iconPos="right" />
-        </nuxt-link>
+          <hr>
+          <DataTable
+            class="mt-4"
+            :value="products"
+            style="width: 100%"
+            paginator
+            :rows="10"
+            :rowsPerPageOptions="[5, 10, 20, 50]"
+          >
+            <!-- Header Section -->
+            <template #header>
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex justify-between items-center mb-4">
+                  <div class="flex items-center">
+                    <!-- <img class="w-10 h-10 rounded-full ml-4" src="path/to/avatar.png" alt="User Avatar"> -->
+                    <div class="relative">
+                      <img
+                        src="/public/listbargiry/icons-Line-search.png"
+                        alt=""
+                        style="position: absolute; top: 8px; left: 10px"
+                      />
+                      <input
+                        type="text"
+                        placeholder="جستجوی محصول"
+                        class="border rounded-lg px-8 py-2"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <nuxt-link to="/product/new">
+                  <Button
+                    label="محصول جدید"
+                    severity="success"
+                    icon="mdi mdi-plus"
+                    iconPos="right"
+                  />
+                </nuxt-link>
+              </div>
+            </template>
+
+            <!-- Columns -->
+            <Column field="name" header="نام" style="text-align: start" />
+            <Column header="تصویر" style="text-align: start">
+              <template #body="slotProps">
+                <img src="/public/girbox.jpg" class="w-24 rounded" />
+              </template>
+            </Column>
+            <Column field="price" header="قیمت" style="text-align: start">
+              <template #body="slotProps">
+                {{ formatCurrency(slotProps.data.price) }}
+              </template>
+            </Column>
+            <Column
+              field="category"
+              header="دسته‌بندی"
+              style="text-align: start"
+            />
+            <Column field="code" header="کد محصول" style="text-align: start">
+            </Column>
+            <Column field="rating" header="ویرایش" style="text-align: start">
+              <template #body="slotProps">
+                <i class="mdi mdi-pencil" style="font-size: 2.5rem"></i>
+              </template>
+            </Column>
+
+            <Column header="حذف" style="text-align: start">
+              <template #body="slotProps">
+                <i class="mdi mdi-delete" style="font-size: 2.5rem"></i>
+              </template>
+            </Column>
+
+            <!-- Footer Section -->
+            <template #footer>
+              مجموعاً {{ products ? products.length : 0 }} محصول در لیست وجود
+              دارد.
+            </template>
+          </DataTable>
         </div>
-      </template>
-
-      <!-- Columns -->
-      <Column field="name" header="نام" style="text-align: start;" />
-      <Column header="تصویر" style="text-align: start;">
-        <template #body="slotProps">
-          <img
-            src="/public/girbox.jpg"
-      
-            class="w-24 rounded"
-          />
-        </template>
-      </Column>
-      <Column field="price" header="قیمت" style="text-align: start;">
-        <template #body="slotProps">
-          {{ formatCurrency(slotProps.data.price) }}
-        </template>
-      </Column>
-      <Column field="category" header="دسته‌بندی"  style="text-align: start;"/>
-      <Column field="code" header="کد محصول" style="text-align: start;">
-       
-      </Column>
-      <Column field="rating" header="ویرایش" style="text-align: start;">
-        <template #body="slotProps">
-          <i class="mdi mdi-pencil" style="font-size: 2.5rem"></i>
-        </template>
-      </Column>
-   
-      <Column header="حذف" style="text-align: start;">
-        <template #body="slotProps">
-          <i class="mdi mdi-delete" style="font-size: 2.5rem"></i>
-        </template>
-      </Column>
-
-      <!-- Footer Section -->
-      <template #footer>
-        مجموعاً {{ products ? products.length : 0 }} محصول در لیست وجود دارد.
-      </template>
-    </DataTable>
-  </div>
-      
       </div>
     </div>
   </div>
@@ -131,7 +193,6 @@ export default {
           price: 999.99,
           category: "جلوبندی",
           code: "ffff",
-    
         },
         {
           name: "گیربکس",
@@ -139,7 +200,6 @@ export default {
           price: 999.99,
           category: "جلوبندی",
           code: "ffff",
-    
         },
         {
           name: "گیربکس",
@@ -147,7 +207,6 @@ export default {
           price: 999.99,
           category: "جلوبندی",
           code: "ffff",
-    
         },
         {
           name: "گیربکس",
@@ -155,7 +214,6 @@ export default {
           price: 999.99,
           category: "جلوبندی",
           code: "ffff",
-    
         },
         {
           name: "گیربکس",
@@ -163,7 +221,6 @@ export default {
           price: 999.99,
           category: "جلوبندی",
           code: "ffff",
-    
         },
         {
           name: "گیربکس",
@@ -171,9 +228,7 @@ export default {
           price: 999.99,
           category: "جلوبندی",
           code: "ffff",
-    
         },
-   
       ],
     };
   },
