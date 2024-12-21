@@ -23,58 +23,43 @@
       <div class="flex flex-row mt-6">
         <div class="p-6 bg-white rounded-lg shadow-md rtl" style="width: 100%">
           <!-- Data Table -->
-          <div class="flex items-center mb-4 gap-4">
-            <nuxt-link to="/product/category">
-              <Button
-                label="دسته بندی ها"
-                severity="success"
-                icon="mdi mdi-plus"
-                iconPos="right"
-              />
-            </nuxt-link>
-            <nuxt-link to="/product/cars">
-              <Button
-                label="خودرو ها"
-                severity="success"
-                icon="mdi mdi-plus"
-                iconPos="right"
-              />
-            </nuxt-link>
-            <nuxt-link to="/product/carparts">
-              <Button
-                label="بخش های خودرو"
-                severity="success"
-                icon="mdi mdi-plus"
-                iconPos="right"
-              />
-            </nuxt-link>
-            <nuxt-link to="/product/companies">
-              <Button
-                label="شرکت های سازنده"
-                severity="success"
-                icon="mdi mdi-plus"
-                iconPos="right"
-              />
-            </nuxt-link>
-            <nuxt-link to="/product/brands">
-              <Button
-                label="برند ها"
-                severity="success"
-                icon="mdi mdi-plus"
-                iconPos="right"
-              />
-            </nuxt-link>
-            <nuxt-link to="/product/tags">
-              <Button
-                label="برچسب ها"
-                severity="success"
-                icon="mdi mdi-plus"
-                iconPos="right"
-              />
-            </nuxt-link>
-            
-            
-          </div>
+          <form
+              class="bg-white p-6 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-4"
+            >
+              <!-- Product Name -->
+              <div>
+                <label class="block text-sm font-semibold mb-1"
+                  > خودرو ها</label
+                >
+                <InputText
+                  v-model="productName"
+                  placeholder="نام خودرو را وارد کنید"
+                  class="w-full"
+                />
+              </div>
+
+
+
+              <!-- Submit Button -->
+              <div class="p-4 flex justify-end md:col-span-2">
+                <!-- Submit Button -->
+                <Button
+                  label="انصراف"
+                  class="text-green-700 font-bold rounded-md px-6 py-2 transition duration-300 ease-in-out transform hover:bg-green-600 active:bg-green-800"
+                  @click="handleSubmit"
+                  variant="outlined"
+                  style="width: 160px; background: none; color: #10b981"
+                />
+
+                <!-- Send Button -->
+                <Button
+                  label="ثبت"
+                  class="border mr-4 border-green-700 text-green-700 font-bold rounded-md px-6 py-2 transition duration-300 ease-in-out transform hover:bg-green-700 hover:text-white active:bg-green-600"
+                  @click="handleSend"
+                  style="width: 160px"
+                />
+              </div>
+            </form>
           <hr />
           <DataTable
             class="mt-4"
@@ -98,42 +83,18 @@
                       />
                       <input
                         type="text"
-                        placeholder="جستجوی محصول"
+                        placeholder="جستجوی خودرو"
                         class="border rounded-lg px-8 py-2"
                       />
                     </div>
                   </div>
                 </div>
-                <nuxt-link to="/product/new">
-                  <Button
-                    label="محصول جدید"
-                    severity="success"
-                    icon="mdi mdi-plus"
-                    iconPos="right"
-                  />
-                </nuxt-link>
               </div>
             </template>
 
             <!-- Columns -->
-            <Column field="name" header="نام" style="text-align: start" />
-            <Column header="تصویر" style="text-align: start">
-              <template #body="slotProps">
-                <img src="/public/girbox.jpg" class="w-24 rounded" />
-              </template>
-            </Column>
-            <Column field="price" header="قیمت" style="text-align: start">
-              <template #body="slotProps">
-                {{ formatCurrency(slotProps.data.price) }}
-              </template>
-            </Column>
-            <Column
-              field="category"
-              header="دسته‌بندی"
-              style="text-align: start"
-            />
-            <Column field="code" header="کد محصول" style="text-align: start">
-            </Column>
+            <Column field="name" header="نام  خودرو" style="text-align: start" />
+
             <Column field="rating" header="ویرایش" style="text-align: start">
               <template #body="slotProps">
                 <i class="mdi mdi-pencil" style="font-size: 2.5rem"></i>
@@ -190,66 +151,47 @@ export default {
     return {
       products: [
         {
-          name: "گیربکس",
+          name: "پراید",
           image: "laptop.png",
           price: 999.99,
           category: "جلوبندی",
           code: "ffff",
         },
         {
-          name: "گیربکس",
+          name: "پراید",
           image: "laptop.png",
           price: 999.99,
           category: "جلوبندی",
           code: "ffff",
         },
         {
-          name: "گیربکس",
+          name: "پراید",
           image: "laptop.png",
           price: 999.99,
           category: "جلوبندی",
           code: "ffff",
         },
         {
-          name: "گیربکس",
+          name: "پراید",
           image: "laptop.png",
           price: 999.99,
           category: "جلوبندی",
           code: "ffff",
         },
         {
-          name: "گیربکس",
+          name: "پراید",
           image: "laptop.png",
           price: 999.99,
           category: "جلوبندی",
           code: "ffff",
         },
-        {
-          name: "گیربکس",
-          image: "laptop.png",
-          price: 999.99,
-          category: "جلوبندی",
-          code: "ffff",
-        },
+ 
       ],
     };
   },
   methods: {
-    formatCurrency(value) {
-      return `${value.toFixed(3)}`;
-    },
-    getSeverity(product) {
-      switch (product.inventoryStatus) {
-        case "In Stock":
-          return "success";
-        case "Low Stock":
-          return "warning";
-        case "Out of Stock":
-          return "danger";
-        default:
-          return "info";
-      }
-    },
+
+
   },
 };
 </script>
