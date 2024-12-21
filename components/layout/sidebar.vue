@@ -124,8 +124,8 @@ export default {
           id: 2,
         },
         {
-          label: "مدیریت پست ها",
-          to: "/",
+          label: "مدیریت مقالات",
+          to: "/post",
           id: 3,
         },
         {
