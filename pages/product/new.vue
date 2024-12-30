@@ -203,8 +203,9 @@
                   :options="brands"
                   placeholder="برند را انتخاب کنید"
                   class="w-full"
-                  optionLabel="label"
+                  optionLabel="name"
                 />
+
               </div>
 
               <!-- Section Type -->
@@ -351,7 +352,7 @@
                 <Button
                   label="ثبت"
                   class="border mr-4 border-green-700 text-green-700 font-bold rounded-md px-6 py-2 transition duration-300 ease-in-out transform hover:bg-green-700 hover:text-white active:bg-green-600"
-                  @click="handleSend"
+                  @click="brans"
                   style="width: 160px"
                 />
               </div>
@@ -390,7 +391,9 @@
 }
 </style>
 <script>
+
 import TiptapEditor from "../../components/TiptapEditor.vue";
+
 
 export default {
   components: {
@@ -398,6 +401,10 @@ export default {
   },
   data() {
     return {
+      data : null,
+      data1 : null,
+      data2 : null,
+
       content: "hello",
       ingredient: null,
       src: null,
@@ -443,19 +450,20 @@ export default {
   methods: {
     submitForm() {
       // Implement form submission logic here
-      alert(
-        "Form submitted with the following data:\n" +
-          `Name: ${this.productName}\n` +
-          `Price: ${this.productPrice}\n` +
-          `Code: ${this.productCode}\n` +
-          `Price with Tax: ${this.priceWithTax}\n` +
-          `Height: ${this.height}\n` +
-          `Secondary Color: ${this.secondaryColor}\n` +
-          `Vehicle Type: ${this.vehicleType}\n` +
-          `Brand: ${this.brand}\n` +
-          `Section Type: ${this.sectionType}\n` +
-          `Submission Method: ${this.submissionMethod}`
-      );
+      // alert(
+      //   "Form submitted with the following data:\n" +
+      //     `Name: ${this.productName}\n` +
+      //     `Price: ${this.productPrice}\n` +
+      //     `Code: ${this.productCode}\n` +
+      //     `Price with Tax: ${this.priceWithTax}\n` +
+      //     `Height: ${this.height}\n` +
+      //     `Secondary Color: ${this.secondaryColor}\n` +
+      //     `Vehicle Type: ${this.vehicleType}\n` +
+      //     `Brand: ${this.brand}\n` +
+      //     `Section Type: ${this.sectionType}\n` +
+      //     `Submission Method: ${this.submissionMethod}`
+      // );
+      console.log("This runs before the component is mounted." , this.content );
     },
     onFileSelect(event) {
       const file = event.files[0];
@@ -477,6 +485,67 @@ export default {
 
       reader.readAsDataURL(file);
     },
+    async brans() {
+      try {
+         this.data = await $fetch('/api/brand');
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.brands = toRaw(this.data.brnads);
+        console.log("ddd",  toRaw(this.data.brnads));
+      }
+    },
+    async carparts() {
+      try {
+         this.data = await $fetch('/api/brand');
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.brands = toRaw(this.data.brnads);
+        console.log("ddd",  toRaw(this.data.brnads));
+
+      }
+    },
+    async category() {
+      try {
+         this.data = await $fetch('/api/brand');
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.brands = toRaw(this.data.brnads);
+        console.log("ddd",  toRaw(this.data.brnads));
+
+      }
+    },
+    async company() {
+      try {
+         this.data = await $fetch('/api/brand');
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.brands = toRaw(this.data.brnads);
+        console.log("ddd",  toRaw(this.data.brnads));
+
+      }
+    },
+
   },
+ 
+  beforeMount() {
+    console.log("This runs before the component is mounted." , this.content );
+    this.brans()
+    this.carparts()
+    this.category()
+    this.company()
+
+  },
+  mounted() {
+		
+	}
+
+
+  
 };
 </script>
+
+

@@ -66,7 +66,7 @@
           </div>
         </div>
       </div>
-   
+     <button @click="brans()">rfff </button>
   
     
     
@@ -240,5 +240,22 @@ export default {
       },
     };
   },
+  methods: {
+    async brans() {
+      try {
+        this.data = await $fetch('/brand', {
+          method: "POST",
+          body: { name: "test3" , display_name : "fgfgf"},
+        });
+      } catch (error) {
+        // errors.value = Object.values(error.data.data.message).flat();
+        console.log(error);
+      } finally {
+        console.log("ddd", this.data);
+      }
+    },
+  },
+
+
 };
 </script>
