@@ -193,7 +193,7 @@ export default {
   methods: {
     async brans() {
       try {
-        this.data = await $fetch('/api/brand/create', {
+        this.data = await useFetch('/api/brand/create', {
           method: 'POST',
           body: { name: this.productName  },
         });
