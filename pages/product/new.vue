@@ -65,7 +65,7 @@
                     قیمت تخفیف دار</label
                   >
                   <InputText
-                    v-model="productPrice"
+                    v-model="priceoff"
                     type="number"
                     placeholder="قیمت را وارد کنید"
                     class="w-full"
@@ -90,7 +90,7 @@
                     طول به سانتی متر
                   </label>
                   <InputText
-                    v-model="priceWithTax"
+                    v-model="productlength"
                     type="number"
                     placeholder="123 "
                     class="w-full"
@@ -103,7 +103,7 @@
                     >عرض به سانتی متر</label
                   >
                   <InputText
-                    v-model="height"
+                    v-model="productwidth"
                     type="number"
                     placeholder=" 125  "
                     class="w-full"
@@ -116,7 +116,7 @@
                     >رنگ اولیه</label
                   >
                   <InputText
-                    v-model="secondaryColor"
+                    v-model="productfirstcolor"
                     placeholder="رنگ اولیه را وارد کنید"
                     class="w-full"
                   />
@@ -127,7 +127,7 @@
                     >رنگ ثانویه</label
                   >
                   <InputText
-                    v-model="secondaryColor"
+                    v-model="productsecondcolor"
                     placeholder="رنگ ثانویه را وارد کنید"
                     class="w-full"
                   />
@@ -139,7 +139,7 @@
                     >کشور سازنده
                   </label>
                   <InputText
-                    v-model="secondaryColor"
+                    v-model="productcountry"
                     placeholder=" کشور سازنده را وارد کنید"
                     style="width: 50%"
                   />
@@ -415,7 +415,13 @@ export default {
       src1: null,
       productName: "",
       productPrice: null,
+      brandModel: null,
+      priceoff: null,
       productCode: "",
+      productlength: null,
+      productwidth: null,
+      productfirstcolor: null,
+      productsecondcolor: null,
       priceWithTax: null,
       height: null,
       secondaryColor: "",
@@ -484,6 +490,17 @@ export default {
         formData.append("tag_id", 1);
         formData.append("primary_image", this.Imagefile);
         formData.append("price", this.productPrice);
+        formData.append("priceoff", this.priceoff);
+        formData.append("productcode", this.productCode);
+        formData.append("product_length", this.productlength);
+        formData.append("product_width", this.productwidth);
+        formData.append("product_first_color", this.productfirstcolor);
+        formData.append("product_second_color", this.productsecondcolor);
+        formData.append("product_country", this.productcountry);
+        formData.append("Inventory_status", this.Inventorystatus);
+        formData.append("product_file", this.productfile);
+        formData.append("product_garanty", this.productgaranty);
+        formData.append("product_send_way", this.productsend_way);
         formData.append("quantity", 1);
         formData.append("delivery_amount", 80000);
         formData.append("description", "fffff");
