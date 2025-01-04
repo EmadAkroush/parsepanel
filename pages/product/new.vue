@@ -151,7 +151,7 @@
                     دسته بندی محصول</label
                   >
                   <Dropdown
-                    v-model="vehicleType"
+                    v-model="categoryModel"
                     :options="category"
                     placeholder="دسته بندی محصول را انتخاب کنید"
                     optionLabel="name"
@@ -163,7 +163,7 @@
                     >نوع خودرو</label
                   >
                   <Dropdown
-                    v-model="vehicleType"
+                    v-model="carModel"
                     :options="cars"
                     placeholder="نوع خودرو را انتخاب کنید"
                     optionLabel="name"
@@ -175,7 +175,7 @@
                     >بخش خودرو
                   </label>
                   <Dropdown
-                    v-model="vehicleType"
+                    v-model="carpartModel"
                     :options="carpart"
                     placeholder="مثلا جلوبندی"
                     optionLabel="name"
@@ -188,7 +188,7 @@
                     شرکت سازنده
                   </label>
                   <Dropdown
-                    v-model="vehicleType"
+                    v-model="companyModel"
                     :options="company"
                     placeholder="شرکت سازنده خودرو را انتخاب کنید"
                     optionLabel="name"
@@ -200,7 +200,7 @@
                 <div>
                   <label class="block text-sm font-semibold mb-1">برند</label>
                   <Dropdown
-                    v-model="brand"
+                    v-model="brandModel"
                     :options="brands"
                     placeholder="برند را انتخاب کنید"
                     class="w-full"
@@ -214,8 +214,8 @@
                     >نوع ضمانت</label
                   >
                   <Dropdown
-                    v-model="sectionType"
-                    :options="sectionTypes"
+                    v-model="productgarantymodel"
+                    :options="productgaranty"
                     placeholder="نوع ضمانت را انتخاب کنید"
                     optionLabel="label"
                     class="w-full"
@@ -226,12 +226,12 @@
                   <label class="block text-sm font-semibold mb-1"
                     >بر چسب های محصول
                   </label>
-                  <MultiSelect
-                    v-model="tagsmodel"
+             
+                  <Dropdown
+                    v-model="tagidModel"
                     :options="tags"
+                   placeholder="انتخاب برچسب"
                     optionLabel="name"
-                    placeholder="انتخاب برچسب"
-                    :maxSelectedLabels="3"
                     class="w-full"
                   />
                 </div>
@@ -242,8 +242,8 @@
                     >روش ارسال</label
                   >
                   <Dropdown
-                    v-model="submissionMethod"
-                    :options="submissionMethods"
+                    v-model="productsendwaymodel"
+                    :options="productsendway"
                     placeholder="روش ارسال را انتخاب کنید"
                     optionLabel="label"
                     class="w-full"
@@ -258,19 +258,19 @@
                       >وضعیت موجودی
                     </label>
                     <RadioButton
-                      v-model="ingredient"
+                      v-model="Inventorystatus"
                       inputId="ingredient1"
                       name="pizza"
-                      value="Cheese"
+                      value="mojod"
                     />
                     <label for="ingredient1">موجود</label>
                   </div>
                   <div class="flex items-center gap-2 mr-4">
                     <RadioButton
-                      v-model="ingredient"
+                      v-model="Inventorystatus"
                       inputId="ingredient2"
                       name="pizza"
-                      value="Mushroom"
+                      value="namojod"
                     />
                     <label for="ingredient2">ناموجود</label>
                   </div>
@@ -416,12 +416,19 @@ export default {
       productName: "",
       productPrice: null,
       brandModel: null,
+      categoryModel: null,
+      carModel: null,
+      carpartModel: null,
+      companyModel: null,
+      tagidModel: null,
       priceoff: null,
       productCode: "",
       productlength: null,
       productwidth: null,
       productfirstcolor: null,
       productsecondcolor: null,
+      productfile: null,
+      Inventorystatus: null,
       priceWithTax: null,
       height: null,
       secondaryColor: "",
@@ -436,16 +443,18 @@ export default {
       company: null,
       tags: null,
       tagsmodel: null,
-      submissionMethods: [
+      productsendway: [
         { label: "پست پیشتاز", value: "postpishtaz" },
         { label: "تیپاکس", value: "tapax" },
-        { label: "هردو", value: "hardo" },
+        { label: "هردو", value: "herdo" },
       ],
-      sectionTypes: [
+      productgaranty: [
         { label: "ضمانت تعمیر", value: "tamir" },
         { label: "ضمانت تعویض", value: "taviz" },
         { label: "هیچ کدام", value: "hichkodum" },
       ],
+      productgarantymodel : null,
+      productsendwaymodel : null
     };
   },
 
@@ -463,6 +472,7 @@ export default {
     },
     onFileSelect1(event) {
       const file = event.files[0];
+      this.productfile = file;
       const reader = new FileReader();
 
       reader.onload = async (e) => {
@@ -476,18 +486,18 @@ export default {
       this.Images = file;
     },
     testdata() {
-      console.log("formData", this.Imagefile);
+      console.log("formData", this.tagidModel);
     },
     async addproduct() {
       try {
         const formData = new FormData();
         formData.append("name", this.productName);
-        formData.append("brand_id", 1);
-        formData.append("category_id", 1);
-        formData.append("car_id", 1);
-        formData.append("carpart_id", 1);
-        formData.append("company_id", 1);
-        formData.append("tag_id", 1);
+        formData.append("brand_id", this.brandModel.id);
+        formData.append("category_id", this.categoryModel.id);
+        formData.append("car_id", this.carModel.id);
+        formData.append("carpart_id", this.carpartModel.id);
+        formData.append("company_id", this.companyModel.id);
+        formData.append("tag_id", this.tagidModel.id);
         formData.append("primary_image", this.Imagefile);
         formData.append("price", this.productPrice);
         formData.append("priceoff", this.priceoff);
@@ -499,13 +509,13 @@ export default {
         formData.append("product_country", this.productcountry);
         formData.append("Inventory_status", this.Inventorystatus);
         formData.append("product_file", this.productfile);
-        formData.append("product_garanty", this.productgaranty);
-        formData.append("product_send_way", this.productsend_way);
+        formData.append("product_garanty", this.productgarantymodel.value);
+        formData.append("product_send_way", this.productsendwaymodel.value);
         formData.append("quantity", 1);
         formData.append("delivery_amount", 80000);
-        formData.append("description", "fffff");
+        formData.append("description", this.content);
         for (let index = 0; index < this.Images.length; index++) {
-          formData.append("images", this.Images[0]);
+          formData.append(`images[${index}]`, this.Images[index]);
         }
         // this.response = await this.$axios.post(
         //   "http://127.0.0.1:8000/api/products",
@@ -516,7 +526,6 @@ export default {
         //     },
         //   }
         // );
-
         this.product = await $fetch("http://127.0.0.1:8000/api/products", {
           method: "POST",
           body: formData,
