@@ -25,6 +25,7 @@
           <!-- Data Table -->
           <form
             class="bg-white p-6 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-4"
+          
           >
             <!-- Product Name -->
             <div>
@@ -42,7 +43,6 @@
               <Button
                 label="انصراف"
                 class="text-green-700 font-bold rounded-md px-6 py-2 transition duration-300 ease-in-out transform hover:bg-green-600 active:bg-green-800"
-                @click="handleSubmit"
                 variant="outlined"
                 style="width: 160px; background: none; color: #10b981"
               />
@@ -59,7 +59,7 @@
           <hr />
           <DataTable
             class="mt-4"
-            :value="products"
+            :value="allbrans"
             style="width: 100%"
             paginator
             :rows="10"
@@ -91,7 +91,7 @@
             <!-- Columns -->
             <Column
               field="name"
-              header="نام شرکت ها"
+              header="نام برند ها"
               style="text-align: start"
             />
 
@@ -101,9 +101,9 @@
               </template>
             </Column>
 
-            <Column header="حذف" style="text-align: start">
+            <Column header="حذف" style="text-align: start" >
               <template #body="slotProps">
-                <i class="mdi mdi-delete" style="font-size: 2.5rem"></i>
+                <i class="mdi mdi-delete" style="font-size: 2.5rem" @click="deletebrands(slotProps.data.id)"></i>
               </template>
             </Column>
 
@@ -116,6 +116,7 @@
         </div>
       </div>
     </div>
+    <Toast position="top-left" group="tl" />
   </div>
 </template>
 <style lang="scss">
@@ -150,7 +151,10 @@ export default {
   data() {
     return {
       data: null,
+      data1: null,
       productName: null,
+      brands : null,
+      allbrans : null,
       products: [
         {
           name: "سایپا",
@@ -190,14 +194,20 @@ export default {
       ],
     };
   },
+  watch: {
+    // وقتی تعداد برندها تغییر کند، درخواست جدیدی به سرور می‌زنیم
+    brandCount(newCount) {
+      this.fetchBrands();
+    },
+  },
   methods: {
     async brans() {
       try {
-        this.data = await useFetch('/api/brand/create', {
+        this.data = await $fetch('/api/brand/create', {
           method: 'POST',
           body: { name: this.productName  },
         });
-        console.log("ddd",  toRaw(this.data));
+        this.$toast.add({ severity: 'success', summary: 'ایجاد برند', detail: 'برند با موفقیت ایجاد شد', group: 'tl', life: 3000 });
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
         console.log(error);
@@ -205,8 +215,34 @@ export default {
         console.log("ddd",  toRaw(this.data));
       }
     },
+    async getbrans() {
+      try {
+        this.brands  = await $fetch('/api/brand');
+        this.allbrans = this.brands.brands
+      } catch (error) {
+        // errors.value = Object.values(error.data.data.message).flat();
+        console.log(error);
+      } finally {
+        console.log("brands",  this.allbrans);
+      }
+    },
+    async deletebrands(id) {
+      try {
+        this.data1 = await $fetch(`/api/brand/delete/${id}`, {
+          method: 'DELETE'
+        });
+        this.$toast.add({ severity: 'success', summary: 'ایجاد برند', detail: 'برند با موفقیت ایجاد شد', group: 'tl', life: 3000 });
+      } catch (error) {
+        // errors.value = Object.values(error.data.data.message).flat();
+        console.log(error);
+      } finally {
+        console.log("ddd",  toRaw(this.data1));
+      }
+    },
 
-    
+  },
+  beforeMount() {
+    this.getbrans();
 
   },
 };

@@ -362,6 +362,7 @@
           </div>
         </div>
       </div>
+      <Toast position="top-left" group="tl" />
     </div>
   </div>
 </template>
@@ -458,6 +459,7 @@ export default {
     };
   },
 
+
   methods: {
     onFileSelect(event) {
       const file = event.files[0];
@@ -531,12 +533,14 @@ export default {
           body: formData,
       
         });
-        console.log("نخم", this.product);
+        this.$toast.add({ severity: 'success', summary: 'ایجاد محصول', detail: 'محصول با موفقیت ایجاد شد', group: 'tl', life: 3000 });
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
         console.log(error);
       } finally {
         console.log("qqq", toRaw(this.product));
+    
+
       }
     },
     async categoryfunc() {
@@ -605,8 +609,6 @@ export default {
   },
 
   beforeMount() {
-    console.log("This runs before the component is mounted.", this.content);
-
     this.categoryfunc();
     this.carsfunc();
     this.carpartsfunc();
