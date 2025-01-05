@@ -1,18 +1,22 @@
 export default defineEventHandler(async (event) => {
-
-    const { public: { apiBase } } = useRuntimeConfig();
+    const body = await readBody(event);
+    const { public: { apiBase } } = useRuntimeConfig()
     // const token = getCookie(event, 'token');
+  console.log("dddddd" , body);
   
     try {
         const data = await $fetch(`${apiBase}/api/company`, {
+            method: 'POST',
+            body: body,
             headers: {
                 'Accept': 'Multipart/Form-Data',
             }
-        });
-  
-        return data.data;
+        })
+        
+        return data;
     } catch (error) {
-        return error;
+        console.log("go" , error);
+        
+        return error
     }
-  
-  })
+})

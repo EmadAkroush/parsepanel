@@ -95,11 +95,7 @@
               style="text-align: start"
             />
 
-            <Column field="rating" header="ویرایش" style="text-align: start">
-              <template #body="slotProps">
-                <i class="mdi mdi-pencil" style="font-size: 2.5rem"></i>
-              </template>
-            </Column>
+
 
             <Column header="حذف" style="text-align: start" >
               <template #body="slotProps">
@@ -196,9 +192,7 @@ export default {
   },
   watch: {
     // وقتی تعداد برندها تغییر کند، درخواست جدیدی به سرور می‌زنیم
-    brandCount(newCount) {
-      this.fetchBrands();
-    },
+ 
   },
   methods: {
     async brans() {
@@ -207,6 +201,7 @@ export default {
           method: 'POST',
           body: { name: this.productName  },
         });
+        this.getbrans();
         this.$toast.add({ severity: 'success', summary: 'ایجاد برند', detail: 'برند با موفقیت ایجاد شد', group: 'tl', life: 3000 });
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
@@ -227,18 +222,23 @@ export default {
       }
     },
     async deletebrands(id) {
+      console.log("ggg" , id);
+      
       try {
-        this.data1 = await $fetch(`/api/brand/delete/${id}`, {
-          method: 'DELETE'
+        this.data1 = await $fetch(`/api/brand/delete`, {
+          method: 'DELETE',
+          query:  { url : `${id}`}
         });
-        this.$toast.add({ severity: 'success', summary: 'ایجاد برند', detail: 'برند با موفقیت ایجاد شد', group: 'tl', life: 3000 });
+        this.getbrans();
+        this.$toast.add({ severity: 'success', summary: ' حذف برند', detail: 'برند با موفقیت حذف شد', group: 'tl', life: 3000 });
       } catch (error) {
-        // errors.value = Object.values(error.data.data.message).flat();
+   
         console.log(error);
       } finally {
         console.log("ddd",  toRaw(this.data1));
       }
     },
+
 
   },
   beforeMount() {

@@ -24,46 +24,42 @@
         <div class="p-6 bg-white rounded-lg shadow-md rtl" style="width: 100%">
           <!-- Data Table -->
           <form
-              class="bg-white p-6 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-4"
-            >
-              <!-- Product Name -->
-              <div>
-                <label class="block text-sm font-semibold mb-1"
-                  > دسته بندی</label
-                >
-                <InputText
-                  v-model="productName"
-                  placeholder="نام دسته بندی را وارد کنید"
-                  class="w-full"
-                />
-              </div>
+            class="bg-white p-6 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-4"
+          
+          >
+            <!-- Product Name -->
+            <div>
+              <label class="block text-sm font-semibold mb-1"> دسته بندی ها</label>
+              <InputText
+                v-model="productName"
+                placeholder="نام  دسته بندی را وارد کنید"
+                class="w-full"
+              />
+            </div>
 
-
-
+            <!-- Submit Button -->
+            <div class="p-4 flex justify-end md:col-span-2">
               <!-- Submit Button -->
-              <div class="p-4 flex justify-end md:col-span-2">
-                <!-- Submit Button -->
-                <Button
-                  label="انصراف"
-                  class="text-green-700 font-bold rounded-md px-6 py-2 transition duration-300 ease-in-out transform hover:bg-green-600 active:bg-green-800"
-                  @click="handleSubmit"
-                  variant="outlined"
-                  style="width: 160px; background: none; color: #10b981"
-                />
+              <Button
+                label="انصراف"
+                class="text-green-700 font-bold rounded-md px-6 py-2 transition duration-300 ease-in-out transform hover:bg-green-600 active:bg-green-800"
+                variant="outlined"
+                style="width: 160px; background: none; color: #10b981"
+              />
 
-                <!-- Send Button -->
-                <Button
-                  label="ثبت"
-                  class="border mr-4 border-green-700 text-green-700 font-bold rounded-md px-6 py-2 transition duration-300 ease-in-out transform hover:bg-green-700 hover:text-white active:bg-green-600"
-                  @click="handleSend"
-                  style="width: 160px"
-                />
-              </div>
-            </form>
+              <!-- Send Button -->
+              <Button
+                label="ثبت"
+                class="border mr-4 border-green-700 text-green-700 font-bold rounded-md px-6 py-2 transition duration-300 ease-in-out transform hover:bg-green-700 hover:text-white active:bg-green-600"
+                @click="categoryfun()"
+                style="width: 160px"
+              />
+            </div>
+          </form>
           <hr />
           <DataTable
             class="mt-4"
-            :value="products"
+            :value="allcategory"
             style="width: 100%"
             paginator
             :rows="10"
@@ -83,7 +79,7 @@
                       />
                       <input
                         type="text"
-                        placeholder="جستجوی دسته بندی"
+                        placeholder="جستجو"
                         class="border rounded-lg px-8 py-2"
                       />
                     </div>
@@ -93,17 +89,17 @@
             </template>
 
             <!-- Columns -->
-            <Column field="name" header="نام دسته بندی" style="text-align: start" />
+            <Column
+              field="name"
+              header="نام دسته بندی  ها"
+              style="text-align: start"
+            />
 
-            <Column field="rating" header="ویرایش" style="text-align: start">
-              <template #body="slotProps">
-                <i class="mdi mdi-pencil" style="font-size: 2.5rem"></i>
-              </template>
-            </Column>
 
-            <Column header="حذف" style="text-align: start">
+
+            <Column header="حذف" style="text-align: start" >
               <template #body="slotProps">
-                <i class="mdi mdi-delete" style="font-size: 2.5rem"></i>
+                <i class="mdi mdi-delete" style="font-size: 2.5rem" @click="deletecategory(slotProps.data.id)"></i>
               </template>
             </Column>
 
@@ -116,6 +112,7 @@
         </div>
       </div>
     </div>
+    <Toast position="top-left" group="tl" />
   </div>
 </template>
 <style lang="scss">
@@ -149,55 +146,69 @@
 export default {
   data() {
     return {
-      products: [
-        {
-          name: "گیربکس",
-          image: "laptop.png",
-          price: 999.99,
-          category: "جلوبندی",
-          code: "ffff",
-        },
-        {
-          name: "گیربکس",
-          image: "laptop.png",
-          price: 999.99,
-          category: "جلوبندی",
-          code: "ffff",
-        },
-        {
-          name: "گیربکس",
-          image: "laptop.png",
-          price: 999.99,
-          category: "جلوبندی",
-          code: "ffff",
-        },
-        {
-          name: "گیربکس",
-          image: "laptop.png",
-          price: 999.99,
-          category: "جلوبندی",
-          code: "ffff",
-        },
-        {
-          name: "گیربکس",
-          image: "laptop.png",
-          price: 999.99,
-          category: "جلوبندی",
-          code: "ffff",
-        },
-        {
-          name: "گیربکس",
-          image: "laptop.png",
-          price: 999.99,
-          category: "جلوبندی",
-          code: "ffff",
-        },
-      ],
+      data: null,
+      data1: null,
+      productName: null,
+      category : null,
+      allcategory : null,
+  
     };
   },
+  watch: {
+    // وقتی تعداد برندها تغییر کند، درخواست جدیدی به سرور می‌زنیم
+ 
+  },
   methods: {
+    async categoryfun() {
+      try {
+        this.data = await $fetch('/api/category/create', {
+          method: 'POST',
+          body: { "parent_id": 1 , name: this.productName  },
+        });
+        this.getcategory();
+        this.$toast.add({ severity: 'success', summary: 'ایجاد دسته بندی', detail: 'دسته بندی با موفقیت ایجاد شد', group: 'tl', life: 3000 });
+      } catch (error) {
+        // errors.value = Object.values(error.data.data.message).flat();
+        console.log(error);
+      } finally {
+        console.log("ddd",  toRaw(this.data));
+      }
+    },
+    async getcategory() {
+      try {
+        this.category  = await $fetch('/api/category');
+        this.allcategory = this.category.categories
+      } catch (error) {
+        // errors.value = Object.values(error.data.data.message).flat();
+        console.log(error);
+      } finally {
+        console.log("brands",  this.allcategory);
+      }
+    },
+    async deletecategory(id) {
 
+      try {
+        this.data1 = await $fetch(`/api/category/delete`, {
+          method: 'DELETE',
+          query:  { url : `${id}`}
+        });
+        this.getcategory();
+        this.$toast.add({ severity: 'success', summary: ' حذف دسته بندی', detail: 'دسته بندی با موفقیت حذف شد', group: 'tl', life: 3000 });
+      } catch (error) {
+   
+        console.log(error);
+      } finally {
+        console.log("ddd",  toRaw(this.data1));
+      }
+    },
+
+
+  },
+  beforeMount() {
+    this.getcategory();
 
   },
 };
 </script>
+
+
