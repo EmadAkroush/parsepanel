@@ -250,6 +250,20 @@ export default {
           return "info";
       }
     },
+    async getproduct() {
+      try {
+        this.product = await $fetch("/api/product");
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.product = toRaw(this.product);
+        console.log("pr", toRaw(this.product.products));
+      }
+    },
+  },
+  beforeMount() {
+    this.getproduct();
+ 
   },
 };
 </script>

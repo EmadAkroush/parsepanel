@@ -406,6 +406,8 @@ export default {
       data1: null,
       data2: null,
       data3: null,
+      data4: null,
+      data5: null,
       Imagefile: null,
       Images: null,
       bol: null,
@@ -543,6 +545,8 @@ export default {
 
       }
     },
+
+
     async categoryfunc() {
       try {
         this.data = await $fetch("/api/category");
@@ -555,7 +559,7 @@ export default {
     },
     async carsfunc() {
       try {
-        this.data1 = await $fetch("/api/car");
+        this.data1 = await $fetch("/api/cars");
       } catch (error) {
         console.log(error);
       } finally {
@@ -566,7 +570,7 @@ export default {
 
     async carpartsfunc() {
       try {
-        this.data2 = await $fetch("/api/carpart");
+        this.data2 = await $fetch("/api/carparts");
       } catch (error) {
         console.log(error);
       } finally {
@@ -587,23 +591,23 @@ export default {
 
     async bransfunc() {
       try {
-        this.data = await $fetch("/api/brand");
+        this.data4 = await $fetch("/api/brand");
       } catch (error) {
         console.log(error);
       } finally {
-        this.brands = toRaw(this.data.brnads);
-        console.log("ddd", toRaw(this.data.brnads));
+        this.brands = toRaw(this.data4.brands);
+        console.log("brands", toRaw(this.data4.brands));
       }
     },
 
     async tagsfunc() {
       try {
-        this.data = await $fetch("/api/tag");
+        this.data5 = await $fetch("/api/tags");
       } catch (error) {
         console.log(error);
       } finally {
-        this.tags = toRaw(this.data.tags);
-        console.log("ddd", toRaw(this.data.tags));
+        this.tags = toRaw(this.data5.tags);
+        console.log("ddd", toRaw(this.data5.tags));
       }
     },
   },

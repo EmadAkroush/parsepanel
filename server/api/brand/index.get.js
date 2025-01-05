@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
               'Accept': 'Multipart/Form-Data',
           }
       });
-
+    
       return data.data;
   } catch (error) {
       return error;
