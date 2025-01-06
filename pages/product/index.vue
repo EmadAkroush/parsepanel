@@ -78,7 +78,7 @@
           <hr />
           <DataTable
             class="mt-4"
-            :value="products"
+            :value="productsAll"
             style="width: 100%"
             paginator
             :rows="10"
@@ -117,22 +117,27 @@
 
             <!-- Columns -->
             <Column field="name" header="نام" style="text-align: start" />
-            <Column header="تصویر" style="text-align: start">
+            <Column field="primary_image" header="تصویر" style="text-align: start">
               <template #body="slotProps">
-                <img src="/public/girbox.jpg" class="w-24 rounded" />
+                <img :src="slotProps.data.primary_image" class="w-24 rounded" />
               </template>
             </Column>
             <Column field="price" header="قیمت" style="text-align: start">
-              <template #body="slotProps">
+              <!-- <template #body="slotProps">
                 {{ formatCurrency(slotProps.data.price) }}
-              </template>
+              </template> -->
             </Column>
             <Column
-              field="category"
-              header="دسته‌بندی"
+              field="Inventory_status"
+              header="وضعیت موجودی"
               style="text-align: start"
             />
-            <Column field="code" header="کد محصول" style="text-align: start">
+            <Column
+              field="category_name"
+              header="دسته بندی محصول"
+              style="text-align: start"
+            />
+            <Column field="productcode" header="کد محصول" style="text-align: start">
             </Column>
             <Column field="rating" header="ویرایش" style="text-align: start">
               <template #body="slotProps">
@@ -142,7 +147,7 @@
 
             <Column header="حذف" style="text-align: start">
               <template #body="slotProps">
-                <i class="mdi mdi-delete" style="font-size: 2.5rem"></i>
+                <i class="mdi mdi-delete" style="font-size: 2.5rem" @click="deletedialog(slotProps.data.id)"></i>
               </template>
             </Column>
 
@@ -154,6 +159,14 @@
           </DataTable>
         </div>
       </div>
+      <Toast position="top-left" group="tl" />
+      <Dialog v-model:visible="visible" modal header="حذف محصول" :style="{ width: '25rem' }">
+            <span class="text-surface-500 dark:text-surface-400 block mb-8"> آیا از حذف محصول اطمینان دارید</span>
+            <div class="flex justify-end gap-2">
+                <Button type="button" label="خیر" severity="secondary" @click="visible = false"></Button>
+                <Button type="button" label="بله" @click="deleteproduct()"></Button>
+            </div>
+        </Dialog>
     </div>
   </div>
 </template>
@@ -196,48 +209,18 @@ export default {
           category: "جلوبندی",
           code: "ffff",
         },
-        {
-          name: "گیربکس",
-          image: "laptop.png",
-          price: 999.99,
-          category: "جلوبندی",
-          code: "ffff",
-        },
-        {
-          name: "گیربکس",
-          image: "laptop.png",
-          price: 999.99,
-          category: "جلوبندی",
-          code: "ffff",
-        },
-        {
-          name: "گیربکس",
-          image: "laptop.png",
-          price: 999.99,
-          category: "جلوبندی",
-          code: "ffff",
-        },
-        {
-          name: "گیربکس",
-          image: "laptop.png",
-          price: 999.99,
-          category: "جلوبندی",
-          code: "ffff",
-        },
-        {
-          name: "گیربکس",
-          image: "laptop.png",
-          price: 999.99,
-          category: "جلوبندی",
-          code: "ffff",
-        },
+    
       ],
+      productsAll : null,
+      visible: false,
+      idproduct: null
+
     };
   },
   methods: {
-    formatCurrency(value) {
-      return `${value.toFixed(3)}`;
-    },
+    // formatCurrency(value) {
+    //   return `${value.toFixed(3)}`;
+    // },
     getSeverity(product) {
       switch (product.inventoryStatus) {
         case "In Stock":
@@ -253,6 +236,7 @@ export default {
     async getproduct() {
       try {
         this.product = await $fetch("/api/product");
+        this.productsAll = this.product.products
       } catch (error) {
         console.log(error);
       } finally {
@@ -260,6 +244,31 @@ export default {
         console.log("pr", toRaw(this.product.products));
       }
     },
+    deletedialog(id){
+      this.visible = true
+      this.idproduct = id
+
+    },
+
+    async deleteproduct() {
+   
+      
+      try {
+        this.data1 = await $fetch(`/api/product/delete`, {
+          method: 'DELETE',
+          query:  { url : `${this.idproduct}`}
+        });
+        this.getproduct();
+        this.$toast.add({ severity: 'success', summary: ' حذف محصول', detail: 'محصول با موفقیت حذف شد', group: 'tl', life: 3000 });
+      } catch (error) {
+   
+        console.log(error);
+      } finally {
+        console.log("ddd",  toRaw(this.data1));
+        this.visible = false
+      }
+    },
+
   },
   beforeMount() {
     this.getproduct();

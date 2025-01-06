@@ -361,8 +361,10 @@
             </client-only>
           </div>
         </div>
+        <Toast position="top-left" group="tl" />
+        
       </div>
-      <Toast position="top-left" group="tl" />
+   
     </div>
   </div>
 </template>
@@ -396,6 +398,7 @@
 <script>
 import TiptapEditor from "../../components/TiptapEditor.vue";
 
+
 export default {
   components: {
     TiptapEditor,
@@ -408,6 +411,7 @@ export default {
       data3: null,
       data4: null,
       data5: null,
+      visible: false,
       Imagefile: null,
       Images: null,
       bol: null,
@@ -497,11 +501,17 @@ export default {
         const formData = new FormData();
         formData.append("name", this.productName);
         formData.append("brand_id", this.brandModel.id);
+        formData.append("brand_name", this.brandModel.name);
         formData.append("category_id", this.categoryModel.id);
+        formData.append("category_name", this.categoryModel.name);
         formData.append("car_id", this.carModel.id);
+        formData.append("car_name", this.carModel.name);
         formData.append("carpart_id", this.carpartModel.id);
+        formData.append("carpart_name", this.carpartModel.name);
         formData.append("company_id", this.companyModel.id);
+        formData.append("company_name", this.companyModel.name);
         formData.append("tag_id", this.tagidModel.id);
+        formData.append("tag_name", this.tagidModel.name);
         formData.append("primary_image", this.Imagefile);
         formData.append("price", this.productPrice);
         formData.append("priceoff", this.priceoff);
@@ -521,24 +531,19 @@ export default {
         for (let index = 0; index < this.Images.length; index++) {
           formData.append(`images[${index}]`, this.Images[index]);
         }
-        // this.response = await this.$axios.post(
-        //   "http://127.0.0.1:8000/api/products",
-        //   formData,
-        //   {
-        //     headers: {
-        //       "Content-Type": "multipart/form-data",
-        //     },
-        //   }
-        // );
+      
         this.product = await $fetch("http://127.0.0.1:8000/api/products", {
           method: "POST",
           body: formData,
       
         });
         this.$toast.add({ severity: 'success', summary: 'ایجاد محصول', detail: 'محصول با موفقیت ایجاد شد', group: 'tl', life: 3000 });
+        navigateTo('/product')
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
         console.log(error);
+        this.$toast.add({ severity: 'error', summary: 'خطا', detail: 'ایجاد محصول با شکست مواجه شد', group: 'tl', life: 3000 });
+
       } finally {
         console.log("qqq", toRaw(this.product));
     
