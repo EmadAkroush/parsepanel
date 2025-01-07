@@ -72,17 +72,13 @@
                 iconPos="right"
               />
             </nuxt-link>
-            
-            
           </div>
           <hr />
           <DataTable
             class="mt-4"
             :value="productsAll"
             style="width: 100%"
-            paginator
             :rows="10"
-            :rowsPerPageOptions="[5, 10, 20, 50]"
           >
             <!-- Header Section -->
             <template #header>
@@ -117,7 +113,11 @@
 
             <!-- Columns -->
             <Column field="name" header="نام" style="text-align: start" />
-            <Column field="primary_image" header="تصویر" style="text-align: start">
+            <Column
+              field="primary_image"
+              header="تصویر"
+              style="text-align: start"
+            >
               <template #body="slotProps">
                 <img :src="slotProps.data.primary_image" class="w-24 rounded" />
               </template>
@@ -137,36 +137,73 @@
               header="دسته بندی محصول"
               style="text-align: start"
             />
-            <Column field="productcode" header="کد محصول" style="text-align: start">
+            <Column
+              field="productcode"
+              header="کد محصول"
+              style="text-align: start"
+            >
             </Column>
             <Column field="rating" header="ویرایش" style="text-align: start">
               <template #body="slotProps">
-                <i class="mdi mdi-pencil" style="font-size: 2.5rem"></i>
+                <nuxt-link :to="`product/${slotProps.data.id}`">
+                <i class="mdi mdi-pencil" style="font-size: 2.5rem">
+                  {{ slotProps.data.id }}
+                </i>
+              </nuxt-link>
               </template>
             </Column>
 
             <Column header="حذف" style="text-align: start">
               <template #body="slotProps">
-                <i class="mdi mdi-delete" style="font-size: 2.5rem" @click="deletedialog(slotProps.data.id)"></i>
+                <i
+                  class="mdi mdi-delete"
+                  style="font-size: 2.5rem"
+                  @click="deletedialog(slotProps.data.id)"
+                ></i>
               </template>
             </Column>
 
             <!-- Footer Section -->
             <template #footer>
-              مجموعاً {{ products ? products.length : 0 }} محصول در لیست وجود
+              مجموعاً {{ totalRecords }} محصول در لیست وجود
               دارد.
             </template>
           </DataTable>
+          <Paginator
+            :rows="10"
+            :totalRecords="totalRecords"
+            template="PageLinks "
+            @page="onPageChange"
+            :currentPage="currentPage"
+          />
+
+        
+            <!-- <Paginator v-model:first="kol" :rows="10" :totalRecords="120" :rowsPerPageOptions="[10, 20, 30]" template=" PrevPageLink  NextPageLink " >
+          
+        </Paginator> -->
+       
         </div>
       </div>
       <Toast position="top-left" group="tl" />
-      <Dialog v-model:visible="visible" modal header="حذف محصول" :style="{ width: '25rem' }">
-            <span class="text-surface-500 dark:text-surface-400 block mb-8"> آیا از حذف محصول اطمینان دارید</span>
-            <div class="flex justify-end gap-2">
-                <Button type="button" label="خیر" severity="secondary" @click="visible = false"></Button>
-                <Button type="button" label="بله" @click="deleteproduct()"></Button>
-            </div>
-        </Dialog>
+      <Dialog
+        v-model:visible="visible"
+        modal
+        header="حذف محصول"
+        :style="{ width: '25rem' }"
+      >
+        <span class="text-surface-500 dark:text-surface-400 block mb-8">
+          آیا از حذف محصول اطمینان دارید</span
+        >
+        <div class="flex justify-end gap-2">
+          <Button
+            type="button"
+            label="خیر"
+            severity="secondary"
+            @click="visible = false"
+          ></Button>
+          <Button type="button" label="بله" @click="deleteproduct()"></Button>
+        </div>
+      </Dialog>
     </div>
   </div>
 </template>
@@ -201,6 +238,7 @@
 export default {
   data() {
     return {
+   
       products: [
         {
           name: "گیربکس",
@@ -209,18 +247,16 @@ export default {
           category: "جلوبندی",
           code: "ffff",
         },
-    
       ],
-      productsAll : null,
+      productsAll: null,
       visible: false,
-      idproduct: null
-
+      idproduct: null,
+      currentPage: null,
+      queryParams: null,
+      totalRecords: null
     };
   },
   methods: {
-    // formatCurrency(value) {
-    //   return `${value.toFixed(3)}`;
-    // },
     getSeverity(product) {
       switch (product.inventoryStatus) {
         case "In Stock":
@@ -233,46 +269,61 @@ export default {
           return "info";
       }
     },
-    async getproduct() {
+    async getproduct(par) {
+      
       try {
-        this.product = await $fetch("/api/product");
-        this.productsAll = this.product.products
+       
+        this.product = await $fetch("/api/product" , {
+          query: { page: par },
+        });
+        this.productsAll = this.product.products;
+        this.totalRecords = this.product.total;
       } catch (error) {
         console.log(error);
       } finally {
         this.product = toRaw(this.product);
-        console.log("pr", toRaw(this.product.products));
+        console.log("pr", toRaw(this.product.total));
       }
     },
-    deletedialog(id){
-      this.visible = true
-      this.idproduct = id
-
+    deletedialog(id) {
+      this.visible = true;
+      this.idproduct = id;
     },
 
     async deleteproduct() {
-   
-      
       try {
         this.data1 = await $fetch(`/api/product/delete`, {
-          method: 'DELETE',
-          query:  { url : `${this.idproduct}`}
+          method: "DELETE",
+          query: { url: `${this.idproduct}` },
         });
         this.getproduct();
-        this.$toast.add({ severity: 'success', summary: ' حذف محصول', detail: 'محصول با موفقیت حذف شد', group: 'tl', life: 3000 });
+        this.$toast.add({
+          severity: "success",
+          summary: " حذف محصول",
+          detail: "محصول با موفقیت حذف شد",
+          group: "tl",
+          life: 3000,
+        });
       } catch (error) {
-   
         console.log(error);
       } finally {
-        console.log("ddd",  toRaw(this.data1));
-        this.visible = false
+        console.log("ddd", toRaw(this.data1));
+        this.visible = false;
       }
     },
+
+    onPageChange(event) {
+      this.currentPage = event.page + 1
+      this.getproduct(this.currentPage)
+      console.log("event" , this.currentPage);
+      
+    },
+    
+
 
   },
   beforeMount() {
     this.getproduct();
- 
   },
 };
 </script>

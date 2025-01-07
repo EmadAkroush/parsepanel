@@ -23,9 +23,10 @@
       <div class="flex flex-row mt-6">
         <div class="p-6 bg-white rounded-lg shadow-md rtl" style="width: 100%">
           <div class="container mx-auto p-6">
-            <h1 class="text-2xl font-bold mb-6">فرم ایجاد محصول</h1>
+            <h1 class="text-2xl font-bold mb-6">فرم آپدیت محصول  </h1>
             <div class="my-8">
               <h1>توضیحات محصول</h1>
+              {{ pageId }}
               <client-only>
                 <tiptap-editor v-model="content" />
               </client-only>
@@ -405,6 +406,7 @@ export default {
   },
   data() {
     return {
+      pageId: this.$route.params.id,
       data: null,
       data1: null,
       data2: null,
@@ -554,6 +556,21 @@ export default {
       }
     },
 
+    async getproduct() {
+      try {
+        this.product = await $fetch("/api/product/details" , {
+          query:  { id : `${this.pageId}`}
+        });
+        this.productName = this.product.name
+
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.product = toRaw(this.product);
+        console.log("pr", toRaw(this.product.name));
+      }
+    },
+
 
     async categoryfunc() {
       try {
@@ -627,7 +644,11 @@ export default {
     this.companyfunc();
     this.bransfunc();
     this.tagsfunc();
+    this.getproduct();
+   
   },
-  mounted() {},
+  mounted() {
+    
+  },
 };
 </script>

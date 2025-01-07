@@ -2,17 +2,17 @@ export default defineEventHandler(async (event) => {
     
     const { public: { apiBase } } = useRuntimeConfig();
     // const token = getCookie(event, 'token');
-  
-    const queryParams = getQuery(event);
+    const query = getQuery(event);
 
+    
     try {
-        const data = await $fetch(`${apiBase}/api/products`, {
+        const data = await $fetch(`${apiBase}/api/products/${query.id}`, {
             headers: {
                 'Accept': 'Multipart/Form-Data',
             },
-            query: queryParams,
         });
-  
+       console.log("ff" , query);
+       
 
         return data.data;
     } catch (error) {
