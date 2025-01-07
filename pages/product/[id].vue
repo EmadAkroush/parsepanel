@@ -23,7 +23,7 @@
       <div class="flex flex-row mt-6">
         <div class="p-6 bg-white rounded-lg shadow-md rtl" style="width: 100%">
           <div class="container mx-auto p-6">
-            <h1 class="text-2xl font-bold mb-6">فرم آپدیت محصول  </h1>
+            <h1 class="text-2xl font-bold mb-6">فرم آپدیت محصول</h1>
             <div class="my-8">
               <h1>توضیحات محصول</h1>
               {{ pageId }}
@@ -34,7 +34,7 @@
             <client-only>
               <form
                 class="bg-white p-6 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-4"
-                @submit.prevent="addproduct()"
+                @submit.prevent="po()"
               >
                 <!-- Product Name -->
                 <div>
@@ -200,10 +200,11 @@
                 <!-- Brand -->
                 <div>
                   <label class="block text-sm font-semibold mb-1">برند</label>
+                  {{ brandModel }}
                   <Dropdown
                     v-model="brandModel"
                     :options="brands"
-                    placeholder="برند را انتخاب کنید"
+                    placeholder="برند محصول را انتخاب کنید"
                     class="w-full"
                     optionLabel="name"
                   />
@@ -227,11 +228,11 @@
                   <label class="block text-sm font-semibold mb-1"
                     >بر چسب های محصول
                   </label>
-             
+
                   <Dropdown
                     v-model="tagidModel"
                     :options="tags"
-                   placeholder="انتخاب برچسب"
+                    placeholder="انتخاب برچسب"
                     optionLabel="name"
                     class="w-full"
                   />
@@ -258,11 +259,14 @@
                     <label class="block text-sm font-semibold mb-1 ml-4"
                       >وضعیت موجودی
                     </label>
+              
                     <RadioButton
                       v-model="Inventorystatus"
                       inputId="ingredient1"
                       name="pizza"
-                      value="mojod"
+                      value="موجود"
+                      ref="emd"
+                      id="red"
                     />
                     <label for="ingredient1">موجود</label>
                   </div>
@@ -271,7 +275,8 @@
                       v-model="Inventorystatus"
                       inputId="ingredient2"
                       name="pizza"
-                      value="namojod"
+                      value="ناموجود"
+
                     />
                     <label for="ingredient2">ناموجود</label>
                   </div>
@@ -298,6 +303,15 @@
                       class="shadow-md rounded-xl w-full sm:w-64"
                       style="filter: grayscale(100%)"
                     />
+               
+                    <img
+                      v-if="Imagefileshow"
+                      :src="Imagefileshow"
+                      alt="Image"
+                      class="shadow-md rounded-xl w-full sm:w-64"
+                      style="filter: grayscale(100%)"
+                    />
+                    
                   </div>
                 </div>
 
@@ -319,6 +333,13 @@
                     <img
                       v-if="src1"
                       :src="src1"
+                      alt="Image"
+                      class="shadow-md rounded-xl w-full sm:w-64"
+                      style="filter: grayscale(100%)"
+                    />
+                    <img
+                      v-if="productfileshow"
+                      :src="productfileshow"
                       alt="Image"
                       class="shadow-md rounded-xl w-full sm:w-64"
                       style="filter: grayscale(100%)"
@@ -363,9 +384,7 @@
           </div>
         </div>
         <Toast position="top-left" group="tl" />
-        
       </div>
-   
     </div>
   </div>
 </template>
@@ -415,6 +434,7 @@ export default {
       data5: null,
       visible: false,
       Imagefile: null,
+      Imagefileshow: null,
       Images: null,
       bol: null,
       product: null,
@@ -437,6 +457,7 @@ export default {
       productfirstcolor: null,
       productsecondcolor: null,
       productfile: null,
+      productfileshow : null,
       Inventorystatus: null,
       priceWithTax: null,
       height: null,
@@ -468,6 +489,7 @@ export default {
   },
 
 
+
   methods: {
     onFileSelect(event) {
       const file = event.files[0];
@@ -495,8 +517,13 @@ export default {
       const file = event.files;
       this.Images = file;
     },
-    testdata() {
-      console.log("formData", this.tagidModel);
+    po() {
+    
+      // console.log("formData", emd);
+      document.getElementById("ingredient1").checked = true;
+      this.$refs.emd.checked = true; 
+      console.log("formData" , document.getElementById("ingredient1"));
+
     },
     async addproduct() {
       console.log("this.productfile)" , this.productfile);
@@ -536,11 +563,11 @@ export default {
         for (let index = 0; index < this.Images.length; index++) {
           formData.append(`images[${index}]`, this.Images[index]);
         }
-      
+
         this.product = await $fetch("https://parseback.liara.run/api/products", {
           method: "POST",
           body: formData,
-      
+
         });
         this.$toast.add({ severity: 'success', summary: 'ایجاد محصول', detail: 'محصول با موفقیت ایجاد شد', group: 'tl', life: 3000 });
         navigateTo('/product')
@@ -551,7 +578,7 @@ export default {
 
       } finally {
         console.log("qqq", toRaw(this.product));
-    
+
 
       }
     },
@@ -562,12 +589,26 @@ export default {
           query:  { id : `${this.pageId}`}
         });
         this.productName = this.product.name
+        this.Imagefileshow = this.product.primary_image
+        this.productPrice = this.product.price
+        this.priceoff = this.product.priceoff
+        this.productCode = this.product.productcode
+        this.productlength = this.product.product_length
+        this.productwidth = this.product.product_width
+        this.productfirstcolor = this.product.product_first_color
+        this.productsecondcolor = this.product.product_second_color
+        this.productcountry = this.product.product_country
+        this.Inventorystatus = this.product.Inventory_status
+        this.productfileshow = this.product.product_file
+       
+
+        
 
       } catch (error) {
         console.log(error);
       } finally {
         this.product = toRaw(this.product);
-        console.log("pr", toRaw(this.product.name));
+        console.log("pr", toRaw(this.product));
       }
     },
 
