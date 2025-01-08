@@ -26,7 +26,7 @@
             <h1 class="text-2xl font-bold mb-6">فرم آپدیت محصول</h1>
             <div class="my-8">
               <h1>توضیحات محصول</h1>
-              {{ pageId }}
+         
               <client-only>
                 <tiptap-editor v-model="content" />
               </client-only>
@@ -154,7 +154,7 @@
                   <Dropdown
                     v-model="categoryModel"
                     :options="category"
-                    placeholder="دسته بندی محصول را انتخاب کنید"
+                    :placeholder="categoryholder"
                     optionLabel="name"
                     class="w-full"
                   />
@@ -166,7 +166,7 @@
                   <Dropdown
                     v-model="carModel"
                     :options="cars"
-                    placeholder="نوع خودرو را انتخاب کنید"
+                    :placeholder="carholder"
                     optionLabel="name"
                     class="w-full"
                   />
@@ -178,7 +178,7 @@
                   <Dropdown
                     v-model="carpartModel"
                     :options="carpart"
-                    placeholder="مثلا جلوبندی"
+                    :placeholder="carpartholder"
                     optionLabel="name"
                     class="w-full"
                   />
@@ -191,7 +191,7 @@
                   <Dropdown
                     v-model="companyModel"
                     :options="company"
-                    placeholder="شرکت سازنده خودرو را انتخاب کنید"
+                    :placeholder="companyholder"
                     optionLabel="name"
                     class="w-full"
                   />
@@ -200,11 +200,11 @@
                 <!-- Brand -->
                 <div>
                   <label class="block text-sm font-semibold mb-1">برند</label>
-                  {{ brandModel }}
+
                   <Dropdown
                     v-model="brandModel"
                     :options="brands"
-                    placeholder="برند محصول را انتخاب کنید"
+                    :placeholder="brandholder"
                     class="w-full"
                     optionLabel="name"
                   />
@@ -216,9 +216,9 @@
                     >نوع ضمانت</label
                   >
                   <Dropdown
-                    v-model="productgarantymodel"
+                    v-model="productgarantyholder"
                     :options="productgaranty"
-                    placeholder="نوع ضمانت را انتخاب کنید"
+                    :placeholder="productgarantyholder"
                     optionLabel="label"
                     class="w-full"
                   />
@@ -232,7 +232,7 @@
                   <Dropdown
                     v-model="tagidModel"
                     :options="tags"
-                    placeholder="انتخاب برچسب"
+                    :placeholder="tagholder"
                     optionLabel="name"
                     class="w-full"
                   />
@@ -246,7 +246,7 @@
                   <Dropdown
                     v-model="productsendwaymodel"
                     :options="productsendway"
-                    placeholder="روش ارسال را انتخاب کنید"
+                    :placeholder="productsendwayholder"
                     optionLabel="label"
                     class="w-full"
                   />
@@ -259,7 +259,7 @@
                     <label class="block text-sm font-semibold mb-1 ml-4"
                       >وضعیت موجودی
                     </label>
-              
+
                     <RadioButton
                       v-model="Inventorystatus"
                       inputId="ingredient1"
@@ -276,7 +276,6 @@
                       inputId="ingredient2"
                       name="pizza"
                       value="ناموجود"
-
                     />
                     <label for="ingredient2">ناموجود</label>
                   </div>
@@ -303,7 +302,7 @@
                       class="shadow-md rounded-xl w-full sm:w-64"
                       style="filter: grayscale(100%)"
                     />
-               
+
                     <img
                       v-if="Imagefileshow"
                       :src="Imagefileshow"
@@ -311,7 +310,6 @@
                       class="shadow-md rounded-xl w-full sm:w-64"
                       style="filter: grayscale(100%)"
                     />
-                    
                   </div>
                 </div>
 
@@ -359,6 +357,15 @@
                     accept="image/*"
                     @select="onFileSelect2"
                   />
+             
+                  <div v-for="item  in ImagesShow">
+                    <img
+                      :src="item.image"
+                      alt="Image"
+                      class="shadow-md rounded-xl w-full sm:w-64 mt-8"
+                      style="filter: grayscale(100%)"
+                    />
+                  </div>
                 </div>
 
                 <!-- Submit Button -->
@@ -373,7 +380,7 @@
 
                   <!-- Send Button -->
                   <Button
-                    label="ثبت"
+                    label="بروزرسانی"
                     class="border mr-4 border-green-700 text-green-700 font-bold rounded-md px-6 py-2 transition duration-300 ease-in-out transform hover:bg-green-700 hover:text-white active:bg-green-600"
                     type="submit"
                     style="width: 160px"
@@ -418,7 +425,6 @@
 <script>
 import TiptapEditor from "../../components/TiptapEditor.vue";
 
-
 export default {
   components: {
     TiptapEditor,
@@ -436,20 +442,27 @@ export default {
       Imagefile: null,
       Imagefileshow: null,
       Images: null,
+      ImagesShow: null,
       bol: null,
       product: null,
-      content: "hello",
+      content: null,
       ingredient: null,
       src: null,
       src1: null,
       productName: "",
       productPrice: null,
       brandModel: null,
+      brandholder: null,
       categoryModel: null,
+      categoryholder: null,
       carModel: null,
+      carholder: null,
       carpartModel: null,
+      carpartholder: null,
       companyModel: null,
+      companyholder: null,
       tagidModel: null,
+      tagholder: null,
       priceoff: null,
       productCode: "",
       productlength: null,
@@ -457,7 +470,7 @@ export default {
       productfirstcolor: null,
       productsecondcolor: null,
       productfile: null,
-      productfileshow : null,
+      productfileshow: null,
       Inventorystatus: null,
       priceWithTax: null,
       height: null,
@@ -483,12 +496,12 @@ export default {
         { label: "ضمانت تعویض", value: "taviz" },
         { label: "هیچ کدام", value: "hichkodum" },
       ],
-      productgarantymodel : null,
-      productsendwaymodel : null
+      productgarantymodel: null,
+      productgarantyholder: null,
+      productsendwaymodel: null,
+      productsendwayholder: null,
     };
   },
-
-
 
   methods: {
     onFileSelect(event) {
@@ -518,15 +531,13 @@ export default {
       this.Images = file;
     },
     po() {
-    
       // console.log("formData", emd);
-      document.getElementById("ingredient1").checked = true;
-      this.$refs.emd.checked = true; 
-      console.log("formData" , document.getElementById("ingredient1"));
-
+      // document.getElementById("ingredient1").checked = true;
+      // this.$refs.emd.checked = true;
+      console.log("formData",  this.carholder);
     },
     async addproduct() {
-      console.log("this.productfile)" , this.productfile);
+      console.log("this.productfile)", this.productfile);
       try {
         const formData = new FormData();
         formData.append("name", this.productName);
@@ -555,8 +566,9 @@ export default {
         if (this.productfile) {
           formData.append("product_file", this.productfile);
         }
-        formData.append("product_garanty", this.productgarantymodel.value);
-        formData.append("product_send_way", this.productsendwaymodel.value);
+        formData.append("product_garanty", this.productgarantymodel.label);
+        formData.append("product_send_way", this.productsendwaymodel.label);
+
         formData.append("quantity", 1);
         formData.append("delivery_amount", 80000);
         formData.append("description", this.content);
@@ -564,45 +576,64 @@ export default {
           formData.append(`images[${index}]`, this.Images[index]);
         }
 
-        this.product = await $fetch("https://parseback.liara.run/api/products", {
-          method: "POST",
-          body: formData,
+        this.product = await $fetch(
+          "https://parseback.liara.run/api/products",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
 
+        this.$toast.add({
+          severity: "success",
+          summary: "ایجاد محصول",
+          detail: "محصول با موفقیت ایجاد شد",
+          group: "tl",
+          life: 3000,
         });
-        this.$toast.add({ severity: 'success', summary: 'ایجاد محصول', detail: 'محصول با موفقیت ایجاد شد', group: 'tl', life: 3000 });
-        navigateTo('/product')
+        navigateTo("/product");
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
         console.log(error);
-        this.$toast.add({ severity: 'error', summary: 'خطا', detail: 'ایجاد محصول با شکست مواجه شد', group: 'tl', life: 3000 });
-
+        this.$toast.add({
+          severity: "error",
+          summary: "خطا",
+          detail: "ایجاد محصول با شکست مواجه شد",
+          group: "tl",
+          life: 3000,
+        });
       } finally {
         console.log("qqq", toRaw(this.product));
-
-
       }
     },
 
     async getproduct() {
       try {
-        this.product = await $fetch("/api/product/details" , {
-          query:  { id : `${this.pageId}`}
+        this.product = await $fetch("/api/product/details", {
+          query: { id: `${this.pageId}` },
         });
-        this.productName = this.product.name
-        this.Imagefileshow = this.product.primary_image
-        this.productPrice = this.product.price
-        this.priceoff = this.product.priceoff
-        this.productCode = this.product.productcode
-        this.productlength = this.product.product_length
-        this.productwidth = this.product.product_width
-        this.productfirstcolor = this.product.product_first_color
-        this.productsecondcolor = this.product.product_second_color
-        this.productcountry = this.product.product_country
-        this.Inventorystatus = this.product.Inventory_status
-        this.productfileshow = this.product.product_file
-       
-
-        
+        this.productName = this.product.name;
+        this.Imagefileshow = this.product.primary_image;
+        this.productPrice = this.product.price;
+        this.priceoff = this.product.priceoff;
+        this.productCode = this.product.productcode;
+        this.productlength = this.product.product_length;
+        this.productwidth = this.product.product_width;
+        this.productfirstcolor = this.product.product_first_color;
+        this.productsecondcolor = this.product.product_second_color;
+        this.productcountry = this.product.product_country;
+        this.Inventorystatus = this.product.Inventory_status;
+        this.productfileshow = this.product.product_file;
+        this.ImagesShow = this.product.images;
+        this.tagholder = this.product.tag_name;
+        this.productgarantyholder = this.product.product_garanty;
+        this.productsendwayholder = this.product.product_send_way;
+        this.brandholder = this.product.brand_name;
+        this.companyholder = this.product.company_name;
+        this.carpartholder = this.product.carpart_name;
+        this.carholder = this.product.car_name;
+        this.categoryholder = this.product.category_name;
+        this.content = this.product.description;
 
       } catch (error) {
         console.log(error);
@@ -611,7 +642,6 @@ export default {
         console.log("pr", toRaw(this.product));
       }
     },
-
 
     async categoryfunc() {
       try {
@@ -686,10 +716,7 @@ export default {
     this.bransfunc();
     this.tagsfunc();
     this.getproduct();
-   
   },
-  mounted() {
-    
-  },
+  mounted() {},
 };
 </script>

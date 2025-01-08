@@ -526,8 +526,8 @@ export default {
         if (this.productfile) {
           formData.append("product_file", this.productfile);
         }
-        formData.append("product_garanty", this.productgarantymodel.value);
-        formData.append("product_send_way", this.productsendwaymodel.value);
+        formData.append("product_garanty", this.productgarantymodel.label);
+        formData.append("product_send_way", this.productsendwaymodel.label);
         formData.append("quantity", 1);
         formData.append("delivery_amount", 80000);
         formData.append("description", this.content);
