@@ -516,6 +516,7 @@ export default {
 
       reader.readAsDataURL(file);
     },
+
     onFileSelect1(event) {
       const file = event.files[0];
       this.productfile = file;
@@ -535,7 +536,8 @@ export default {
       // console.log("formData", emd);
       // document.getElementById("ingredient1").checked = true;
       // this.$refs.emd.checked = true;
-      console.log("formData", this.carholder);
+
+    
     },
     async updateproduct() {
       try {
@@ -591,10 +593,10 @@ export default {
           "tag_name",
           this.tagidModel ? this.tagidModel.name : this.product.tag_name
         );
-        formData.append(
-          "primary_image",
-          this.Imagefile ? this.Imagefile : this.product.primary_image
-        );
+        if(this.Imagefile){
+          formData.append("primary_image", this.Imagefile);
+        }
+       
         formData.append("price", this.productPrice);
         formData.append("priceoff", this.priceoff);
         formData.append("productcode", this.productCode);
@@ -606,9 +608,7 @@ export default {
         formData.append("Inventory_status", this.Inventorystatus);
         if (this.productfile) {
           formData.append("product_file", this.productfile);
-        } else {
-          formData.append("product_file", this.product.product_file);
-        }
+        } 
         formData.append(
           "product_garanty",
           this.productgarantymodel
@@ -629,16 +629,12 @@ export default {
           for (let index = 0; index < this.Images.length; index++) {
             formData.append(`images[${index}]`, this.Images[index]);
           }
-        } else {
-          for (let index = 0; index < this.product.images.length; index++) {
-            formData.append(`images[${index}]`, this.Images[index]);
-          }
-        }
+        } 
 
         formData.append("_method", "PUT");
 
         this.productup = await $fetch(
-          "https://parseback.liara.run/api/products/144",
+          `https://parseback.liara.run/api/products/${this.pageId}`,
           {
             method: "POST",
             body: formData,
