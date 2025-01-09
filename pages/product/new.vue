@@ -261,7 +261,7 @@
                       v-model="Inventorystatus"
                       inputId="ingredient1"
                       name="pizza"
-                      value="mojod"
+                      value="موجود"
                     />
                     <label for="ingredient1">موجود</label>
                   </div>
@@ -270,7 +270,7 @@
                       v-model="Inventorystatus"
                       inputId="ingredient2"
                       name="pizza"
-                      value="namojod"
+                      value="ناموجود"
                     />
                     <label for="ingredient2">ناموجود</label>
                   </div>

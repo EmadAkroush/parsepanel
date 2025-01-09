@@ -147,7 +147,6 @@
               <template #body="slotProps">
                 <nuxt-link :to="`product/${slotProps.data.id}`">
                 <i class="mdi mdi-pencil" style="font-size: 2.5rem">
-                  {{ slotProps.data.id }}
                 </i>
               </nuxt-link>
               </template>

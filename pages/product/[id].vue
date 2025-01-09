@@ -23,10 +23,10 @@
       <div class="flex flex-row mt-6">
         <div class="p-6 bg-white rounded-lg shadow-md rtl" style="width: 100%">
           <div class="container mx-auto p-6">
-            <h1 class="text-2xl font-bold mb-6">فرم آپدیت محصول</h1>
+            <h1 class="text-2xl font-bold mb-6">فرم ویرایش محصول</h1>
             <div class="my-8">
               <h1>توضیحات محصول</h1>
-         
+
               <client-only>
                 <tiptap-editor v-model="content" />
               </client-only>
@@ -34,7 +34,7 @@
             <client-only>
               <form
                 class="bg-white p-6 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-4"
-                @submit.prevent="po()"
+                @submit.prevent="updateproduct()"
               >
                 <!-- Product Name -->
                 <div>
@@ -357,8 +357,8 @@
                     accept="image/*"
                     @select="onFileSelect2"
                   />
-             
-                  <div v-for="item  in ImagesShow">
+
+                  <div v-for="item in ImagesShow">
                     <img
                       :src="item.image"
                       alt="Image"
@@ -445,6 +445,7 @@ export default {
       ImagesShow: null,
       bol: null,
       product: null,
+      productup: null,
       content: null,
       ingredient: null,
       src: null,
@@ -534,26 +535,66 @@ export default {
       // console.log("formData", emd);
       // document.getElementById("ingredient1").checked = true;
       // this.$refs.emd.checked = true;
-      console.log("formData",  this.carholder);
+      console.log("formData", this.carholder);
     },
-    async addproduct() {
-      console.log("this.productfile)", this.productfile);
+    async updateproduct() {
       try {
         const formData = new FormData();
         formData.append("name", this.productName);
-        formData.append("brand_id", this.brandModel.id);
-        formData.append("brand_name", this.brandModel.name);
-        formData.append("category_id", this.categoryModel.id);
-        formData.append("category_name", this.categoryModel.name);
-        formData.append("car_id", this.carModel.id);
-        formData.append("car_name", this.carModel.name);
-        formData.append("carpart_id", this.carpartModel.id);
-        formData.append("carpart_name", this.carpartModel.name);
-        formData.append("company_id", this.companyModel.id);
-        formData.append("company_name", this.companyModel.name);
-        formData.append("tag_id", this.tagidModel.id);
-        formData.append("tag_name", this.tagidModel.name);
-        formData.append("primary_image", this.Imagefile);
+        formData.append(
+          "brand_id",
+          this.brandModel ? this.brandModel.id : this.product.brand_id
+        );
+        formData.append(
+          "brand_name",
+          this.brandModel ? this.brandModel.name : this.product.brand_name
+        );
+        formData.append(
+          "category_id",
+          this.categoryModel ? this.categoryModel.id : this.product.category_id
+        );
+        formData.append(
+          "category_name",
+          this.categoryModel
+            ? this.categoryModel.name
+            : this.product.category_name
+        );
+        formData.append(
+          "car_id",
+          this.carModel ? this.carModel.id : this.product.car_id
+        );
+        formData.append(
+          "car_name",
+          this.carModel ? this.carModel.name : this.product.car_name
+        );
+        formData.append(
+          "carpart_id",
+          this.carpartModel ? this.carpartModel.id : this.product.carpart_id
+        );
+        formData.append(
+          "carpart_name",
+          this.carpartModel ? this.carpartModel.name : this.product.carpart_name
+        );
+        formData.append(
+          "company_id",
+          this.companyModel ? this.companyModel.id : this.product.company_id
+        );
+        formData.append(
+          "company_name",
+          this.companyModel ? this.companyModel.name : this.product.company_name
+        );
+        formData.append(
+          "tag_id",
+          this.tagidModel ? this.tagidModel.id : this.product.tag_id
+        );
+        formData.append(
+          "tag_name",
+          this.tagidModel ? this.tagidModel.name : this.product.tag_name
+        );
+        formData.append(
+          "primary_image",
+          this.Imagefile ? this.Imagefile : this.product.primary_image
+        );
         formData.append("price", this.productPrice);
         formData.append("priceoff", this.priceoff);
         formData.append("productcode", this.productCode);
@@ -565,19 +606,39 @@ export default {
         formData.append("Inventory_status", this.Inventorystatus);
         if (this.productfile) {
           formData.append("product_file", this.productfile);
+        } else {
+          formData.append("product_file", this.product.product_file);
         }
-        formData.append("product_garanty", this.productgarantymodel.label);
-        formData.append("product_send_way", this.productsendwaymodel.label);
+        formData.append(
+          "product_garanty",
+          this.productgarantymodel
+            ? this.productgarantymodel.label
+            : this.product.product_garanty
+        );
+        formData.append(
+          "product_send_way",
+          this.productsendwaymodel
+            ? this.productsendwaymodel.label
+            : this.product.product_send_way
+        );
 
         formData.append("quantity", 1);
         formData.append("delivery_amount", 80000);
         formData.append("description", this.content);
-        for (let index = 0; index < this.Images.length; index++) {
-          formData.append(`images[${index}]`, this.Images[index]);
+        if (this.Images) {
+          for (let index = 0; index < this.Images.length; index++) {
+            formData.append(`images[${index}]`, this.Images[index]);
+          }
+        } else {
+          for (let index = 0; index < this.product.images.length; index++) {
+            formData.append(`images[${index}]`, this.Images[index]);
+          }
         }
 
-        this.product = await $fetch(
-          "https://parseback.liara.run/api/products",
+        formData.append("_method", "PUT");
+
+        this.productup = await $fetch(
+          "https://parseback.liara.run/api/products/144",
           {
             method: "POST",
             body: formData,
@@ -586,24 +647,24 @@ export default {
 
         this.$toast.add({
           severity: "success",
-          summary: "ایجاد محصول",
-          detail: "محصول با موفقیت ایجاد شد",
+          summary: "بروزرسانی محصول",
+          detail: "محصول با موفقیت بروزرسانی شد",
           group: "tl",
           life: 3000,
         });
         navigateTo("/product");
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
-        console.log(error);
+        console.log("gg", error);
         this.$toast.add({
           severity: "error",
           summary: "خطا",
-          detail: "ایجاد محصول با شکست مواجه شد",
+          detail: "بروزرسانی محصول با شکست مواجه شد",
           group: "tl",
           life: 3000,
         });
       } finally {
-        console.log("qqq", toRaw(this.product));
+        console.log("qqq", toRaw(this.productup));
       }
     },
 
@@ -634,7 +695,6 @@ export default {
         this.carholder = this.product.car_name;
         this.categoryholder = this.product.category_name;
         this.content = this.product.description;
-
       } catch (error) {
         console.log(error);
       } finally {
