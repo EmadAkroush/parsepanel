@@ -25,11 +25,12 @@
           <!-- Data Table -->
           <form
             class="bg-white p-6 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-4"
-          
           >
             <!-- Product Name -->
             <div>
-              <label class="block text-sm font-semibold mb-1"> دسته بندی ها</label>
+              <label class="block text-sm font-semibold mb-1">
+                دسته بندی ها</label
+              >
               <InputText
                 v-model="productName"
                 placeholder="نام  دسته بندی را وارد کنید"
@@ -95,11 +96,24 @@
               style="text-align: start"
             />
 
-
-
-            <Column header="حذف" style="text-align: start" >
+            <Column field="rating" header="ویرایش" style="text-align: start">
               <template #body="slotProps">
-                <i class="mdi mdi-delete" style="font-size: 2.5rem" @click="deletecategory(slotProps.data.id)"></i>
+                <i
+                  class="mdi mdi-pencil"
+                  style="font-size: 2.5rem"
+                  @click="editdialog(slotProps.data.id)"
+                >
+                </i>
+              </template>
+            </Column>
+
+            <Column header="حذف" style="text-align: start">
+              <template #body="slotProps">
+                <i
+                  class="mdi mdi-delete"
+                  style="font-size: 2.5rem"
+                  @click="deletecategory(slotProps.data.id)"
+                ></i>
               </template>
             </Column>
 
@@ -110,6 +124,38 @@
             </template>
           </DataTable>
         </div>
+        <Dialog
+          v-model:visible="visible"
+          modal
+          header="ویرایش دسته بندی"
+          :style="{ width: '25rem' }"
+        >
+          <span class="text-surface-500 dark:text-surface-400 block mb-8">
+            نام جدید را وارد کنید</span
+          >
+          <div class="flex items-center gap-4 mb-4">
+            <InputText
+              id="username"
+              class="flex-auto"
+              autocomplete="off"
+              v-model="categoryholder"
+            />
+          </div>
+
+          <div class="flex justify-end gap-2">
+            <Button
+              type="button"
+              label="انصراف"
+              severity="secondary"
+              @click="visible = false"
+            ></Button>
+            <Button
+              type="button"
+              label="بروزرسانی"
+              @click="editcategory()"
+            ></Button>
+          </div>
+        </Dialog>
       </div>
     </div>
     <Toast position="top-left" group="tl" />
@@ -148,67 +194,115 @@ export default {
     return {
       data: null,
       data1: null,
+      details: null,
       productName: null,
-      category : null,
-      allcategory : null,
-  
+      category: null,
+      allcategory: null,
+      idedit: null,
+      visible: false,
+      categoryholder : null,
+      edit : null
     };
   },
   watch: {
     // وقتی تعداد برندها تغییر کند، درخواست جدیدی به سرور می‌زنیم
- 
   },
   methods: {
     async categoryfun() {
       try {
-        this.data = await $fetch('/api/category/create', {
-          method: 'POST',
-          body: { "parent_id": 1 , name: this.productName  },
+        this.data = await $fetch("/api/category/create", {
+          method: "POST",
+          body: { parent_id: 1, name: this.productName },
         });
         this.getcategory();
-        this.$toast.add({ severity: 'success', summary: 'ایجاد دسته بندی', detail: 'دسته بندی با موفقیت ایجاد شد', group: 'tl', life: 3000 });
+        this.$toast.add({
+          severity: "success",
+          summary: "ایجاد دسته بندی",
+          detail: "دسته بندی با موفقیت ایجاد شد",
+          group: "tl",
+          life: 3000,
+        });
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
         console.log(error);
       } finally {
-        console.log("ddd",  toRaw(this.data));
+        console.log("ddd", toRaw(this.data));
       }
     },
     async getcategory() {
       try {
-        this.category  = await $fetch('/api/category');
-        this.allcategory = this.category.categories
+        this.category = await $fetch("/api/category");
+        this.allcategory = this.category.categories;
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
         console.log(error);
       } finally {
-        console.log("brands",  this.allcategory);
+        console.log("brands", this.allcategory);
       }
     },
     async deletecategory(id) {
-
       try {
         this.data1 = await $fetch(`/api/category/delete`, {
-          method: 'DELETE',
-          query:  { url : `${id}`}
+          method: "DELETE",
+          query: { url: `${id}` },
         });
         this.getcategory();
-        this.$toast.add({ severity: 'success', summary: ' حذف دسته بندی', detail: 'دسته بندی با موفقیت حذف شد', group: 'tl', life: 3000 });
+        this.$toast.add({
+          severity: "success",
+          summary: " حذف دسته بندی",
+          detail: "دسته بندی با موفقیت حذف شد",
+          group: "tl",
+          life: 3000,
+        });
       } catch (error) {
-   
         console.log(error);
       } finally {
-        console.log("ddd",  toRaw(this.data1));
+        console.log("ddd", toRaw(this.data1));
       }
     },
-
-
+    async editcategory() {
+      try {
+        this.edit = await $fetch(`/api/category/edit`, {
+          method: "PUT",
+          body: { parent_id: 1, name: this.categoryholder },
+          query: { url: `${this.idedit}` },
+        });
+        this.getcategory();
+        this.$toast.add({
+          severity: "success",
+          summary: " ویرایش دسته بندی",
+          detail: "دسته بندی با موفقیت ویرایش شد",
+          group: "tl",
+          life: 3000,
+        });
+        this.visible = false;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        console.log("ddd", toRaw(this.edit));
+      }
+    },
+    async getcategorybyid(id) {
+      try {
+        this.details = await $fetch(`/api/category/details`, {
+          query: { url: `${id}` },
+        });
+        this.categoryholder = this.details.name;
+   
+      } catch (error) {
+        console.log(error);
+      } finally {
+        console.log("der", toRaw(this.details.name));
+      }
+    },
+    editdialog(id) {
+      this.idedit = id;
+      this.visible = true;
+      this.getcategorybyid(id);
+    },
   },
   beforeMount() {
     this.getcategory();
-
   },
 };
 </script>
-
-

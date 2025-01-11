@@ -25,11 +25,10 @@
           <!-- Data Table -->
           <form
             class="bg-white p-6 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-4"
-          
           >
             <!-- Product Name -->
             <div>
-              <label class="block text-sm font-semibold mb-1"> بخش  ها</label>
+              <label class="block text-sm font-semibold mb-1"> بخش ها</label>
               <InputText
                 v-model="productName"
                 placeholder="نام بخش ها را وارد کنید"
@@ -95,11 +94,24 @@
               style="text-align: start"
             />
 
-
-
-            <Column header="حذف" style="text-align: start" >
+            <Column field="rating" header="ویرایش" style="text-align: start">
               <template #body="slotProps">
-                <i class="mdi mdi-delete" style="font-size: 2.5rem" @click="deletecarparts(slotProps.data.id)"></i>
+                <i
+                  class="mdi mdi-pencil"
+                  style="font-size: 2.5rem"
+                  @click="editdialog(slotProps.data.id)"
+                >
+                </i>
+              </template>
+            </Column>
+
+            <Column header="حذف" style="text-align: start">
+              <template #body="slotProps">
+                <i
+                  class="mdi mdi-delete"
+                  style="font-size: 2.5rem"
+                  @click="deletecarparts(slotProps.data.id)"
+                ></i>
               </template>
             </Column>
 
@@ -110,6 +122,38 @@
             </template>
           </DataTable>
         </div>
+        <Dialog
+          v-model:visible="visible"
+          modal
+          header="ویرایش بخش ها"
+          :style="{ width: '25rem' }"
+        >
+          <span class="text-surface-500 dark:text-surface-400 block mb-8">
+            نام بخش  جدید را وارد کنید</span
+          >
+          <div class="flex items-center gap-4 mb-4">
+            <InputText
+              id="username"
+              class="flex-auto"
+              autocomplete="off"
+              v-model="categoryholder"
+            />
+          </div>
+
+          <div class="flex justify-end gap-2">
+            <Button
+              type="button"
+              label="انصراف"
+              severity="secondary"
+              @click="visible = false"
+            ></Button>
+            <Button
+              type="button"
+              label="بروزرسانی"
+              @click="editcategory()"
+            ></Button>
+          </div>
+        </Dialog>
       </div>
     </div>
     <Toast position="top-left" group="tl" />
@@ -149,66 +193,112 @@ export default {
       data: null,
       data1: null,
       productName: null,
-      carparts : null,
-      allcarparts : null,
-  
+      carparts: null,
+      allcarparts: null,
+      idedit: null,
+      visible: false,
+      categoryholder: null,
+      edit: null,
     };
   },
   watch: {
     // وقتی تعداد برندها تغییر کند، درخواست جدیدی به سرور می‌زنیم
- 
   },
   methods: {
     async carpartsfun() {
       try {
-        this.data = await $fetch('/api/carparts/create', {
-          method: 'POST',
-          body: { name: this.productName  },
+        this.data = await $fetch("/api/carparts/create", {
+          method: "POST",
+          body: { name: this.productName },
         });
         this.getcarparts();
-        this.$toast.add({ severity: 'success', summary: 'ایجاد برند', detail: 'برند با موفقیت ایجاد شد', group: 'tl', life: 3000 });
+        this.$toast.add({
+          severity: "success",
+          summary: "ایجاد برند",
+          detail: "برند با موفقیت ایجاد شد",
+          group: "tl",
+          life: 3000,
+        });
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
         console.log(error);
       } finally {
-        console.log("ddd",  toRaw(this.data));
+        console.log("ddd", toRaw(this.data));
       }
     },
     async getcarparts() {
       try {
-        this.carparts  = await $fetch('/api/carparts');
-        this.allcarparts = this.carparts.carparts
+        this.carparts = await $fetch("/api/carparts");
+        this.allcarparts = this.carparts.carparts;
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
         console.log(error);
       } finally {
-        console.log("brands",  this.allcarparts);
+        console.log("brands", this.allcarparts);
       }
     },
     async deletecarparts(id) {
-
       try {
         this.data1 = await $fetch(`/api/carparts/delete`, {
-          method: 'DELETE',
-          query:  { url : `${id}`}
+          method: "DELETE",
+          query: { url: `${id}` },
         });
         this.getcarparts();
-        this.$toast.add({ severity: 'success', summary: ' حذف برند', detail: 'برند با موفقیت حذف شد', group: 'tl', life: 3000 });
+        this.$toast.add({
+          severity: "success",
+          summary: " حذف برند",
+          detail: "برند با موفقیت حذف شد",
+          group: "tl",
+          life: 3000,
+        });
       } catch (error) {
-   
         console.log(error);
       } finally {
-        console.log("ddd",  toRaw(this.data1));
+        console.log("ddd", toRaw(this.data1));
       }
     },
-
-
+    async editcategory() {
+      try {
+        this.edit = await $fetch(`/api/carparts/edit`, {
+          method: "PUT",
+          body: { parent_id: 1, name: this.categoryholder },
+          query: { url: `${this.idedit}` },
+        });
+        this.getcarparts();
+        this.$toast.add({
+          severity: "success",
+          summary: " ویرایش  بخش ها",
+          detail: " بخش خودرو با موفقیت ویرایش شد",
+          group: "tl",
+          life: 3000,
+        });
+        this.visible = false;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        console.log("ddd", toRaw(this.edit));
+      }
+    },
+    async getcategorybyid(id) {
+      try {
+        this.details = await $fetch(`/api/carparts/details`, {
+          query: { url: `${id}` },
+        });
+        this.categoryholder = this.details.name;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        console.log("der", toRaw(this.details.name));
+      }
+    },
+    editdialog(id) {
+      this.idedit = id;
+      this.visible = true;
+      this.getcategorybyid(id);
+    },
   },
   beforeMount() {
     this.getcarparts();
-
   },
 };
 </script>
-
-

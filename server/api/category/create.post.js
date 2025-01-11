@@ -2,7 +2,7 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event);
     const { public: { apiBase } } = useRuntimeConfig()
     // const token = getCookie(event, 'token');
-  console.log("dddddd" , body);
+     console.log("dddddd" , body);
   
     try {
         const data = await $fetch(`${apiBase}/api/categories`, {

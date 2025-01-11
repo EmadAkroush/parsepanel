@@ -95,6 +95,17 @@
               style="text-align: start"
             />
 
+            <Column field="rating" header="ویرایش" style="text-align: start">
+              <template #body="slotProps">
+                <i
+                  class="mdi mdi-pencil"
+                  style="font-size: 2.5rem"
+                  @click="editdialog(slotProps.data.id)"
+                >
+                </i>
+              </template>
+            </Column>
+
 
 
             <Column header="حذف" style="text-align: start" >
@@ -110,6 +121,41 @@
             </template>
           </DataTable>
         </div>
+        <Dialog
+          v-model:visible="visible"
+          modal
+          header="ویرایش  برچسب ها"
+          :style="{ width: '25rem' }"
+        >
+          <span class="text-surface-500 dark:text-surface-400 block mb-8">
+            نام برچسب جدید را وارد کنید</span
+          >
+          <div class="flex items-center gap-4 mb-4">
+            <InputText
+              id="username"
+              class="flex-auto"
+              autocomplete="off"
+              v-model="categoryholder"
+            />
+          </div>
+
+          
+     
+
+          <div class="flex justify-end gap-2">
+            <Button
+              type="button"
+              label="انصراف"
+              severity="secondary"
+              @click="visible = false"
+            ></Button>
+            <Button
+              type="button"
+              label="بروزرسانی"
+              @click="editcategory()"
+            ></Button>
+          </div>
+        </Dialog>
       </div>
     </div>
     <Toast position="top-left" group="tl" />
@@ -151,6 +197,10 @@ export default {
       productName: null,
       tags : null,
       alltags : null,
+      idedit: null,
+      visible: false,
+      categoryholder: null,
+      edit: null,
   
     };
   },
@@ -200,6 +250,45 @@ export default {
       } finally {
         console.log("ddd",  toRaw(this.data1));
       }
+    },
+    async editcategory() {
+      try {
+        this.edit = await $fetch(`/api/tags/edit`, {
+          method: "PUT",
+          body: { parent_id: 1, name: this.categoryholder },
+          query: { url: `${this.idedit}` },
+        });
+        this.gettags();
+        this.$toast.add({
+          severity: "success",
+          summary: " ویرایش  برچسب ها",
+          detail: "  برچسب ها با موفقیت ویرایش شد",
+          group: "tl",
+          life: 3000,
+        });
+        this.visible = false;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        console.log("ddd", toRaw(this.edit));
+      }
+    },
+    async getcategorybyid(id) {
+      try {
+        this.details = await $fetch(`/api/tags/details`, {
+          query: { url: `${id}` },
+        });
+        this.categoryholder = this.details.name;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        console.log("der", toRaw(this.details.name));
+      }
+    },
+    editdialog(id) {
+      this.idedit = id;
+      this.visible = true;
+      this.getcategorybyid(id);
     },
 
 
