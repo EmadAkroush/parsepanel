@@ -14,8 +14,12 @@ export default defineNuxtConfig({
         
     },
     css: [
-        '@mdi/font/css/materialdesignicons.min.css'
+        '@mdi/font/css/materialdesignicons.min.css',
+        '@vuepic/vue-datepicker/dist/main.css' // وارد کردن استایل مستقیما در پیکربندی Nuxt
       ],
+      build: {
+        transpile: ['@vuepic/vue-datepicker']
+    },
     primevue: {
         options: {
             theme: {

@@ -24,6 +24,7 @@
         <div class="p-6 bg-white rounded-lg shadow-md rtl" style="width: 100%">
           <!-- Data Table -->
           <div class="flex items-center mb-4 gap-4">
+          
             <nuxt-link to="/product/category">
               <Button
                 label="دسته بندی ها"
