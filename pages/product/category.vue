@@ -303,6 +303,7 @@ export default {
   },
   beforeMount() {
     this.getcategory();
+
   },
 };
 </script>

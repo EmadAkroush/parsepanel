@@ -313,6 +313,7 @@ export default {
       }
     },
 
+
     onPageChange(event) {
       this.currentPage = event.page + 1
       this.getproduct(this.currentPage)
