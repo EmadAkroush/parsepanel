@@ -32,7 +32,6 @@
                 iconPos="right"
               />
             </nuxt-link>
- 
 
             <nuxt-link to="/post/tags">
               <Button
@@ -42,13 +41,11 @@
                 iconPos="right"
               />
             </nuxt-link>
-            
-            
           </div>
           <hr />
           <DataTable
             class="mt-4"
-            :value="products"
+            :value="productsAll"
             style="width: 100%"
             paginator
             :rows="10"
@@ -74,9 +71,9 @@
                     </div>
                   </div>
                 </div>
-                <nuxt-link to="/post">
+                <nuxt-link to="/post/new">
                   <Button
-                    label="مقاله جدید" 
+                    label="مقاله جدید"
                     severity="success"
                     icon="mdi mdi-plus"
                     iconPos="right"
@@ -86,28 +83,36 @@
             </template>
 
             <!-- Columns -->
-            <Column field="name" header="نام" style="text-align: start" />
-            <Column header="تصویر" style="text-align: start">
+            <Column field="title" header="عنوان" style="text-align: start" />
+            <Column
+              field="primary_image"
+              header="تصویر"
+              style="text-align: start"
+            >
               <template #body="slotProps">
-                <img src="/public/girbox.jpg" class="w-24 rounded" />
+                <img :src="slotProps.data.primary_image" class="w-24 rounded" />
               </template>
             </Column>
-          
+
             <Column
-              field="category"
+              field="category_name"
               header="دسته‌بندی"
               style="text-align: start"
             />
-            
+
             <Column field="rating" header="ویرایش" style="text-align: start">
               <template #body="slotProps">
                 <i class="mdi mdi-pencil" style="font-size: 2.5rem"></i>
               </template>
             </Column>
 
-            <Column header="حذف" style="text-align: start">
+            <Column header="حذف" style="text-align: start" @click="">
               <template #body="slotProps">
-                <i class="mdi mdi-delete" style="font-size: 2.5rem"></i>
+                <i
+                  class="mdi mdi-delete"
+                  style="font-size: 2.5rem"
+                  @click="deletedialog(slotProps.data.id)"
+                ></i>
               </template>
             </Column>
 
@@ -117,6 +122,30 @@
               دارد.
             </template>
           </DataTable>
+          <Toast position="top-left" group="tl" />
+          <Dialog
+            v-model:visible="visible"
+            modal
+            header="حذف محصول"
+            :style="{ width: '25rem' }"
+          >
+            <span class="text-surface-500 dark:text-surface-400 block mb-8">
+              آیا از حذف محصول اطمینان دارید</span
+            >
+            <div class="flex justify-end gap-2">
+              <Button
+                type="button"
+                label="خیر"
+                severity="secondary"
+                @click="visible = false"
+              ></Button>
+              <Button
+                type="button"
+                label="بله"
+                @click="deleteproduct()"
+              ></Button>
+            </div>
+          </Dialog>
         </div>
       </div>
     </div>
@@ -125,6 +154,8 @@
 <style lang="scss">
 .main {
   background-color: #f3f4f6;
+
+
   .sec1 {
     display: flex;
     justify-content: space-between;
@@ -153,35 +184,13 @@
 export default {
   data() {
     return {
+      productsAll: null,
+      visible: false,
+      idproduct: null,
+      currentPage: null,
+      queryParams: null,
+      totalRecords: null,
       products: [
-        {
-          name: "بررسی دلایل ایجاد صداهای عجیب و غریب در اتومبیل",
-          image: "laptop.png",
-          price: 999.99,
-          category: "موتور خودرو",
-          code: "ffff",
-        },
-        {
-          name: "بررسی دلایل ایجاد صداهای عجیب و غریب در اتومبیل",
-          image: "laptop.png",
-          price: 999.99,
-          category: "موتور خودرو",
-          code: "ffff",
-        },
-        {
-          name: "بررسی دلایل ایجاد صداهای عجیب و غریب در اتومبیل",
-          image: "laptop.png",
-          price: 999.99,
-          category: "موتور خودرو",
-          code: "ffff",
-        },
-        {
-          name: "بررسی دلایل ایجاد صداهای عجیب و غریب در اتومبیل",
-          image: "laptop.png",
-          price: 999.99,
-          category: "موتور خودرو",
-          code: "ffff",
-        },
         {
           name: "بررسی دلایل ایجاد صداهای عجیب و غریب در اتومبیل",
           image: "laptop.png",
@@ -193,9 +202,22 @@ export default {
     };
   },
   methods: {
-    formatCurrency(value) {
-      return `${value.toFixed(3)}`;
+    async getproduct(par) {
+      try {
+        this.product = await $fetch("/api/post/main", {
+          query: { page: par },
+        });
+        this.productsAll = this.product.posts;
+        this.totalRecords = this.product.total;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.product = toRaw(this.product);
+        console.log("pr", toRaw(this.product));
+      }
     },
+
+
     getSeverity(product) {
       switch (product.inventoryStatus) {
         case "In Stock":
@@ -208,6 +230,36 @@ export default {
           return "info";
       }
     },
+    deletedialog(id) {
+      this.visible = true;
+      this.idproduct = id;
+    },
+    async deleteproduct() {
+      try {
+        this.data1 = await $fetch(`/api/post/main/delete`, {
+          method: "DELETE",
+          query: { url: `${this.idproduct}` },
+        });
+        this.getproduct();
+        this.$toast.add({
+          severity: "success",
+          summary: " حذف محصول",
+          detail: "محصول با موفقیت حذف شد",
+          group: "tl",
+          life: 3000,
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        console.log("ddd", toRaw(this.data1));
+        this.visible = false;
+      }
+    },
+
+  },
+  beforeMount() {
+    this.getproduct();
+   
   },
 };
 </script>

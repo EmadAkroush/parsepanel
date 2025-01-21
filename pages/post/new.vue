@@ -5,7 +5,7 @@
         <img src="/public/opration/icons-Line-truck.png" alt="" class="pic" />
 
         <div class="mr-2 text-right">
-          <p class="text-right">مدیریت محصولات</p>
+          <p class="text-right">مدیریت مقالات</p>
         </div>
       </div>
       <div
@@ -23,261 +23,138 @@
       <div class="flex flex-row mt-6">
         <div class="p-6 bg-white rounded-lg shadow-md rtl" style="width: 100%">
           <div class="container mx-auto p-6">
-            <h1 class="text-2xl font-bold mb-6">فرم ایجاد محصول</h1>
-            <div class=" my-8">
-                <h1>توضیحات محصول</h1>
-                <client-only>
-                  <tiptap-editor v-model="content"  />
-                </client-only>
-              </div>
+            <h1 class="text-2xl font-bold mb-6">فرم ایجاد مقاله</h1>
 
             <form
               class="bg-white p-6 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-4"
             >
               <!-- Product Name -->
-              <div>
-                <label class="block text-sm font-semibold mb-1"
-                  >نام محصول</label
+              <div class="md:col-span-2">
+                <label class="block text-sm font-semibold mb-1">
+                  عنوان مقاله</label
                 >
                 <InputText
                   v-model="productName"
-                  placeholder="نام محصول را وارد کنید"
+                  placeholder="عنوان مقاله را وارد کنید"
                   class="w-full"
                 />
               </div>
 
-              <!-- Price -->
-              <div>
-                <label class="block text-sm font-semibold mb-1"
-                  >قیمت محصول</label
-                >
-                <InputText
-                  v-model="productPrice"
-                  type="number"
-                  placeholder="قیمت را وارد کنید"
-                  class="w-full"
-                />
+              <div class="my-8 md:col-span-2">
+                <h1>مقدمه مقاله</h1>
+                <client-only>
+                  <tiptap-editor v-model="content" />
+                </client-only>
               </div>
-              <!-- Price -->
+
+              <!-- Secondary Color -->
               <div>
                 <label class="block text-sm font-semibold mb-1">
-                  قیمت تخفیف دار</label
+                  چه چیزی یاد می گیرید 1</label
                 >
                 <InputText
-                  v-model="productPrice"
-                  type="number"
-                  placeholder="قیمت را وارد کنید"
+                  v-model="secondaryColor"
+                  placeholder="چه چیزی یاد می گیرید 1"
                   class="w-full"
                 />
               </div>
-
-              <!-- Product Code -->
-              <div>
-                <label class="block text-sm font-semibold mb-1">کد محصول</label>
-                <InputText
-                  v-model="productCode"
-                  placeholder="کد محصول را وارد کنید"
-                  class="w-full"
-                />
-              </div>
-
-          
-
-              <!-- Price with Tax -->
+              <!-- Secondary Color -->
               <div>
                 <label class="block text-sm font-semibold mb-1">
-                  طول به سانتی متر
-                </label>
-                <InputText
-                  v-model="priceWithTax"
-                  type="number"
-                  placeholder="123 "
-                  class="w-full"
-                />
-              </div>
-
-              <!-- Height -->
-              <div>
-                <label class="block text-sm font-semibold mb-1"
-                  >عرض به سانتی متر</label
+                  چه چیزی یاد می گیرید 2</label
                 >
                 <InputText
-                  v-model="height"
-                  type="number"
-                  placeholder=" 125  "
+                  v-model="secondaryColor"
+                  placeholder="چه چیزی یاد می گیرید 2"
                   class="w-full"
                 />
               </div>
 
               <!-- Secondary Color -->
               <div>
-                <label class="block text-sm font-semibold mb-1"
-                  >رنگ اولیه</label
+                <label class="block text-sm font-semibold mb-1">
+                  چه چیزی یاد می گیرید 3</label
                 >
                 <InputText
                   v-model="secondaryColor"
-                  placeholder="رنگ اولیه را وارد کنید"
+                  placeholder="چه چیزی یاد می گیرید 3"
                   class="w-full"
                 />
               </div>
               <!-- Secondary Color -->
               <div>
-                <label class="block text-sm font-semibold mb-1"
-                  >رنگ ثانویه</label
+                <label class="block text-sm font-semibold mb-1">
+                  چه چیزی یاد می گیرید 4</label
                 >
                 <InputText
                   v-model="secondaryColor"
-                  placeholder="رنگ ثانویه را وارد کنید"
+                  placeholder="چه چیزی یاد می گیرید 4"
                   class="w-full"
-                />
-              </div>
-
-              <!-- Secondary Color -->
-              <div class="col-span-2">
-                <label class="block text-sm font-semibold mb-1"
-                  >کشور سازنده
-                </label>
-                <InputText
-                  v-model="secondaryColor"
-                  placeholder=" کشور سازنده را وارد کنید"
-                  style="width: 50%"
                 />
               </div>
 
               <!-- Vehicle Type -->
               <div>
                 <label class="block text-sm font-semibold mb-1">
-                  دسته بندی محصول</label
-                >
-                <Dropdown
-                  v-model="vehicleType"
-                  :options="vehicleTypes"
-                  placeholder="دسته بندی محصول را انتخاب کنید"
-                  optionLabel="label"
-                  class="w-full"
-                />
-              </div>
-              <div>
-                <label class="block text-sm font-semibold mb-1"
-                  >نوع خودرو</label
-                >
-                <Dropdown
-                  v-model="vehicleType"
-                  :options="vehicleTypes"
-                  placeholder="نوع خودرو را انتخاب کنید"
-                  optionLabel="label"
-                  class="w-full"
-                />
-              </div>
-              <div>
-                <label class="block text-sm font-semibold mb-1"
-                  >بخش خودرو  </label
-                >
-                <Dropdown
-                  v-model="vehicleType"
-                  :options="vehicleTypes"
-                  placeholder="مثلا جلوبندی"
-                  optionLabel="label"
-                  class="w-full"
-                />
-              </div>
-
-              <div>
-                <label class="block text-sm font-semibold mb-1"
-                  > شرکت سازنده  </label
-                >
-                <Dropdown
-                  v-model="vehicleType"
-                  :options="vehicleTypes"
-                  placeholder="شرکت سازنده خودرو را انتخاب کنید"
-                  optionLabel="label"
-                  class="w-full"
-                />
-              </div>
-
-              <!-- Brand -->
-              <div>
-                <label class="block text-sm font-semibold mb-1">برند</label>
-                <Dropdown
-                  v-model="brand"
-                  :options="brands"
-                  placeholder="برند را انتخاب کنید"
-                  class="w-full"
-                  optionLabel="label"
-                />
-              </div>
-
-              <!-- Section Type -->
-              <div>
-                <label class="block text-sm font-semibold mb-1"
-                  >نوع ضمانت</label
-                >
-                <Dropdown
-                  v-model="sectionType"
-                  :options="sectionTypes"
-                  placeholder="نوع ضمانت را انتخاب کنید"
-                  optionLabel="label"
-                  class="w-full"
-                />
-              </div>
-
-              <div>
-                <label class="block text-sm font-semibold mb-1"
-                  >بر چسب های محصول
+                  برچسب 1
                 </label>
-                <MultiSelect
-                  v-model="selectedCities"
-                  :options="cities"
-                  optionLabel="name"
-                  placeholder="انتخاب برچسب"
-                  :maxSelectedLabels="3"
+                <Dropdown
+                  v-model="vehicleType"
+                  :options="vehicleTypes"
+                  placeholder="برچسب 1"
+                  optionLabel="label"
                   class="w-full"
                 />
               </div>
-
-              <!-- Submission Method -->
+              <!-- Vehicle Type -->
               <div>
-                <label class="block text-sm font-semibold mb-1"
-                  >روش ارسال</label
-                >
+                <label class="block text-sm font-semibold mb-1">
+                  برچسب 2
+                </label>
                 <Dropdown
-                  v-model="submissionMethod"
-                  :options="submissionMethods"
-                  placeholder="روش ارسال را انتخاب کنید"
+                  v-model="vehicleType"
+                  :options="vehicleTypes"
+                  placeholder="برچسب 2"
+                  optionLabel="label"
+                  class="w-full"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-semibold mb-1">
+                  برچسب 3
+                </label>
+                <Dropdown
+                  v-model="vehicleType"
+                  :options="vehicleTypes"
+                  placeholder="برچسب 3"
                   optionLabel="label"
                   class="w-full"
                 />
               </div>
 
-              <!-- Submission Method -->
+              <div>
+                <label class="block text-sm font-semibold mb-1">
+                  دسته بندی
+                </label>
+                <Dropdown
+                  v-model="vehicleType"
+                  :options="vehicleTypes"
+                  placeholder="دسته بندی خود را انتخاب کنید"
+                  optionLabel="label"
+                  class="w-full"
+                />
+              </div>
 
-              <div class="flex md:col-span-2">
-                <div class="flex items-center gap-2">
-                  <label class="block text-sm font-semibold mb-1 ml-4"
-                    >وضعیت موجودی
-                  </label>
-                  <RadioButton
-                    v-model="ingredient"
-                    inputId="ingredient1"
-                    name="pizza"
-                    value="Cheese"
-                  />
-                  <label for="ingredient1">موجود</label>
-                </div>
-                <div class="flex items-center gap-2 mr-4">
-                  <RadioButton
-                    v-model="ingredient"
-                    inputId="ingredient2"
-                    name="pizza"
-                    value="Mushroom"
-                  />
-                  <label for="ingredient2">ناموجود</label>
-                </div>
+              <div class="my-8 md:col-span-2 body-blog">
+                <h1>مقدمه مقاله</h1>
+                <client-only>
+                  <tiptap-editor v-model="content" />
+                </client-only>
               </div>
 
               <div class="mt-8">
                 <label class="block text-sm font-semibold mb-1">
-                  بارگذاری تصویر شاخص
+                  بارگذاری تصویر اصلی
                 </label>
 
                 <div class="card flex flex-col items-center gap-6">
@@ -301,7 +178,7 @@
 
               <div class="mt-8">
                 <label class="block text-sm font-semibold mb-1">
-                  بارگذاری کاتالوگ محصول
+                  بارگذاری تصویر وسط
                 </label>
 
                 <div class="card flex flex-col items-center gap-6">
@@ -322,17 +199,64 @@
                   />
                 </div>
               </div>
-
-              <!-- File Upload -->
-              <div class="col-span-1 md:col-span-2">
+              <!-- Secondary Color -->
+              <div>
                 <label class="block text-sm font-semibold mb-1">
-                  بارگذاری تصاویر اسلایدر محصول</label
+                  متن لینک 1</label
                 >
-                <FileUpload
-                  mode="advanced"
-                  name="demo[]"
-                  multiple
-                  accept="image/*"
+                <InputText
+                  v-model="secondaryColor"
+                  placeholder=" متن لینک 1"
+                  class="w-full"
+                />
+              </div>
+              <!-- Secondary Color -->
+              <div>
+                <label class="block text-sm font-semibold mb-1"> لینک 1</label>
+                <InputText
+                  v-model="secondaryColor"
+                  placeholder=" لینک 1"
+                  class="w-full"
+                />
+              </div>
+              <!-- Secondary Color -->
+              <div>
+                <label class="block text-sm font-semibold mb-1">
+                  متن لینک 2</label
+                >
+                <InputText
+                  v-model="secondaryColor"
+                  placeholder=" متن لینک 2"
+                  class="w-full"
+                />
+              </div>
+              <!-- Secondary Color -->
+              <div>
+                <label class="block text-sm font-semibold mb-1"> لینک 2</label>
+                <InputText
+                  v-model="secondaryColor"
+                  placeholder=" لینک 2"
+                  class="w-full"
+                />
+              </div>
+              <!-- Secondary Color -->
+              <div>
+                <label class="block text-sm font-semibold mb-1">
+                  متن لینک 3</label
+                >
+                <InputText
+                  v-model="secondaryColor"
+                  placeholder=" متن لینک 3"
+                  class="w-full"
+                />
+              </div>
+              <!-- Secondary Color -->
+              <div>
+                <label class="block text-sm font-semibold mb-1"> لینک 3</label>
+                <InputText
+                  v-model="secondaryColor"
+                  placeholder=" لینک 3"
+                  class="w-full"
                 />
               </div>
 
@@ -365,6 +289,11 @@
 <style lang="scss">
 .main {
   background-color: #f3f4f6;
+  .body-blog {
+    .tiptap {
+      height: 800px;
+    }
+  }
   .sec1 {
     display: flex;
     justify-content: space-between;

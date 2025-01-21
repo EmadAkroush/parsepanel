@@ -254,7 +254,8 @@ export default {
       idproduct: null,
       currentPage: null,
       queryParams: null,
-      totalRecords: null
+      totalRecords: null,
+      
     };
   },
   methods: {
