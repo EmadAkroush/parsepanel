@@ -30,11 +30,11 @@
             >
               <!-- Product Name -->
               <div class="md:col-span-2">
-                <label class="block text-sm font-semibold mb-1">
+                <label class="block text-sm font-semibold mb-1"   >
                   عنوان مقاله</label
                 >
                 <InputText
-                  v-model="productName"
+                  v-model="title"
                   placeholder="عنوان مقاله را وارد کنید"
                   class="w-full"
                 />
@@ -43,7 +43,7 @@
               <div class="my-8 md:col-span-2">
                 <h1>مقدمه مقاله</h1>
                 <client-only>
-                  <tiptap-editor v-model="content" />
+                  <tiptap-editor v-model="summary" />
                 </client-only>
               </div>
 
@@ -53,7 +53,7 @@
                   چه چیزی یاد می گیرید 1</label
                 >
                 <InputText
-                  v-model="secondaryColor"
+                  v-model="whatlearn1"
                   placeholder="چه چیزی یاد می گیرید 1"
                   class="w-full"
                 />
@@ -64,7 +64,7 @@
                   چه چیزی یاد می گیرید 2</label
                 >
                 <InputText
-                  v-model="secondaryColor"
+                  v-model="whatlearn2"
                   placeholder="چه چیزی یاد می گیرید 2"
                   class="w-full"
                 />
@@ -76,7 +76,7 @@
                   چه چیزی یاد می گیرید 3</label
                 >
                 <InputText
-                  v-model="secondaryColor"
+                  v-model="whatlearn3"
                   placeholder="چه چیزی یاد می گیرید 3"
                   class="w-full"
                 />
@@ -87,7 +87,7 @@
                   چه چیزی یاد می گیرید 4</label
                 >
                 <InputText
-                  v-model="secondaryColor"
+                  v-model="whatlearn4"
                   placeholder="چه چیزی یاد می گیرید 4"
                   class="w-full"
                 />
@@ -99,7 +99,7 @@
                   برچسب 1
                 </label>
                 <Dropdown
-                  v-model="vehicleType"
+                  v-model="tags1"
                   :options="vehicleTypes"
                   placeholder="برچسب 1"
                   optionLabel="label"
@@ -112,7 +112,7 @@
                   برچسب 2
                 </label>
                 <Dropdown
-                  v-model="vehicleType"
+                  v-model="tags2"
                   :options="vehicleTypes"
                   placeholder="برچسب 2"
                   optionLabel="label"
@@ -124,7 +124,7 @@
                   برچسب 3
                 </label>
                 <Dropdown
-                  v-model="vehicleType"
+                  v-model="tags3"
                   :options="vehicleTypes"
                   placeholder="برچسب 3"
                   optionLabel="label"
@@ -137,7 +137,7 @@
                   دسته بندی
                 </label>
                 <Dropdown
-                  v-model="vehicleType"
+                  v-model="category"
                   :options="vehicleTypes"
                   placeholder="دسته بندی خود را انتخاب کنید"
                   optionLabel="label"
@@ -146,9 +146,9 @@
               </div>
 
               <div class="my-8 md:col-span-2 body-blog">
-                <h1>مقدمه مقاله</h1>
+                <h1>بدنه مقاله</h1>
                 <client-only>
-                  <tiptap-editor v-model="content" />
+                  <tiptap-editor v-model="description" />
                 </client-only>
               </div>
 
@@ -205,7 +205,7 @@
                   متن لینک 1</label
                 >
                 <InputText
-                  v-model="secondaryColor"
+                  v-model="linktext1"
                   placeholder=" متن لینک 1"
                   class="w-full"
                 />
@@ -214,7 +214,7 @@
               <div>
                 <label class="block text-sm font-semibold mb-1"> لینک 1</label>
                 <InputText
-                  v-model="secondaryColor"
+                  v-model="link1"
                   placeholder=" لینک 1"
                   class="w-full"
                 />
@@ -225,7 +225,7 @@
                   متن لینک 2</label
                 >
                 <InputText
-                  v-model="secondaryColor"
+                  v-model="linktext2"
                   placeholder=" متن لینک 2"
                   class="w-full"
                 />
@@ -234,7 +234,7 @@
               <div>
                 <label class="block text-sm font-semibold mb-1"> لینک 2</label>
                 <InputText
-                  v-model="secondaryColor"
+                  v-model="link2"
                   placeholder=" لینک 2"
                   class="w-full"
                 />
@@ -245,7 +245,7 @@
                   متن لینک 3</label
                 >
                 <InputText
-                  v-model="secondaryColor"
+                  v-model="linktext3"
                   placeholder=" متن لینک 3"
                   class="w-full"
                 />
@@ -254,10 +254,24 @@
               <div>
                 <label class="block text-sm font-semibold mb-1"> لینک 3</label>
                 <InputText
-                  v-model="secondaryColor"
+                  v-model="link3"
                   placeholder=" لینک 3"
                   class="w-full"
                 />
+              </div>
+
+              <div class="md:col-span-2">
+                <label class="block text-sm font-semibold mb-1" > عنوان سئو</label>
+                <InputText
+                  v-model="seotitle"
+                  placeholder="عنوان سئو"
+                  class="w-full"
+                  
+                />
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-sm font-semibold mb-1" >  توضیحات سئو</label>
+                <Textarea v-model="seodes" rows="5" cols="150"     placeholder="توضیحات سئو" />
               </div>
 
               <!-- Submit Button -->
@@ -328,66 +342,38 @@ export default {
   data() {
     return {
       content: "hello",
-      ingredient: null,
       src: null,
       src1: null,
-      productName: "",
-      productPrice: null,
-      productCode: "",
-      priceWithTax: null,
-      height: null,
-      secondaryColor: "",
-      vehicleType: null,
-      brand: null,
-      sectionType: null,
-      submissionMethod: null,
-      vehicleTypes: [
-        { label: "خودروها", value: "cars" },
-        { label: "موتور", value: "motorcycles" },
-      ],
-      brands: [
-        { label: "برند A", value: "brandA" },
-        { label: "برند B", value: "brandB" },
-      ],
-      sectionTypes: [
-        { label: "نوع اول", value: "type1" },
-        { label: "نوع دوم", value: "type2" },
-      ],
-      submissionMethods: [
-        { label: "پست پیشتاز", value: "post" },
-        { label: "تیپاکس", value: "pickup" },
-        { label: "هردو", value: "pickup1" },
-      ],
-      selectedCities: null,
-      cities: [
-        { name: "New York", code: "NY" },
-        { name: "Rome", code: "RM" },
-        { name: "London", code: "LDN" },
-        { name: "Istanbul", code: "IST" },
-        { name: "Paris", code: "PRS" },
-      ],
+      title: null,
+      summary: null,
+      whatlearn1: null,
+      whatlearn2: null,
+      whatlearn3: null,
+      whatlearn4: null,
+      tags1:null,
+      tags2:null,
+      tags3:null,
+      category : null,
+      description: null,
+      primary_image : null,
+      middle_image: null,
+      linktext1: null,
+      link1: null,
+      linktext2: null,
+      link2: null,
+      linktext3: null,
+      link3: null,
+      seotitle: null,
+      seodes: null,
+
     };
   },
 
   methods: {
-    submitForm() {
-      // Implement form submission logic here
-      alert(
-        "Form submitted with the following data:\n" +
-          `Name: ${this.productName}\n` +
-          `Price: ${this.productPrice}\n` +
-          `Code: ${this.productCode}\n` +
-          `Price with Tax: ${this.priceWithTax}\n` +
-          `Height: ${this.height}\n` +
-          `Secondary Color: ${this.secondaryColor}\n` +
-          `Vehicle Type: ${this.vehicleType}\n` +
-          `Brand: ${this.brand}\n` +
-          `Section Type: ${this.sectionType}\n` +
-          `Submission Method: ${this.submissionMethod}`
-      );
-    },
+
     onFileSelect(event) {
       const file = event.files[0];
+      this.primary_image = file
       const reader = new FileReader();
 
       reader.onload = async (e) => {
@@ -398,6 +384,7 @@ export default {
     },
     onFileSelect1(event) {
       const file = event.files[0];
+      this.middle_image = file
       const reader = new FileReader();
 
       reader.onload = async (e) => {
