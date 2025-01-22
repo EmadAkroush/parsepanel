@@ -5,7 +5,7 @@
         <img src="/public/opration/icons-Line-truck.png" alt="" class="pic" />
 
         <div class="mr-2 text-right">
-          <p class="text-right">مدیریت محصولات</p>
+          <p class="text-right">مدیریت مقالات </p>
         </div>
       </div>
       <div
@@ -29,10 +29,10 @@
           >
             <!-- Product Name -->
             <div>
-              <label class="block text-sm font-semibold mb-1">  شرکت  ها</label>
+              <label class="block text-sm font-semibold mb-1">  برچسب  ها</label>
               <InputText
                 v-model="productName"
-                placeholder="نام شرکت  را وارد کنید"
+                placeholder="نام برچسب را وارد کنید"
                 class="w-full"
               />
             </div>

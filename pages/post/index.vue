@@ -47,7 +47,6 @@
             class="mt-4"
             :value="productsAll"
             style="width: 100%"
-            paginator
             :rows="10"
             :rowsPerPageOptions="[5, 10, 20, 50]"
           >
@@ -120,10 +119,17 @@
 
             <!-- Footer Section -->
             <template #footer>
-              مجموعاً {{ products ? products.length : 0 }} محصول در لیست وجود
+              مجموعاً {{ totalRecords }} محصول در لیست وجود
               دارد.
             </template>
           </DataTable>
+          <Paginator
+            :rows="10"
+            :totalRecords="totalRecords"
+            template="PageLinks "
+            @page="onPageChange"
+            :currentPage="currentPage"
+          />
           <Toast position="top-left" group="tl" />
           <Dialog
             v-model:visible="visible"
@@ -192,6 +198,7 @@ export default {
       currentPage: null,
       queryParams: null,
       totalRecords: null,
+      product : null,
       products: [
         {
           name: "بررسی دلایل ایجاد صداهای عجیب و غریب در اتومبیل",
@@ -204,6 +211,8 @@ export default {
     };
   },
   methods: {
+    
+  
     async getproduct(par) {
       try {
         this.product = await $fetch("/api/post/main", {
@@ -217,6 +226,13 @@ export default {
         this.product = toRaw(this.product);
         console.log("pr", toRaw(this.product));
       }
+    },
+
+    onPageChange(event) {
+      this.currentPage = event.page + 1
+      this.getproduct(this.currentPage)
+      console.log("event" , this.currentPage);
+      
     },
 
 
