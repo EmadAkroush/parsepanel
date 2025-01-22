@@ -467,6 +467,7 @@ export default {
 
 
   methods: {
+    
     onFileSelect(event) {
       const file = event.files[0];
       this.Imagefile = file;

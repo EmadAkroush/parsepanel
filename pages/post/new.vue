@@ -100,9 +100,9 @@
                 </label>
                 <Dropdown
                   v-model="tags1"
-                  :options="vehicleTypes"
+                  :options="tagsdrop"
                   placeholder="برچسب 1"
-                  optionLabel="label"
+                  optionLabel="name"
                   class="w-full"
                 />
               </div>
@@ -113,9 +113,9 @@
                 </label>
                 <Dropdown
                   v-model="tags2"
-                  :options="vehicleTypes"
+                  :options="tagsdrop"
                   placeholder="برچسب 2"
-                  optionLabel="label"
+                  optionLabel="name"
                   class="w-full"
                 />
               </div>
@@ -125,9 +125,9 @@
                 </label>
                 <Dropdown
                   v-model="tags3"
-                  :options="vehicleTypes"
+                  :options="tagsdrop"
                   placeholder="برچسب 3"
-                  optionLabel="label"
+                  optionLabel="name"
                   class="w-full"
                 />
               </div>
@@ -138,9 +138,9 @@
                 </label>
                 <Dropdown
                   v-model="category"
-                  :options="vehicleTypes"
+                  :options="categorydrop"
                   placeholder="دسته بندی خود را انتخاب کنید"
-                  optionLabel="label"
+                  optionLabel="name"
                   class="w-full"
                 />
               </div>
@@ -280,7 +280,7 @@
                 <Button
                   label="انصراف"
                   class="text-green-700 font-bold rounded-md px-6 py-2 transition duration-300 ease-in-out transform hover:bg-green-600 active:bg-green-800"
-                  @click="handleSubmit"
+            
                   variant="outlined"
                   style="width: 160px; background: none; color: #10b981"
                 />
@@ -289,13 +289,14 @@
                 <Button
                   label="ثبت"
                   class="border mr-4 border-green-700 text-green-700 font-bold rounded-md px-6 py-2 transition duration-300 ease-in-out transform hover:bg-green-700 hover:text-white active:bg-green-600"
-                  @click="handleSend"
+                  @click="addpost"
                   style="width: 160px"
                 />
               </div>
             </form>
           </div>
         </div>
+        <Toast position="top-left" group="tl" /> 
       </div>
     </div>
   </div>
@@ -342,6 +343,9 @@ export default {
   data() {
     return {
       content: "hello",
+      data1: null,
+      data2: null,
+      post: null,
       src: null,
       src1: null,
       title: null,
@@ -365,11 +369,86 @@ export default {
       link3: null,
       seotitle: null,
       seodes: null,
+      categorydrop : null ,
+      tagsdrop : null,
 
     };
   },
 
   methods: {
+
+    async addpost() {
+      
+      try {
+        const formData = new FormData();
+        formData.append("title", this.title);
+        formData.append("user_id", "1");
+        formData.append("date", "ddd");
+        formData.append("primary_image", this.primary_image);
+        formData.append("summary", this.summary);
+        formData.append("whatlearn1", this.whatlearn1);
+        formData.append("whatlearn2", this.whatlearn2);
+        formData.append("whatlearn3", this.whatlearn3);
+        formData.append("whatlearn4", this.whatlearn4);
+        formData.append("middle_image", this.middle_image);
+        formData.append("description", this.description);
+        formData.append("external_sources1", this.link1);
+        formData.append("external_sources2", this.link2);
+        formData.append("external_sources3", this.link3);
+        formData.append("tag_id", this.tags1.id);
+        formData.append("tag_name", this.tags1.name);
+        formData.append("tag_name2", this.tags1.name);
+        formData.append("tag_name3", this.tags1.name);
+        formData.append("external_sources_text1", this.linktext1);
+        formData.append("external_sources_text2", this.linktext2);
+        formData.append("external_sources_text3", this.linktext3);
+        formData.append("category_id", this.category.id);
+        formData.append("category_name", this.category.name);
+      
+        this.post = await $fetch("https://parseback.liara.run/api/post", {
+          method: "POST",
+          body: formData,
+      
+        });
+        this.$toast.add({ severity: 'success', summary: 'ایجاد محصول', detail: 'محصول با موفقیت ایجاد شد', group: 'tl', life: 3000 });
+        navigateTo('/post')
+      } catch (error) {
+        // errors.value = Object.values(error.data.data.message).flat();
+        console.log(error);
+        this.$toast.add({ severity: 'error', summary: 'خطا', detail: 'ایجاد محصول با شکست مواجه شد', group: 'tl', life: 3000 });
+
+      } finally {
+        console.log("qqq", toRaw(this.post));
+    
+
+      }
+    },
+
+
+
+
+    async categoryfunc() {
+      try {
+        this.data1 = await $fetch("/api/post/category");
+        this.categorydrop = toRaw(this.data1.PostCategory);
+      } catch (error) {
+        console.log(error);
+      } finally {
+      
+    
+      }
+    },
+    async tagsfunc() {
+      try {
+        this.data2 = await $fetch("/api/post/tags");
+        this.tagsdrop = toRaw(this.data2.PostTags);
+      } catch (error) {
+        console.log(error);
+      } finally {
+
+     
+      }
+    },
 
     onFileSelect(event) {
       const file = event.files[0];
@@ -393,6 +472,13 @@ export default {
 
       reader.readAsDataURL(file);
     },
+
   },
+  beforeMount() {
+    this.categoryfunc();
+    this.tagsfunc();
+
+  },
+
 };
 </script>
