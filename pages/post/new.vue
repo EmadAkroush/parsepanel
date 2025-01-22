@@ -401,8 +401,8 @@ export default {
         formData.append("external_sources3", this.link3);
         formData.append("tag_id", this.tags1.id);
         formData.append("tag_name", this.tags1.name);
-        formData.append("tag_name2", this.tags1.name);
-        formData.append("tag_name3", this.tags1.name);
+        formData.append("tag_name2", this.tags2.name);
+        formData.append("tag_name3", this.tags3.name);
         formData.append("external_sources_text1", this.linktext1);
         formData.append("external_sources_text2", this.linktext2);
         formData.append("external_sources_text3", this.linktext3);
