@@ -147,7 +147,7 @@
             <Column field="rating" header="ویرایش" style="text-align: start">
               <template #body="slotProps">
                 <nuxt-link :to="`product/${slotProps.data.id}`">
-                <i class="mdi mdi-pencil" style="font-size: 2.5rem">
+                <i class="mdi mdi-pencil" style="font-size: 2.5rem" >
                 </i>
               </nuxt-link>
               </template>

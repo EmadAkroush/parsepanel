@@ -102,7 +102,9 @@
 
             <Column field="rating" header="ویرایش" style="text-align: start">
               <template #body="slotProps">
-                <i class="mdi mdi-pencil" style="font-size: 2.5rem"></i>
+                <nuxt-link  :to="`post/${slotProps.data.id}`">
+                <i class="mdi mdi-pencil" style="font-size: 2.5rem" @click=""></i>
+              </nuxt-link>
               </template>
             </Column>
 

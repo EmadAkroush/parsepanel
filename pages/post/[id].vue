@@ -23,7 +23,7 @@
       <div class="flex flex-row mt-6">
         <div class="p-6 bg-white rounded-lg shadow-md rtl" style="width: 100%">
           <div class="container mx-auto p-6">
-            <h1 class="text-2xl font-bold mb-6">فرم ایجاد مقاله</h1>
+            <h1 class="text-2xl font-bold mb-6">فرم ویرایش مقاله</h1>
 
             <form
               class="bg-white p-6 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-4"
@@ -101,7 +101,7 @@
                 <Dropdown
                   v-model="tags1"
                   :options="tagsdrop"
-                  placeholder="برچسب 1"
+                  :placeholder="tagsholder1"
                   optionLabel="name"
                   class="w-full"
                 />
@@ -114,7 +114,7 @@
                 <Dropdown
                   v-model="tags2"
                   :options="tagsdrop"
-                  placeholder="برچسب 2"
+                  :placeholder="tagsholder2"
                   optionLabel="name"
                   class="w-full"
                 />
@@ -126,7 +126,7 @@
                 <Dropdown
                   v-model="tags3"
                   :options="tagsdrop"
-                  placeholder="برچسب 3"
+                  :placeholder="tagsholder3"
                   optionLabel="name"
                   class="w-full"
                 />
@@ -139,7 +139,7 @@
                 <Dropdown
                   v-model="category"
                   :options="categorydrop"
-                  placeholder="دسته بندی خود را انتخاب کنید"
+                  :placeholder="categoryholder"
                   optionLabel="name"
                   class="w-full"
                 />
@@ -173,6 +173,14 @@
                     class="shadow-md rounded-xl w-full sm:w-64"
                     style="filter: grayscale(100%)"
                   />
+                  <img
+                      v-if="primary_image_file"
+                      :src="primary_image_file"
+                      alt="Image"
+                      class="shadow-md rounded-xl w-full sm:w-64"
+                      style="filter: grayscale(100%)"
+                    />
+
                 </div>
               </div>
 
@@ -197,6 +205,13 @@
                     class="shadow-md rounded-xl w-full sm:w-64"
                     style="filter: grayscale(100%)"
                   />
+                  <img
+                      v-if="middle_image_file"
+                      :src="middle_image_file"
+                      alt="Image"
+                      class="shadow-md rounded-xl w-full sm:w-64"
+                      style="filter: grayscale(100%)"
+                    />
                 </div>
               </div>
               <!-- Secondary Color -->
@@ -343,9 +358,11 @@ export default {
   data() {
     return {
       content: "hello",
+      pageId: this.$route.params.id,
       data1: null,
       data2: null,
       post: null,
+      post1: null,
       src: null,
       src1: null,
       title: null,
@@ -357,10 +374,16 @@ export default {
       tags1:null,
       tags2:null,
       tags3:null,
+      tagsholder1:null,
+      tagsholder2:null,
+      tagsholder3:null,
       category : null,
+      categoryholder : null,
       description: null,
       primary_image : null,
+      primary_image_file : null,
       middle_image: null,
+      middle_image_file: null,
       linktext1: null,
       link1: null,
       linktext2: null,
@@ -381,9 +404,10 @@ export default {
       
       try {
         const formData = new FormData();
+
         formData.append("title", this.title);
         formData.append("user_id", "1");
-        formData.append("date", "ddd");
+        // formData.append("date", "ddd");
         formData.append("primary_image", this.primary_image);
         formData.append("summary", this.summary);
         formData.append("whatlearn1", this.whatlearn1);
@@ -426,10 +450,45 @@ export default {
       }
     },
 
-    async editpost(){
-      
-     
+    async getpost() {
+      try {
+        this.post1 = await $fetch("/api/post/main/details", {
+          query: { id: `${this.pageId}` },
+        });
+ 
+          this.title = this.post1.title;
+          this.summary = this.post1.summary;
+          this.whatlearn1 = this.post1.whatlearn1;
+          this.whatlearn2 = this.post1.whatlearn2;
+          this.whatlearn3 = this.post1.whatlearn3;
+          this.whatlearn4 = this.post1.whatlearn4;
+          this.tagsholder1 = this.post1.tag_name;
+          this.tagsholder2 = this.post1.tag_name2;
+          this.tagsholder3 = this.post1.tag_name3;
+          this.categoryholder = this.post1.category_name;
+          this.description =  this.post1.description;
+          this.linktext1 =  this.post1.external_sources_text1;
+          this.link1 =  this.post1.external_sources1;
+          this.linktext2 =  this.post1.external_sources_text2;
+          this.link2 =  this.post1.external_sources2;
+          this.linktext3 =  this.post1.external_sources_text3;
+          this.link3 =  this.post1.external_sources3;
+          this.seotitle = this.post1.seo_title;
+          this.seodes = this.post1.seo_body;
+          this.primary_image_file = this.post1.primary_image;
+          this.middle_image_file = this.post1.middle_image;
+
+
+
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.post1 = toRaw(this.post1);
+        console.log("post1", toRaw(this.post1));
+      }
     },
+
+  
 
 
 
@@ -484,6 +543,7 @@ export default {
   beforeMount() {
     this.categoryfunc();
     this.tagsfunc();
+    this.getpost();
 
   },
 
