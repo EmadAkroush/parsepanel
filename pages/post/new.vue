@@ -24,9 +24,22 @@
         <div class="p-6 bg-white rounded-lg shadow-md rtl" style="width: 100%">
           <div class="container mx-auto p-6">
             <h1 class="text-2xl font-bold mb-6">فرم ایجاد مقاله</h1>
-
+            <div class="my-8 md:col-span-2">
+                <h1>مقدمه مقاله</h1>
+                <client-only>
+                  <tiptap-editor v-model="summary" />
+                </client-only>
+              </div>
+              <div class="my-8 md:col-span-2 body-blog">
+                <h1>بدنه مقاله</h1>
+                <client-only>
+                  <tiptap-editor v-model="description" />
+                </client-only>
+              </div>
+          
             <form
               class="bg-white p-6 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-4"
+                @submit.prevent="addpost()"
             >
               <!-- Product Name -->
               <div class="md:col-span-2">
@@ -40,12 +53,7 @@
                 />
               </div>
 
-              <div class="my-8 md:col-span-2">
-                <h1>مقدمه مقاله</h1>
-                <client-only>
-                  <tiptap-editor v-model="summary" />
-                </client-only>
-              </div>
+         
 
               <!-- Secondary Color -->
               <div>
@@ -145,12 +153,7 @@
                 />
               </div>
 
-              <div class="my-8 md:col-span-2 body-blog">
-                <h1>بدنه مقاله</h1>
-                <client-only>
-                  <tiptap-editor v-model="description" />
-                </client-only>
-              </div>
+           
 
               <div class="mt-8">
                 <label class="block text-sm font-semibold mb-1">
@@ -289,11 +292,12 @@
                 <Button
                   label="ثبت"
                   class="border mr-4 border-green-700 text-green-700 font-bold rounded-md px-6 py-2 transition duration-300 ease-in-out transform hover:bg-green-700 hover:text-white active:bg-green-600"
-                  @click="addpost"
+                    type="submit"
                   style="width: 160px"
                 />
               </div>
             </form>
+       
           </div>
         </div>
         <Toast position="top-left" group="tl" /> 
@@ -412,12 +416,12 @@ export default {
           body: formData,
       
         });
-        this.$toast.add({ severity: 'success', summary: 'ایجاد محصول', detail: 'محصول با موفقیت ایجاد شد', group: 'tl', life: 3000 });
+        this.$toast.add({ severity: 'success', summary: 'ایجاد محصول', detail: 'مقاله با موفقیت ایجاد شد' , group: 'tl', life: 3000 });
         navigateTo('/post')
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
         console.log(error);
-        this.$toast.add({ severity: 'error', summary: 'خطا', detail: 'ایجاد محصول با شکست مواجه شد', group: 'tl', life: 3000 });
+        this.$toast.add({ severity: 'error', summary: 'خطا', detail: 'ایجاد مقاله با شکست مواجه شد', group: 'tl', life: 3000 });
 
       } finally {
         console.log("qqq", toRaw(this.post));
