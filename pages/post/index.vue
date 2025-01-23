@@ -101,9 +101,13 @@
 
             <Column field="rating" header="ویرایش" style="text-align: start">
               <template #body="slotProps">
-                <nuxt-link  :to="`post/${slotProps.data.id}`">
-                <i class="mdi mdi-pencil" style="font-size: 2.5rem" @click=""></i>
-              </nuxt-link>
+                <nuxt-link :to="`post/${slotProps.data.id}`">
+                  <i
+                    class="mdi mdi-pencil"
+                    style="font-size: 2.5rem"
+                    @click=""
+                  ></i>
+                </nuxt-link>
               </template>
             </Column>
 
@@ -119,8 +123,7 @@
 
             <!-- Footer Section -->
             <template #footer>
-              مجموعاً {{ totalRecords }} محصول در لیست وجود
-              دارد.
+              مجموعاً {{ totalRecords }} محصول در لیست وجود دارد.
             </template>
           </DataTable>
           <Paginator
@@ -163,7 +166,6 @@
 .main {
   background-color: #f3f4f6;
 
-
   .sec1 {
     display: flex;
     justify-content: space-between;
@@ -198,7 +200,7 @@ export default {
       currentPage: null,
       queryParams: null,
       totalRecords: null,
-      product : null,
+      product: null,
       products: [
         {
           name: "بررسی دلایل ایجاد صداهای عجیب و غریب در اتومبیل",
@@ -211,8 +213,6 @@ export default {
     };
   },
   methods: {
-    
-  
     async getproduct(par) {
       try {
         this.product = await $fetch("/api/post/main", {
@@ -229,12 +229,10 @@ export default {
     },
 
     onPageChange(event) {
-      this.currentPage = event.page + 1
-      this.getproduct(this.currentPage)
-      console.log("event" , this.currentPage);
-      
+      this.currentPage = event.page + 1;
+      this.getproduct(this.currentPage);
+      console.log("event", this.currentPage);
     },
-
 
     getSeverity(product) {
       switch (product.inventoryStatus) {
@@ -273,11 +271,9 @@ export default {
         this.visible = false;
       }
     },
-
   },
   beforeMount() {
     this.getproduct();
-   
   },
 };
 </script>

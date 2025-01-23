@@ -347,6 +347,11 @@ export default {
   data() {
     return {
       content: "hello",
+      Datenow : new Date().toLocaleDateString('fa-IR', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        }),
       data1: null,
       data2: null,
       post: null,
@@ -387,7 +392,7 @@ export default {
         const formData = new FormData();
         formData.append("title", this.title);
         formData.append("user_id", "1");
-        formData.append("date", "ddd");
+        formData.append("date", this.Datenow);
         formData.append("primary_image", this.primary_image);
         formData.append("summary", this.summary);
         formData.append("whatlearn1", this.whatlearn1);

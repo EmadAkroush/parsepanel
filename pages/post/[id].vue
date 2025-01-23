@@ -14,6 +14,7 @@
       >
         <div>
           <p class="ml-2">۱۷ اردیبهشت ۱۴۰۳</p>
+       
         </div>
         <img src="/public/opration/Calender.svg" alt="" class="pic" />
       </div>
@@ -24,6 +25,7 @@
         <div class="p-6 bg-white rounded-lg shadow-md rtl" style="width: 100%">
           <div class="container mx-auto p-6">
             <h1 class="text-2xl font-bold mb-6">فرم ویرایش مقاله</h1>
+        
             <div class="my-8 md:col-span-2">
                 <h1>مقدمه مقاله</h1>
                 <client-only>
@@ -44,8 +46,9 @@
               <!-- Product Name -->
               <div class="md:col-span-2">
                 <label class="block text-sm font-semibold mb-1"   >
-                  عنوان مقاله</label
+                  عنوان مقاله         {{ dop }}</label
                 >
+         
                 <InputText
                   v-model="title"
                   placeholder="عنوان مقاله را وارد کنید"
@@ -361,6 +364,11 @@ export default {
     return {
       content: "hello",
       pageId: this.$route.params.id,
+      Datenow : new Date().toLocaleDateString('fa-IR', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        }),
       data1: null,
       data2: null,
       post: null,
@@ -403,10 +411,12 @@ export default {
   methods: {
     async updatepost() {
       try {
+        
         const formData = new FormData();
+
         formData.append("title", this.title);
         formData.append("user_id", "1");
-        formData.append("date", "ddd");
+        formData.append("date", this.Datenow);
         if(this.primary_image){
           formData.append("primary_image", this.primary_image);
         }
