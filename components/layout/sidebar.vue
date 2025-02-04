@@ -135,7 +135,7 @@ export default {
         },
         {
           label: "مدیریت کاربران",
-          to: "/",
+          to: "/user",
           id: 5,
         },
         {

@@ -111,6 +111,32 @@
                   />
                 </div>
 
+              <!-- Price with Tax -->
+              <div>
+                  <label class="block text-sm font-semibold mb-1">
+                    ارتفاع به سانتی متر
+                  </label>
+                  <InputText
+                    v-model="product_Height"
+                    type="number"
+                    placeholder="123 "
+                    class="w-full"
+                  />
+                </div>
+
+                <!-- Height -->
+                <div>
+                  <label class="block text-sm font-semibold mb-1"
+                    >   وزن به گرم</label
+                  >
+                  <InputText
+                    v-model="product_Weight"
+                    type="number"
+                    placeholder=" 125  "
+                    class="w-full"
+                  />
+                </div>
+
                 <!-- Secondary Color -->
                 <div>
                   <label class="block text-sm font-semibold mb-1"
@@ -487,6 +513,8 @@ export default {
       company: null,
       tags: null,
       tagsmodel: null,
+      product_Height: null,
+      product_Weight: null,
       productsendway: [
         { label: "پست پیشتاز", value: "postpishtaz" },
         { label: "تیپاکس", value: "tapax" },
@@ -536,8 +564,6 @@ export default {
       // console.log("formData", emd);
       // document.getElementById("ingredient1").checked = true;
       // this.$refs.emd.checked = true;
-
-    
     },
     async updateproduct() {
       try {
@@ -593,10 +619,10 @@ export default {
           "tag_name",
           this.tagidModel ? this.tagidModel.name : this.product.tag_name
         );
-        if(this.Imagefile){
+        if (this.Imagefile) {
           formData.append("primary_image", this.Imagefile);
         }
-       
+
         formData.append("price", this.productPrice);
         formData.append("priceoff", this.priceoff);
         formData.append("productcode", this.productCode);
@@ -606,9 +632,11 @@ export default {
         formData.append("product_second_color", this.productsecondcolor);
         formData.append("product_country", this.productcountry);
         formData.append("Inventory_status", this.Inventorystatus);
+        formData.append("product_Height", this.product_Height);
+        formData.append("product_Weight", this.product_Weight);
         if (this.productfile) {
           formData.append("product_file", this.productfile);
-        } 
+        }
         formData.append(
           "product_garanty",
           this.productgarantymodel
@@ -629,7 +657,7 @@ export default {
           for (let index = 0; index < this.Images.length; index++) {
             formData.append(`images[${index}]`, this.Images[index]);
           }
-        } 
+        }
 
         formData.append("_method", "PUT");
 

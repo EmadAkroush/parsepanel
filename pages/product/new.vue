@@ -97,13 +97,40 @@
                   />
                 </div>
 
+                <!-- Price with Tax -->
+                <div>
+                  <label class="block text-sm font-semibold mb-1">
+                    طول به سانتی متر
+                  </label>
+                  <InputText
+                    v-model="productlength"
+                    type="number"
+                    placeholder="123 "
+                    class="w-full"
+                  />
+                </div>
+
+                
+                <!-- Price with Tax -->
+                <div>
+                  <label class="block text-sm font-semibold mb-1">
+                    ارتفاع به سانتی متر
+                  </label>
+                  <InputText
+                    v-model="product_Height"
+                    type="number"
+                    placeholder="123 "
+                    class="w-full"
+                  />
+                </div>
+
                 <!-- Height -->
                 <div>
                   <label class="block text-sm font-semibold mb-1"
-                    >عرض به سانتی متر</label
+                    >   وزن به گرم</label
                   >
                   <InputText
-                    v-model="productwidth"
+                    v-model="product_Weight"
                     type="number"
                     placeholder=" 125  "
                     class="w-full"
@@ -226,11 +253,11 @@
                   <label class="block text-sm font-semibold mb-1"
                     >بر چسب های محصول
                   </label>
-             
+
                   <Dropdown
                     v-model="tagidModel"
                     :options="tags"
-                   placeholder="انتخاب برچسب"
+                    placeholder="انتخاب برچسب"
                     optionLabel="name"
                     class="w-full"
                   />
@@ -362,9 +389,7 @@
           </div>
         </div>
         <Toast position="top-left" group="tl" />
-        
       </div>
-   
     </div>
   </div>
 </template>
@@ -397,7 +422,6 @@
 </style>
 <script>
 import TiptapEditor from "../../components/TiptapEditor.vue";
-
 
 export default {
   components: {
@@ -450,6 +474,8 @@ export default {
       company: null,
       tags: null,
       tagsmodel: null,
+      product_Height: null,
+      product_Weight: null,
       productsendway: [
         { label: "پست پیشتاز", value: "postpishtaz" },
         { label: "تیپاکس", value: "tapax" },
@@ -460,14 +486,12 @@ export default {
         { label: "ضمانت تعویض", value: "taviz" },
         { label: "هیچ کدام", value: "hichkodum" },
       ],
-      productgarantymodel : null,
-      productsendwaymodel : null
+      productgarantymodel: null,
+      productsendwaymodel: null,
     };
   },
 
-
   methods: {
-    
     onFileSelect(event) {
       const file = event.files[0];
       this.Imagefile = file;
@@ -498,7 +522,7 @@ export default {
       console.log("formData", this.tagidModel);
     },
     async addproduct() {
-      console.log("this.productfile)" , this.productfile);
+      console.log("this.productfile)", this.productfile);
       try {
         const formData = new FormData();
         formData.append("name", this.productName);
@@ -524,6 +548,8 @@ export default {
         formData.append("product_second_color", this.productsecondcolor);
         formData.append("product_country", this.productcountry);
         formData.append("Inventory_status", this.Inventorystatus);
+        formData.append("product_Height", this.product_Height);
+        formData.append("product_Weight", this.product_Weight);
         if (this.productfile) {
           formData.append("product_file", this.productfile);
         }
@@ -535,26 +561,36 @@ export default {
         for (let index = 0; index < this.Images.length; index++) {
           formData.append(`images[${index}]`, this.Images[index]);
         }
-      
-        this.product = await $fetch("https://parseback.liara.run/api/products", {
-          method: "POST",
-          body: formData,
-      
+
+        this.product = await $fetch(
+          "https://parseback.liara.run/api/products",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        this.$toast.add({
+          severity: "success",
+          summary: "ایجاد محصول",
+          detail: "محصول با موفقیت ایجاد شد",
+          group: "tl",
+          life: 3000,
         });
-        this.$toast.add({ severity: 'success', summary: 'ایجاد محصول', detail: 'محصول با موفقیت ایجاد شد', group: 'tl', life: 3000 });
-        navigateTo('/product')
+        navigateTo("/product");
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
         console.log(error);
-        this.$toast.add({ severity: 'error', summary: 'خطا', detail: 'ایجاد محصول با شکست مواجه شد', group: 'tl', life: 3000 });
-
+        this.$toast.add({
+          severity: "error",
+          summary: "خطا",
+          detail: "ایجاد محصول با شکست مواجه شد",
+          group: "tl",
+          life: 3000,
+        });
       } finally {
         console.log("qqq", toRaw(this.product));
-    
-
       }
     },
-
 
     async categoryfunc() {
       try {
