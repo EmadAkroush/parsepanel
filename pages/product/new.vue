@@ -98,14 +98,15 @@
                 </div>
 
                 <!-- Price with Tax -->
-                <div>
-                  <label class="block text-sm font-semibold mb-1">
-                    طول به سانتی متر
-                  </label>
+             <!-- Height -->
+             <div>
+                  <label class="block text-sm font-semibold mb-1"
+                    >عرض به سانتی متر</label
+                  >
                   <InputText
-                    v-model="productlength"
+                    v-model="productwidth"
                     type="number"
-                    placeholder="123 "
+                    placeholder=" 125  "
                     class="w-full"
                   />
                 </div>
