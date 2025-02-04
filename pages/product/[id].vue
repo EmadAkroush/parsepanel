@@ -719,6 +719,8 @@ export default {
         this.carholder = this.product.car_name;
         this.categoryholder = this.product.category_name;
         this.content = this.product.description;
+        this.product_Height = this.product.product_Height;
+        this.product_Weight = this.product.product_Weight;
       } catch (error) {
         console.log(error);
       } finally {
