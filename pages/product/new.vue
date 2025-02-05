@@ -422,6 +422,7 @@
 }
 </style>
 <script>
+
 import TiptapEditor from "../../components/TiptapEditor.vue";
 
 export default {
@@ -477,6 +478,7 @@ export default {
       tagsmodel: null,
       product_Height: null,
       product_Weight: null,
+      last: null,
       productsendway: [
         { label: "پست پیشتاز", value: "postpishtaz" },
         { label: "تیپاکس", value: "tapax" },
@@ -593,6 +595,19 @@ export default {
       }
     },
 
+    async getlastproduct() {
+      try {
+       
+        this.last = await $fetch("/api/product/last" );
+        this.productCode = this.last.products.productcode + 1;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.product = toRaw(this.last);
+        console.log("last", toRaw(this.last.products.productcode));
+      }
+    },
+
     async categoryfunc() {
       try {
         this.data = await $fetch("/api/category");
@@ -659,6 +674,7 @@ export default {
   },
 
   beforeMount() {
+    this.getlastproduct();
     this.categoryfunc();
     this.carsfunc();
     this.carpartsfunc();
