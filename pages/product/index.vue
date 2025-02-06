@@ -144,6 +144,14 @@
               style="text-align: start"
             >
             </Column>
+            <Column field="rating" header="کپی" style="text-align: start" >
+              <template #body="slotProps">
+              
+                <i class="mdi mdi-content-copy " style="font-size: 2.5rem" @click="copyproduct(slotProps.data.id)"  >
+                </i>
+          
+              </template>
+            </Column>
             <Column field="rating" header="ویرایش" style="text-align: start">
               <template #body="slotProps">
                 <nuxt-link :to="`product/${slotProps.data.id}`">
@@ -255,6 +263,7 @@ export default {
       currentPage: null,
       queryParams: null,
       totalRecords: null,
+      copy : null
       
     };
   },
@@ -270,6 +279,28 @@ export default {
         default:
           return "info";
       }
+    },
+    async copyproduct(id) {
+      try {
+        this.copy = await $fetch(`/api/product/copy`, {
+          query: { id: id },
+        });
+        this.$toast.add({
+          severity: "success",
+          summary: " کپی محصول",
+          detail: "محصول با موفقیت کپی شد",
+          group: "tl",
+          life: 3000,
+        });
+        this.getproduct();
+   
+      } catch (error) {
+        console.log(error);
+      } finally {
+        console.log("copy", toRaw(this.copy));
+     
+      }
+      
     },
     async getproduct(par) {
       
