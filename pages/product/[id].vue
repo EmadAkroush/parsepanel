@@ -93,7 +93,7 @@
                   <InputText
                     v-model="productlength"
                     type="number"
-                    placeholder="123 "
+                    placeholder="123"
                     class="w-full"
                   />
                 </div>
@@ -106,7 +106,7 @@
                   <InputText
                     v-model="productwidth"
                     type="number"
-                    placeholder=" 125  "
+                    placeholder="125"
                     class="w-full"
                   />
                 </div>
@@ -119,7 +119,7 @@
                   <InputText
                     v-model="product_Height"
                     type="number"
-                    placeholder="123 "
+                    placeholder="123"
                     class="w-full"
                   />
                 </div>
@@ -132,7 +132,7 @@
                   <InputText
                     v-model="product_Weight"
                     type="number"
-                    placeholder=" 125  "
+                    placeholder="125"
                     class="w-full"
                   />
                 </div>
@@ -676,7 +676,7 @@ export default {
           group: "tl",
           life: 3000,
         });
-        navigateTo("/product");
+        navigateTo("/product/main/1");
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
         console.log("gg", error);
