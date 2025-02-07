@@ -120,7 +120,7 @@ export default {
         },
         {
           label: "مدیریت محصولات",
-          to: "/product",
+          to: "/product/main/1",
           id: 2,
         },
         {

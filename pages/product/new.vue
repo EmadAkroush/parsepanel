@@ -479,6 +479,8 @@ export default {
       product_Height: null,
       product_Weight: null,
       last: null,
+      productnumber: null,
+      totalRecords: null,
       productsendway: [
         { label: "پست پیشتاز", value: "postpishtaz" },
         { label: "تیپاکس", value: "tapax" },
@@ -579,7 +581,7 @@ export default {
           group: "tl",
           life: 3000,
         });
-        navigateTo("/product");
+        navigateTo(`/product/main/${this.totalRecords}`);
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
         console.log(error);
@@ -594,7 +596,7 @@ export default {
         console.log("qqq", toRaw(this.product));
       }
     },
-
+    
     async getlastproduct() {
       try {
        
@@ -607,6 +609,20 @@ export default {
         console.log("last", toRaw(this.last.products.productcode));
       }
     },
+
+    async getproduct(par) {
+        try {
+          this.productnumber = await $fetch("/api/product", {
+            query: { page: par },
+          });
+          this.productsAll = this.productnumber.products;
+          this.totalRecords = this.productnumber.total;
+        } catch (error) {
+          console.log(error);
+        } finally {
+   
+        }
+      },
 
     async categoryfunc() {
       try {
@@ -674,6 +690,7 @@ export default {
   },
 
   beforeMount() {
+    this.getproduct();
     this.getlastproduct();
     this.categoryfunc();
     this.carsfunc();
