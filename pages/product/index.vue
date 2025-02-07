@@ -1,3 +1,4 @@
+
 <template>
   <div class="main p-6">
     <div class="flex sec1">
@@ -180,9 +181,10 @@
           <Paginator
             :rows="10"
             :totalRecords="totalRecords"
-            template="PageLinks "
+            template="PageLinks  LastPageLink"
             @page="onPageChange"
             :currentPage="currentPage"
+            
           />
 
         
@@ -243,11 +245,12 @@
   }
 }
 </style>
+
+
 <script>
 export default {
   data() {
     return {
-   
       products: [
         {
           name: "گیربکس",
@@ -263,8 +266,8 @@ export default {
       currentPage: null,
       queryParams: null,
       totalRecords: null,
-      copy : null
-      
+      copy: null,
+      lastpage: 3,
     };
   },
   methods: {
@@ -293,20 +296,15 @@ export default {
           life: 3000,
         });
         this.getproduct();
-   
       } catch (error) {
         console.log(error);
       } finally {
         console.log("copy", toRaw(this.copy));
-     
       }
-      
     },
     async getproduct(par) {
-      
       try {
-       
-        this.product = await $fetch("/api/product" , {
+        this.product = await $fetch("/api/product", {
           query: { page: par },
         });
         this.productsAll = this.product.products;
@@ -345,19 +343,16 @@ export default {
       }
     },
 
-
     onPageChange(event) {
-      this.currentPage = event.page + 1
-      this.getproduct(this.currentPage)
-      console.log("event" , this.currentPage);
-      
+      this.currentPage = event.page + 1;
+      this.getproduct(this.currentPage);
+      console.log("event", this.currentPage);
     },
-    
-
-
   },
-  beforeMount() {
-    this.getproduct();
+   beforeMount() {
+
+     this.getproduct();
+
   },
 };
 </script>
