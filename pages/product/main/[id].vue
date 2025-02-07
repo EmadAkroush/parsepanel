@@ -329,7 +329,7 @@
             method: "DELETE",
             query: { url: `${this.idproduct}` },
           });
-          this.getproduct();
+          this.$router.go()
           this.$toast.add({
             severity: "success",
             summary: " حذف محصول",
