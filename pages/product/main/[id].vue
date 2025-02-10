@@ -297,7 +297,7 @@
             group: "tl",
             life: 3000,
           });
-          this.getproduct();
+          navigateTo(`/product/main/${this.totalRecords}`);
         } catch (error) {
           console.log(error);
         } finally {
