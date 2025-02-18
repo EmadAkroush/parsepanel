@@ -306,7 +306,6 @@
                     <label for="ingredient2">ناموجود</label>
                   </div>
                 </div>
-
                 <div class="mt-8">
                   <label class="block text-sm font-semibold mb-1">
                     بارگذاری تصویر شاخص
@@ -458,6 +457,7 @@ export default {
   data() {
     return {
       pageId: this.$route.params.id,
+      productAll : null,
       data: null,
       data1: null,
       data2: null,
@@ -529,6 +529,7 @@ export default {
       productgarantyholder: null,
       productsendwaymodel: null,
       productsendwayholder: null,
+      totalRecords: null,
     };
   },
 
@@ -564,6 +565,123 @@ export default {
       // console.log("formData", emd);
       // document.getElementById("ingredient1").checked = true;
       // this.$refs.emd.checked = true;
+    },
+    async getproductAll(par) {
+        try {
+          this.productAll = await $fetch("/api/product", {
+            query: { page: par },
+          });
+          this.totalRecords = this.productAll.total;
+        } catch (error) {
+          console.log(error);
+        } finally {
+          this.product = toRaw(this.product);
+          console.log("pr", toRaw(this.product.total));
+        }
+      },
+
+
+    async getproduct() {
+      try {
+        this.product = await $fetch("/api/product/details", {
+          query: { id: `${this.pageId}` },
+        });
+        this.productName = this.product.name;
+        this.Imagefileshow = this.product.primary_image;
+        this.productPrice = this.product.price;
+        this.priceoff = this.product.priceoff;
+        this.productCode = this.product.productcode;
+        this.productlength = this.product.product_length;
+        this.productwidth = this.product.product_width;
+        this.productfirstcolor = this.product.product_first_color;
+        this.productsecondcolor = this.product.product_second_color;
+        this.productcountry = this.product.product_country;
+        this.Inventorystatus = this.product.Inventory_status;
+        this.productfileshow = this.product.product_file;
+        this.ImagesShow = this.product.images;
+        this.tagholder = this.product.tag_name;
+        this.productgarantyholder = this.product.product_garanty;
+        this.productsendwayholder = this.product.product_send_way;
+        this.brandholder = this.product.brand_name;
+        this.companyholder = this.product.company_name;
+        this.carpartholder = this.product.carpart_name;
+        this.carholder = this.product.car_name;
+        this.categoryholder = this.product.category_name;
+        this.content = this.product.description;
+        this.product_Height = this.product.product_Height;
+        this.product_Weight = this.product.product_Weight;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.product = toRaw(this.product);
+        console.log("pr", toRaw(this.product));
+      }
+    },
+
+
+
+    async categoryfunc() {
+      try {
+        this.data = await $fetch("/api/category");
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.category = toRaw(this.data.categories);
+        console.log("ca", toRaw(this.data.categories));
+      }
+    },
+    async carsfunc() {
+      try {
+        this.data1 = await $fetch("/api/cars");
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.cars = toRaw(this.data1.cars);
+        console.log("car", toRaw(this.data1.cars));
+      }
+    },
+
+    async carpartsfunc() {
+      try {
+        this.data2 = await $fetch("/api/carparts");
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.carpart = toRaw(this.data2.carparts);
+        console.log("data2", toRaw(this.data2.carparts));
+      }
+    },
+    async companyfunc() {
+      try {
+        this.data3 = await $fetch("/api/company");
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.company = toRaw(this.data3.companies);
+        console.log("ddd", toRaw(this.data3.companies));
+      }
+    },
+
+    async bransfunc() {
+      try {
+        this.data4 = await $fetch("/api/brand");
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.brands = toRaw(this.data4.brands);
+        console.log("brands", toRaw(this.data4.brands));
+      }
+    },
+
+    async tagsfunc() {
+      try {
+        this.data5 = await $fetch("/api/tags");
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.tags = toRaw(this.data5.tags);
+        console.log("ddd", toRaw(this.data5.tags));
+      }
     },
     async updateproduct() {
       try {
@@ -676,7 +794,7 @@ export default {
           group: "tl",
           life: 3000,
         });
-        navigateTo("/product/main/1");
+        navigateTo(`/product/main/${this.totalRecords}`);
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
         console.log("gg", error);
@@ -691,107 +809,6 @@ export default {
         console.log("qqq", toRaw(this.productup));
       }
     },
-
-    async getproduct() {
-      try {
-        this.product = await $fetch("/api/product/details", {
-          query: { id: `${this.pageId}` },
-        });
-        this.productName = this.product.name;
-        this.Imagefileshow = this.product.primary_image;
-        this.productPrice = this.product.price;
-        this.priceoff = this.product.priceoff;
-        this.productCode = this.product.productcode;
-        this.productlength = this.product.product_length;
-        this.productwidth = this.product.product_width;
-        this.productfirstcolor = this.product.product_first_color;
-        this.productsecondcolor = this.product.product_second_color;
-        this.productcountry = this.product.product_country;
-        this.Inventorystatus = this.product.Inventory_status;
-        this.productfileshow = this.product.product_file;
-        this.ImagesShow = this.product.images;
-        this.tagholder = this.product.tag_name;
-        this.productgarantyholder = this.product.product_garanty;
-        this.productsendwayholder = this.product.product_send_way;
-        this.brandholder = this.product.brand_name;
-        this.companyholder = this.product.company_name;
-        this.carpartholder = this.product.carpart_name;
-        this.carholder = this.product.car_name;
-        this.categoryholder = this.product.category_name;
-        this.content = this.product.description;
-        this.product_Height = this.product.product_Height;
-        this.product_Weight = this.product.product_Weight;
-      } catch (error) {
-        console.log(error);
-      } finally {
-        this.product = toRaw(this.product);
-        console.log("pr", toRaw(this.product));
-      }
-    },
-
-    async categoryfunc() {
-      try {
-        this.data = await $fetch("/api/category");
-      } catch (error) {
-        console.log(error);
-      } finally {
-        this.category = toRaw(this.data.categories);
-        console.log("ca", toRaw(this.data.categories));
-      }
-    },
-    async carsfunc() {
-      try {
-        this.data1 = await $fetch("/api/cars");
-      } catch (error) {
-        console.log(error);
-      } finally {
-        this.cars = toRaw(this.data1.cars);
-        console.log("car", toRaw(this.data1.cars));
-      }
-    },
-
-    async carpartsfunc() {
-      try {
-        this.data2 = await $fetch("/api/carparts");
-      } catch (error) {
-        console.log(error);
-      } finally {
-        this.carpart = toRaw(this.data2.carparts);
-        console.log("data2", toRaw(this.data2.carparts));
-      }
-    },
-    async companyfunc() {
-      try {
-        this.data3 = await $fetch("/api/company");
-      } catch (error) {
-        console.log(error);
-      } finally {
-        this.company = toRaw(this.data3.companies);
-        console.log("ddd", toRaw(this.data3.companies));
-      }
-    },
-
-    async bransfunc() {
-      try {
-        this.data4 = await $fetch("/api/brand");
-      } catch (error) {
-        console.log(error);
-      } finally {
-        this.brands = toRaw(this.data4.brands);
-        console.log("brands", toRaw(this.data4.brands));
-      }
-    },
-
-    async tagsfunc() {
-      try {
-        this.data5 = await $fetch("/api/tags");
-      } catch (error) {
-        console.log(error);
-      } finally {
-        this.tags = toRaw(this.data5.tags);
-        console.log("ddd", toRaw(this.data5.tags));
-      }
-    },
   },
 
   beforeMount() {
@@ -802,6 +819,7 @@ export default {
     this.bransfunc();
     this.tagsfunc();
     this.getproduct();
+    this.getproductAll();
   },
   mounted() {},
 };
