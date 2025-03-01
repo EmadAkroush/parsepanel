@@ -487,7 +487,6 @@ export default {
         { label: "هردو", value: "herdo" },
       ],
       productgaranty: [
-        { label: "ضمانت تعمیر", value: "tamir" },
         { label: "ضمانت تعویض", value: "taviz" },
         { label: "هیچ کدام", value: "hichkodum" },
       ],
