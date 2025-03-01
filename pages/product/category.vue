@@ -214,6 +214,7 @@ export default {
           method: "POST",
           body: { parent_id: 1, name: this.productName },
         });
+        this.productName = "";
         this.getcategory();
         this.$toast.add({
           severity: "success",

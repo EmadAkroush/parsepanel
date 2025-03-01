@@ -195,8 +195,7 @@ export default {
       idedit: null,
       visible: false,
       categoryholder : null,
-      edit : null
-  
+      edit : null,
     };
   },
   watch: {
@@ -210,6 +209,7 @@ export default {
           method: 'POST',
           body: { name: this.productName  },
         });
+        this.productName = "";
         this.getcars();
         this.$toast.add({ severity: 'success', summary: 'ایجاد خوردرو', detail: 'حودورو با موفقیت ایجاد شد', group: 'tl', life: 3000 });
       } catch (error) {

@@ -253,6 +253,7 @@ export default {
           body: { name: this.productName  },
         });
         this.getbrans();
+        this.productName = '';
         this.$toast.add({ severity: 'success', summary: 'ایجاد برند', detail: 'برند با موفقیت ایجاد شد', group: 'tl', life: 3000 });
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();

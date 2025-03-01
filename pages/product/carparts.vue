@@ -211,6 +211,7 @@ export default {
           method: "POST",
           body: { name: this.productName },
         });
+        this.productName = "";
         this.getcarparts();
         this.$toast.add({
           severity: "success",

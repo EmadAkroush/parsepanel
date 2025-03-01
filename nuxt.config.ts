@@ -6,7 +6,7 @@ export default defineNuxtConfig({
     modules: ["@nuxtjs/tailwindcss", "@primevue/nuxt-module"],
     plugins: [
         '~/plugins/axios.js',
-      ],
+      ], 
     runtimeConfig: {
         public: {
             apiBase: 'https://parseback.liara.run'

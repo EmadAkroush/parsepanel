@@ -29,7 +29,7 @@
           >
             <!-- Product Name -->
             <div>
-              <label class="block text-sm font-semibold mb-1">  شرکت  ها</label>
+              <label class="block text-sm font-semibold mb-1" > برچسب ها </label>
               <InputText
                 v-model="productName"
                 placeholder="نام شرکت  را وارد کنید"
@@ -215,6 +215,7 @@ export default {
           method: 'POST',
           body: { "parent_id": 1 , name: this.productName  },
         });
+        this.productName = "";
         this.gettags();
         this.$toast.add({ severity: 'success', summary: 'ایجاد دسته بندی', detail: 'دسته بندی با موفقیت ایجاد شد', group: 'tl', life: 3000 });
       } catch (error) {
@@ -273,6 +274,7 @@ export default {
         console.log("ddd", toRaw(this.edit));
       }
     },
+
     async getcategorybyid(id) {
       try {
         this.details = await $fetch(`/api/tags/details`, {

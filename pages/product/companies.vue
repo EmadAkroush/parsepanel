@@ -216,6 +216,7 @@ export default {
           method: "POST",
           body: { parent_id: 1, name: this.productName },
         });
+        this.productName = '',
         this.getcompanies();
         this.$toast.add({
           severity: "success",
