@@ -53,24 +53,17 @@
                   <label class="block text-sm font-semibold mb-1"
                     >قیمت محصول</label
                   >
-                  <InputText
-                    v-model="productPrice"
-                    type="number"
-                    placeholder="قیمت را وارد کنید"
-                    class="w-full"
-                  />
+                
+                  <InputNumber  v-model="productPrice"  inputId="integeronly"   type="number" placeholder="قیمت را وارد کنید"   class="w-full" fluid />
+
+
                 </div>
                 <!-- Price -->
                 <div>
                   <label class="block text-sm font-semibold mb-1">
                     قیمت تخفیف دار</label
                   >
-                  <InputText
-                    v-model="priceoff"
-                    type="number"
-                    placeholder="قیمت را وارد کنید"
-                    class="w-full"
-                  />
+                  <InputNumber  v-model="priceoff"  inputId="integeronly"   type="number" placeholder="قیمت را وارد کنید"   class="w-full" fluid />
                 </div>
 
                 <!-- Product Code -->
@@ -617,7 +610,10 @@ export default {
         console.log("pr", toRaw(this.product));
       }
     },
-
+  
+    priceser(price) {
+      return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
 
 
     async categoryfunc() {
