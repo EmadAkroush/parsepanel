@@ -32,7 +32,7 @@
               <label class="block text-sm font-semibold mb-1" > برچسب ها </label>
               <InputText
                 v-model="productName"
-                placeholder="نام شرکت  را وارد کنید"
+                placeholder="نام برچسب  را وارد کنید"
                 class="w-full"
               />
             </div>
@@ -297,7 +297,7 @@ export default {
   },
   beforeMount() {
     this.gettags();
-
+     
   },
 };
 </script>
