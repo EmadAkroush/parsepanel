@@ -91,11 +91,13 @@
                         src="/public/listbargiry/icons-Line-search.png"
                         alt=""
                         style="position: absolute; top: 8px; left: 10px"
+                        @click="getproductfilter()"
                       />
                       <input
                         type="text"
                         placeholder="جستجوی محصول"
                         class="border rounded-lg px-8 py-2"
+                        v-model="productName"
                       />
                     </div>
                   </div>
@@ -242,6 +244,8 @@
 </style>
 
 <script>
+
+
 export default {
   data() {
     return {
@@ -261,6 +265,7 @@ export default {
       currentPage: null,
       queryParams: null,
       totalRecords: null,
+      productName: null,
       copy: null,
       lastpage: 3,
     };
@@ -278,8 +283,29 @@ export default {
           return "info";
       }
     },
+
     priceser(price) {
       return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+
+    async getproductfilter(par) {
+      try {
+        this.product = await $fetch("/api/advancedsearch", {
+          query: { page: par },
+          method: "POST",
+          body: {
+            data: this.productName,
+          },
+        });
+        this.productsAll = this.product.products;
+        this.totalRecords = this.product.total;
+      } catch (error) {
+        // errors.value = Object.values(error.data.data.message).flat();
+        console.log(error);
+      } finally {
+        this.spiner = false;
+        console.log("product", toRaw(this.product));
+      }
     },
 
     async copyproduct(id) {

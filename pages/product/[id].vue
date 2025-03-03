@@ -443,6 +443,7 @@
 <script>
 import TiptapEditor from "../../components/TiptapEditor.vue";
 
+
 export default {
   components: {
     TiptapEditor,
