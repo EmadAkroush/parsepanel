@@ -58,6 +58,7 @@
             </div>
           </form>
           <hr />
+    
           <DataTable
             class="mt-4"
             :value="allcategory"
@@ -65,10 +66,13 @@
             paginator
             :rows="10"
             :rowsPerPageOptions="[5, 10, 20, 50]"
+    
           >
             <!-- Header Section -->
             <template #header>
-              <div class="flex flex-wrap items-center justify-between gap-2">
+              <div
+                class="flex flex-col flex-wrap  justify-between gap-2"
+              >
                 <div class="flex justify-between items-center mb-4">
                   <div class="flex items-center">
                     <!-- <img class="w-10 h-10 rounded-full ml-4" src="path/to/avatar.png" alt="User Avatar"> -->
@@ -77,14 +81,19 @@
                         src="/public/listbargiry/icons-Line-search.png"
                         alt=""
                         style="position: absolute; top: 8px; left: 10px"
+                        @click="getproductfilter"
                       />
                       <input
                         type="text"
                         placeholder="جستجو"
                         class="border rounded-lg px-8 py-2"
+                        v-model="search"
                       />
                     </div>
                   </div>
+                </div>
+                <div class="flex justify-center" v-if="spiner">
+                  <ProgressSpinner />
                 </div>
               </div>
             </template>
@@ -123,6 +132,12 @@
               دارد.
             </template>
           </DataTable>
+      
+          <div class="flex items-center justify-center mt-6" v-if="allcategory?.length == 0">
+            <h1>
+                 موردی منطبقی با جستجو یافت نشد
+            </h1>
+          </div>
         </div>
         <Dialog
           v-model:visible="visible"
@@ -200,14 +215,36 @@ export default {
       allcategory: null,
       idedit: null,
       visible: false,
-      categoryholder : null,
-      edit : null
+      categoryholder: null,
+      edit: null,
+      search: null,
+      spiner: true,
     };
   },
   watch: {
     // وقتی تعداد برندها تغییر کند، درخواست جدیدی به سرور می‌زنیم
   },
   methods: {
+    async getproductfilter(par) {
+      this.spiner = true;
+      try {
+        this.category = await $fetch("/api/category/filter", {
+          query: { page: par },
+          method: "POST",
+          body: {
+            data: this.search,
+          },
+        });
+        this.allcategory = this.category;
+      } catch (error) {
+        // errors.value = Object.values(error.data.data.message).flat();
+        console.log(error);
+      } finally {
+        this.spiner = false;
+        console.log("gggg", toRaw(this.category));
+      }
+    },
+
     async categoryfun() {
       try {
         this.data = await $fetch("/api/category/create", {
@@ -234,6 +271,7 @@ export default {
       try {
         this.category = await $fetch("/api/category");
         this.allcategory = this.category.categories;
+        this.spiner = false;
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
         console.log(error);
@@ -289,7 +327,6 @@ export default {
           query: { url: `${id}` },
         });
         this.categoryholder = this.details.name;
-   
       } catch (error) {
         console.log(error);
       } finally {
@@ -304,7 +341,6 @@ export default {
   },
   beforeMount() {
     this.getcategory();
-
   },
 };
 </script>

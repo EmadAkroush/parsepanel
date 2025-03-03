@@ -32,8 +32,9 @@
               <label class="block text-sm font-semibold mb-1"> خودرو ها</label>
               <InputText
                 v-model="productName"
-                placeholder="نام  خودورو را وارد کنید"
+                placeholder="نام خودرو را وارد کنید"
                 class="w-full"
+                
               />
             </div>
 
@@ -67,7 +68,7 @@
           >
             <!-- Header Section -->
             <template #header>
-              <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex flex-col flex-wrap  justify-between gap-2">
                 <div class="flex justify-between items-center mb-4">
                   <div class="flex items-center">
                     <!-- <img class="w-10 h-10 rounded-full ml-4" src="path/to/avatar.png" alt="User Avatar"> -->
@@ -76,14 +77,19 @@
                         src="/public/listbargiry/icons-Line-search.png"
                         alt=""
                         style="position: absolute; top: 8px; left: 10px"
+                        @click="getproductfilter"
                       />
                       <input
                         type="text"
                         placeholder="جستجوی خودرو ها "
                         class="border rounded-lg px-8 py-2"
+                        v-model="search"
                       />
                     </div>
                   </div>
+                </div>
+                <div class="flex justify-center" v-if="spiner">
+                  <ProgressSpinner />
                 </div>
               </div>
             </template>
@@ -118,6 +124,11 @@
               دارد.
             </template>
           </DataTable>
+          <div class="flex items-center justify-center mt-6" v-if="allcars?.length == 0">
+            <h1>
+                 موردی منطبقی با جستجو یافت نشد
+            </h1>
+          </div>
         </div>
         <Dialog
           v-model:visible="visible"
@@ -196,6 +207,8 @@ export default {
       visible: false,
       categoryholder : null,
       edit : null,
+      spiner : true,
+      search : null
     };
   },
   watch: {
@@ -203,7 +216,28 @@ export default {
  
   },
   methods: {
+    async getproductfilter(par) {
+      this.spiner = true;
+      try {
+        this.cars = await $fetch("/api/cars/filter", {
+          query: { page: par },
+          method: "POST",
+          body: {
+            data: this.search,
+          },
+        });
+        this.allcars = this.cars;
+
+      } catch (error) {
+        // errors.value = Object.values(error.data.data.message).flat();
+        console.log(error);
+      } finally {
+        this.spiner = false;
+        console.log("rrrr", toRaw(this.cars));
+      }
+    },
     async carsfun() {
+
       try {
         this.data = await $fetch('/api/cars/create', {
           method: 'POST',
@@ -223,6 +257,7 @@ export default {
       try {
         this.cars  = await $fetch('/api/cars');
         this.allcars = this.cars.cars
+        this.spiner = false
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
         console.log(error);
