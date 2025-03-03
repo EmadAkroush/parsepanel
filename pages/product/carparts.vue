@@ -33,6 +33,7 @@
                 v-model="productName"
                 placeholder="نام بخش ها را وارد کنید"
                 class="w-full"
+              
               />
             </div>
 
@@ -66,7 +67,7 @@
           >
             <!-- Header Section -->
             <template #header>
-              <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex flex-col flex-wrap  justify-between gap-2">
                 <div class="flex justify-between items-center mb-4">
                   <div class="flex items-center">
                     <!-- <img class="w-10 h-10 rounded-full ml-4" src="path/to/avatar.png" alt="User Avatar"> -->
@@ -75,14 +76,19 @@
                         src="/public/listbargiry/icons-Line-search.png"
                         alt=""
                         style="position: absolute; top: 8px; left: 10px"
+                        @click="getproductfilter"
                       />
                       <input
                         type="text"
                         placeholder="جستجوی بخش  ها "
                         class="border rounded-lg px-8 py-2"
+                        v-model="search"
                       />
                     </div>
                   </div>
+                </div>
+                <div class="flex justify-center" v-if="spiner">
+                  <ProgressSpinner />
                 </div>
               </div>
             </template>
@@ -121,6 +127,11 @@
               دارد.
             </template>
           </DataTable>
+          <div class="flex items-center justify-center mt-6" v-if="allcarparts?.length == 0">
+            <h1>
+                 موردی منطبقی با جستجو یافت نشد
+            </h1>
+          </div>
         </div>
         <Dialog
           v-model:visible="visible"
@@ -199,15 +210,50 @@ export default {
       visible: false,
       categoryholder: null,
       edit: null,
+      search : null,
+      spiner: true
+
     };
   },
   watch: {
     // وقتی تعداد برندها تغییر کند، درخواست جدیدی به سرور می‌زنیم
   },
   methods: {
+    async getproductfilter(par) {
+      this.spiner = true;
+      try {
+        this.carparts = await $fetch("/api/carparts/filter", {
+          query: { page: par },
+          method: "POST",
+          body: {
+            data: this.search,
+          },
+        });
+        this.allcarparts = this.carparts;
+
+      } catch (error) {
+        // errors.value = Object.values(error.data.data.message).flat();
+        console.log(error);
+      } finally {
+        this.spiner = false;
+        console.log("rrrr", toRaw(this.carparts));
+      }
+    },
+    async getcarparts() {
+      try {
+        this.carparts = await $fetch("/api/carparts");
+        this.allcarparts = this.carparts.carparts;
+        this.spiner = false
+      } catch (error) {
+        // errors.value = Object.values(error.data.data.message).flat();
+        console.log(error);
+      } finally {
+        console.log("brands", this.allcarparts);
+      }
+    },
     async carpartsfun() {
       try {
-        this.data = await $fetch("/api/carparts/create", {
+        this.carparts = await $fetch("/api/carparts/create", {
           method: "POST",
           body: { name: this.productName },
         });
@@ -227,17 +273,8 @@ export default {
         console.log("ddd", toRaw(this.data));
       }
     },
-    async getcarparts() {
-      try {
-        this.carparts = await $fetch("/api/carparts");
-        this.allcarparts = this.carparts.carparts;
-      } catch (error) {
-        // errors.value = Object.values(error.data.data.message).flat();
-        console.log(error);
-      } finally {
-        console.log("brands", this.allcarparts);
-      }
-    },
+
+ 
     async deletecarparts(id) {
       try {
         this.data1 = await $fetch(`/api/carparts/delete`, {
