@@ -161,9 +161,11 @@
             </Column>
             <Column field="rating" header="ویرایش" style="text-align: start">
               <template #body="slotProps">
-                <nuxt-link :to="`/product/${slotProps.data.id}`">
+                <nuxt-link :to="`/product/${slotProps.data.id}?list=${(currentPage * 10) - 1 }`">
                   <i class="mdi mdi-pencil" style="font-size: 2.5rem"> </i>
+               
                 </nuxt-link>
+         
               </template>
             </Column>
 
@@ -197,6 +199,7 @@
             v-model:first="first"
           >
           </Paginator>
+          {{ currentPage }}
 
           <!-- <Paginator v-model:first="kol" :rows="10" :totalRecords="120" :rowsPerPageOptions="[10, 20, 30]" template=" PrevPageLink  NextPageLink " >
             
@@ -271,7 +274,7 @@ export default {
       productsAll: null,
       visible: false,
       idproduct: null,
-      currentPage: null,
+      currentPage: (parseInt(this.$route.params.id) + 1)/10,
       queryParams: null,
       totalRecords: null,
       productName: null,
@@ -351,7 +354,7 @@ export default {
         console.log(error);
       } finally {
         this.product = toRaw(this.product);
-        console.log("pr", toRaw(this.product.total));
+        console.log("prc", toRaw(this.product.products));
       }
     },
     deletedialog(id) {

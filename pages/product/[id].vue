@@ -26,7 +26,7 @@
             <h1 class="text-2xl font-bold mb-6">فرم ویرایش محصول</h1>
             <div class="my-8">
               <h1>توضیحات محصول</h1>
-
+                 {{ listId }}
               <client-only>
                 <tiptap-editor v-model="content" />
               </client-only>
@@ -467,6 +467,7 @@ export default {
   data() {
     return {
       pageId: this.$route.params.id,
+      listId: this.$route.query.list,
       productAll : null,
       data: null,
       data1: null,
@@ -807,7 +808,7 @@ export default {
           group: "tl",
           life: 3000,
         });
-        navigateTo(`/product/main/${this.totalRecords}`);
+        navigateTo(`/product/main/${this.listId}`);
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
         console.log("gg", error);
