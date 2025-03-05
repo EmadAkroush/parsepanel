@@ -29,7 +29,7 @@
           >
             <!-- Product Name -->
             <div>
-              <label class="block text-sm font-semibold mb-1" > برچسب ها </label>
+              <label class="block text-sm font-semibold mb-1"  > برچسب ها </label>
               <InputText
                 v-model="productName"
                 placeholder="نام برچسب  را وارد کنید"
@@ -67,7 +67,7 @@
           >
             <!-- Header Section -->
             <template #header>
-              <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex flex-col flex-wrap  justify-between gap-2">
                 <div class="flex justify-between items-center mb-4">
                   <div class="flex items-center">
                     <!-- <img class="w-10 h-10 rounded-full ml-4" src="path/to/avatar.png" alt="User Avatar"> -->
@@ -76,15 +76,20 @@
                         src="/public/listbargiry/icons-Line-search.png"
                         alt=""
                         style="position: absolute; top: 8px; left: 10px"
+                        @click="getproductfilter()"
                       />
                       <input
                         type="text"
                         placeholder="جستجو"
                         class="border rounded-lg px-8 py-2"
+                        v-model="search"
                       />
                     </div>
                   </div>
                 </div>
+                <div class="flex justify-center" v-if="spiner">
+                    <ProgressSpinner />
+                  </div>
               </div>
             </template>
 
@@ -120,6 +125,12 @@
               دارد.
             </template>
           </DataTable>
+          <div
+            class="flex items-center justify-center mt-6"
+            v-if="alltags?.length == 0"
+          >
+            <h1>موردی منطبقی با جستجو یافت نشد</h1>
+          </div>
         </div>
         <Dialog
           v-model:visible="visible"
@@ -201,6 +212,8 @@ export default {
       visible: false,
       categoryholder: null,
       edit: null,
+      search: null,
+      spiner: true,
   
     };
   },
@@ -209,6 +222,37 @@ export default {
  
   },
   methods: {
+    async getproductfilter(par) {
+      this.spiner = true;
+      try {
+        this.tags = await $fetch("/api/tags/filter", {
+          query: { page: par },
+          method: "POST",
+          body: {
+            data: this.search,
+          },
+        });
+        this.alltags = this.tags;
+      } catch (error) {
+        // errors.value = Object.values(error.data.data.message).flat();
+        console.log(error);
+      } finally {
+        this.spiner = false;
+        console.log("rrrr", toRaw(this.tags));
+      }
+    },
+    async gettags() {
+      try {
+        this.tags  = await $fetch('/api/tags');
+        this.alltags = this.tags.tags;
+        this.spiner = false;
+      } catch (error) {
+        // errors.value = Object.values(error.data.data.message).flat();
+        console.log(error);
+      } finally {
+        console.log("brands",  this.alltags);
+      }
+    },
     async tagsfun() {
       try {
         this.data = await $fetch('/api/tags/create', {
@@ -225,17 +269,7 @@ export default {
         console.log("ddd",  toRaw(this.data));
       }
     },
-    async gettags() {
-      try {
-        this.tags  = await $fetch('/api/tags');
-        this.alltags = this.tags.tags
-      } catch (error) {
-        // errors.value = Object.values(error.data.data.message).flat();
-        console.log(error);
-      } finally {
-        console.log("brands",  this.alltags);
-      }
-    },
+
     async deletetags(id) {
 
       try {
