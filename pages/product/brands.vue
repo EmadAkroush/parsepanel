@@ -66,7 +66,7 @@
           >
             <!-- Header Section -->
             <template #header>
-              <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex flex-col flex-wrap  justify-between gap-2">
                 <div class="flex justify-between items-center mb-4">
                   <div class="flex items-center">
                     <!-- <img class="w-10 h-10 rounded-full ml-4" src="path/to/avatar.png" alt="User Avatar"> -->
@@ -85,10 +85,11 @@
                       />
                     </div>
                   </div>
-                  <div class="flex justify-center" v-if="spiner">
+               
+                </div>
+                <div class="flex justify-center" v-if="spiner">
                     <ProgressSpinner />
                   </div>
-                </div>
               </div>
             </template>
 
@@ -128,7 +129,7 @@
           </DataTable>
           <div
             class="flex items-center justify-center mt-6"
-            v-if="allcompanies?.length == 0"
+            v-if="allbrans?.length == 0"
           >
             <h1>موردی منطبقی با جستجو یافت نشد</h1>
           </div>
@@ -259,7 +260,7 @@ export default {
     async getproductfilter(par) {
       this.spiner = true;
       try {
-        this.brands = await $fetch("/api/company/filter", {
+        this.brands = await $fetch("/api/brand/filter", {
           query: { page: par },
           method: "POST",
           body: {

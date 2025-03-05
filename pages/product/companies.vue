@@ -128,7 +128,7 @@
           </DataTable>
           <div
             class="flex items-center justify-center mt-6"
-            v-if="allbrans?.length == 0"
+            v-if="allcompanies?.length == 0"
           >
             <h1>موردی منطبقی با جستجو یافت نشد</h1>
           </div>
