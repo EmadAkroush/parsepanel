@@ -25,7 +25,6 @@
           <!-- Data Table -->
           <form
             class="bg-white p-6 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-4"
-          
           >
             <!-- Product Name -->
             <div>
@@ -76,13 +75,18 @@
                         src="/public/listbargiry/icons-Line-search.png"
                         alt=""
                         style="position: absolute; top: 8px; left: 10px"
+                        @click="getproductfilter()"
                       />
                       <input
                         type="text"
                         placeholder="جستجوی برند ها "
                         class="border rounded-lg px-8 py-2"
+                        v-model="search"
                       />
                     </div>
+                  </div>
+                  <div class="flex justify-center" v-if="spiner">
+                    <ProgressSpinner />
                   </div>
                 </div>
               </div>
@@ -106,13 +110,15 @@
               </template>
             </Column>
 
-
-            <Column header="حذف" style="text-align: start" >
+            <Column header="حذف" style="text-align: start">
               <template #body="slotProps">
-                <i class="mdi mdi-delete" style="font-size: 2.5rem" @click="deletebrands(slotProps.data.id)"></i>
+                <i
+                  class="mdi mdi-delete"
+                  style="font-size: 2.5rem"
+                  @click="deletebrands(slotProps.data.id)"
+                ></i>
               </template>
             </Column>
-
 
             <!-- Footer Section -->
             <template #footer>
@@ -120,6 +126,13 @@
               دارد.
             </template>
           </DataTable>
+          <div
+            class="flex items-center justify-center mt-6"
+            v-if="allcompanies?.length == 0"
+          >
+            <h1>موردی منطبقی با جستجو یافت نشد</h1>
+          </div>
+          
         </div>
         <Dialog
           v-model:visible="visible"
@@ -138,9 +151,6 @@
               v-model="categoryholder"
             />
           </div>
-
-          
-     
 
           <div class="flex justify-end gap-2">
             <Button
@@ -195,8 +205,8 @@ export default {
       data: null,
       data1: null,
       productName: null,
-      brands : null,
-      allbrans : null,
+      brands: null,
+      allbrans: null,
       products: [
         {
           name: "سایپا",
@@ -238,56 +248,88 @@ export default {
       visible: false,
       categoryholder: null,
       edit: null,
-
+      search: null,
+      spiner: true,
     };
   },
   watch: {
     // وقتی تعداد برندها تغییر کند، درخواست جدیدی به سرور می‌زنیم
- 
   },
   methods: {
-    async brans() {
+    async getproductfilter(par) {
+      this.spiner = true;
       try {
-        this.data = await $fetch('/api/brand/create', {
-          method: 'POST',
-          body: { name: this.productName  },
+        this.brands = await $fetch("/api/company/filter", {
+          query: { page: par },
+          method: "POST",
+          body: {
+            data: this.search,
+          },
         });
-        this.getbrans();
-        this.productName = '';
-        this.$toast.add({ severity: 'success', summary: 'ایجاد برند', detail: 'برند با موفقیت ایجاد شد', group: 'tl', life: 3000 });
+        this.allbrans = this.brands;
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
         console.log(error);
       } finally {
-        console.log("ddd",  toRaw(this.data));
+        this.spiner = false;
+        console.log("rrrr", toRaw(this.brands));
       }
     },
     async getbrans() {
       try {
-        this.brands  = await $fetch('/api/brand');
-        this.allbrans = this.brands.brands
+        this.brands = await $fetch("/api/brand");
+        this.allbrans = this.brands.brands;
+        this.spiner = false;
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
         console.log(error);
       } finally {
-        console.log("brands",  this.allbrans);
+        console.log("brands", this.allbrans);
       }
     },
-    async deletebrands(id) {
-      console.log("ggg" , id);
-      
+    async brans() {
       try {
-        this.data1 = await $fetch(`/api/brand/delete`, {
-          method: 'DELETE',
-          query:  { url : `${id}`}
+        this.data = await $fetch("/api/brand/create", {
+          method: "POST",
+          body: { name: this.productName },
         });
         this.getbrans();
-        this.$toast.add({ severity: 'success', summary: ' حذف برند', detail: 'برند با موفقیت حذف شد', group: 'tl', life: 3000 });
+        this.productName = "";
+        this.$toast.add({
+          severity: "success",
+          summary: "ایجاد برند",
+          detail: "برند با موفقیت ایجاد شد",
+          group: "tl",
+          life: 3000,
+        });
       } catch (error) {
-   
+        // errors.value = Object.values(error.data.data.message).flat();
         console.log(error);
       } finally {
-        console.log("ddd",  toRaw(this.data1));
+        console.log("ddd", toRaw(this.data));
+      }
+    },
+
+    async deletebrands(id) {
+      console.log("ggg", id);
+
+      try {
+        this.data1 = await $fetch(`/api/brand/delete`, {
+          method: "DELETE",
+          query: { url: `${id}` },
+        });
+        this.getbrans();
+        this.$toast.add({
+          severity: "success",
+          summary: " حذف برند",
+          detail: "برند با موفقیت حذف شد",
+          group: "tl",
+          life: 3000,
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        console.log("ddd", toRaw(this.data1));
       }
     },
     async editcategory() {
@@ -329,14 +371,9 @@ export default {
       this.visible = true;
       this.getcategorybyid(id);
     },
-
-
   },
   beforeMount() {
     this.getbrans();
-
   },
 };
 </script>
-
-

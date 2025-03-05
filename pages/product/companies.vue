@@ -33,7 +33,6 @@
                 v-model="productName"
                 placeholder="نام شرکت  را وارد کنید"
                 class="w-full"
-               
               />
             </div>
 
@@ -68,7 +67,7 @@
             <!-- Header Section -->
             <template #header>
               <div class="flex flex-col flex-wrap justify-between gap-2">
-              
+                <div class="flex justify-between items-center mb-4">
                   <div class="flex items-center">
                     <!-- <img class="w-10 h-10 rounded-full ml-4" src="path/to/avatar.png" alt="User Avatar"> -->
                     <div class="relative">
@@ -76,21 +75,20 @@
                         src="/public/listbargiry/icons-Line-search.png"
                         alt=""
                         style="position: absolute; top: 8px; left: 10px"
-                         @click="getproductfilter()"
+                        @click="getproductfilter()"
                       />
                       <input
                         type="text"
                         placeholder="جستجو"
                         class="border rounded-lg px-8 py-2"
                         v-model="search"
-                   
                       />
                     </div>
                   </div>
-                  <div class="flex justify-center" v-if="spiner">
+                </div>
+                <div class="flex justify-center" v-if="spiner">
                   <ProgressSpinner />
                 </div>
-                
               </div>
             </template>
 
@@ -100,7 +98,7 @@
               header="نام شرکت ها"
               style="text-align: start"
             />
-             
+
             <Column field="rating" header="ویرایش" style="text-align: start">
               <template #body="slotProps">
                 <i
@@ -111,8 +109,6 @@
                 </i>
               </template>
             </Column>
-
-
 
             <Column header="حذف" style="text-align: start">
               <template #body="slotProps">
@@ -129,12 +125,12 @@
               مجموعاً {{ products ? products.length : 0 }} محصول در لیست وجود
               دارد.
             </template>
-
           </DataTable>
-          <div class="flex items-center justify-center mt-6" v-if="allcompanies?.length == 0">
-            <h1>
-                 موردی منطبقی با جستجو یافت نشد
-            </h1>
+          <div
+            class="flex items-center justify-center mt-6"
+            v-if="allbrans?.length == 0"
+          >
+            <h1>موردی منطبقی با جستجو یافت نشد</h1>
           </div>
         </div>
         <Dialog
@@ -154,9 +150,6 @@
               v-model="categoryholder"
             />
           </div>
-
-          
-     
 
           <div class="flex justify-end gap-2">
             <Button
@@ -217,8 +210,8 @@ export default {
       visible: false,
       categoryholder: null,
       edit: null,
-      search : null,
-      spiner: true
+      search: null,
+      spiner: true,
     };
   },
   watch: {
@@ -236,7 +229,6 @@ export default {
           },
         });
         this.allcompanies = this.companies;
-
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
         console.log(error);
@@ -263,8 +255,7 @@ export default {
           method: "POST",
           body: { parent_id: 1, name: this.productName },
         });
-        this.productName = '',
-        this.getcompanies();
+        (this.productName = ""), this.getcompanies();
         this.$toast.add({
           severity: "success",
           summary: "ایجاد دسته بندی",
