@@ -103,8 +103,8 @@
                   </div>
                 </div>
                 <div class="flex justify-center" v-if="spiner">
-                    <ProgressSpinner />
-                  </div>
+                  <ProgressSpinner />
+                </div>
 
                 <nuxt-link to="/product/new">
                   <Button
@@ -130,8 +130,8 @@
             </Column>
             <Column field="price" header="قیمت" style="text-align: start">
               <template #body="slotProps">
-                  {{  priceser(slotProps.data?.price) }}
-                </template>
+                {{ priceser(slotProps.data?.price) }}
+              </template>
             </Column>
             <Column
               field="Inventory_status"
@@ -192,7 +192,7 @@
           <Paginator
             :rows="10"
             :totalRecords="totalRecords"
-            template="PageLinks  LastPageLink"
+            template=" FirstPageLink PrevPageLink PageLinks  NextPageLink  LastPageLink "
             @page="onPageChange"
             v-model:first="first"
           >
@@ -255,8 +255,6 @@
 </style>
 
 <script>
-
-
 export default {
   data() {
     return {
@@ -280,7 +278,6 @@ export default {
       copy: null,
       lastpage: 3,
       spiner: true,
-
     };
   },
   methods: {
@@ -350,7 +347,6 @@ export default {
         this.productsAll = this.product.products;
         this.totalRecords = this.product.total;
         this.spiner = false;
-
       } catch (error) {
         console.log(error);
       } finally {
