@@ -176,6 +176,8 @@
                     :placeholder="categoryholder"
                     optionLabel="name"
                     class="w-full"
+                    filter 
+
                   />
                 </div>
                 <div>
@@ -188,6 +190,8 @@
                     :placeholder="carholder"
                     optionLabel="name"
                     class="w-full"
+                    filter 
+
                   />
                 </div>
                 <div>
@@ -200,6 +204,8 @@
                     :placeholder="carpartholder"
                     optionLabel="name"
                     class="w-full"
+                    filter 
+
                   />
                 </div>
 
@@ -213,6 +219,8 @@
                     :placeholder="companyholder"
                     optionLabel="name"
                     class="w-full"
+                    filter 
+
                   />
                 </div>
 
@@ -226,6 +234,8 @@
                     :placeholder="brandholder"
                     class="w-full"
                     optionLabel="name"
+                    filter 
+
                   />
                 </div>
 
@@ -240,6 +250,8 @@
                     :placeholder="productgarantyholder"
                     optionLabel="label"
                     class="w-full"
+                    filter 
+
                   />
                 </div>
 
@@ -254,6 +266,8 @@
                     :placeholder="tagholder"
                     optionLabel="name"
                     class="w-full"
+                    filter 
+
                   />
                 </div>
 
@@ -268,6 +282,8 @@
                     :placeholder="productsendwayholder"
                     optionLabel="label"
                     class="w-full"
+                    filter 
+
                   />
                 </div>
 

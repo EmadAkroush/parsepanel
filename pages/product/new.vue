@@ -176,6 +176,7 @@
                     placeholder="دسته بندی محصول را انتخاب کنید"
                     optionLabel="name"
                     class="w-full"
+                    filter 
                   />
                 </div>
                 <div>
@@ -188,6 +189,7 @@
                     placeholder="نوع خودرو را انتخاب کنید"
                     optionLabel="name"
                     class="w-full"
+                    filter 
                   />
                 </div>
                 <div>
@@ -200,6 +202,8 @@
                     placeholder="مثلا جلوبندی"
                     optionLabel="name"
                     class="w-full"
+                    filter 
+
                   />
                 </div>
 
@@ -213,6 +217,8 @@
                     placeholder="شرکت سازنده خودرو را انتخاب کنید"
                     optionLabel="name"
                     class="w-full"
+                    filter 
+
                   />
                 </div>
 
@@ -225,6 +231,8 @@
                     placeholder="برند را انتخاب کنید"
                     class="w-full"
                     optionLabel="name"
+                    filter 
+
                   />
                 </div>
 
@@ -239,6 +247,8 @@
                     placeholder="نوع ضمانت را انتخاب کنید"
                     optionLabel="label"
                     class="w-full"
+                    filter 
+
                   />
                 </div>
 
@@ -253,6 +263,8 @@
                     placeholder="انتخاب برچسب"
                     optionLabel="name"
                     class="w-full"
+                    filter 
+
                   />
                 </div>
 
@@ -267,6 +279,8 @@
                     placeholder="روش ارسال را انتخاب کنید"
                     optionLabel="label"
                     class="w-full"
+                    filter 
+
                   />
                 </div>
 
