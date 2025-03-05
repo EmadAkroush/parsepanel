@@ -102,6 +102,10 @@
                     </div>
                   </div>
                 </div>
+                <div class="flex justify-center" v-if="spiner">
+                    <ProgressSpinner />
+                  </div>
+
                 <nuxt-link to="/product/new">
                   <Button
                     label="محصول جدید"
@@ -178,6 +182,13 @@
               مجموعاً {{ totalRecords }} محصول در لیست وجود دارد.
             </template>
           </DataTable>
+          <div
+            class="flex items-center justify-center mt-6"
+            v-if="productsAll?.length == 0"
+          >
+            <h1>موردی منطبقی با جستجو یافت نشد</h1>
+          </div>
+
           <Paginator
             :rows="10"
             :totalRecords="totalRecords"
@@ -268,6 +279,8 @@ export default {
       productName: null,
       copy: null,
       lastpage: 3,
+      spiner: true,
+
     };
   },
   methods: {
@@ -289,6 +302,8 @@ export default {
     },
 
     async getproductfilter(par) {
+      this.spiner = true;
+
       try {
         this.product = await $fetch("/api/advancedsearch", {
           query: { page: par },
@@ -334,6 +349,8 @@ export default {
         });
         this.productsAll = this.product.products;
         this.totalRecords = this.product.total;
+        this.spiner = false;
+
       } catch (error) {
         console.log(error);
       } finally {
