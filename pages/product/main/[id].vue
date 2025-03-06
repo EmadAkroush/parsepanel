@@ -199,7 +199,7 @@
             v-model:first="first"
           >
           </Paginator>
-          {{ currentPage }}
+      
 
           <!-- <Paginator v-model:first="kol" :rows="10" :totalRecords="120" :rowsPerPageOptions="[10, 20, 30]" template=" PrevPageLink  NextPageLink " >
             

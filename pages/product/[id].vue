@@ -26,7 +26,7 @@
             <h1 class="text-2xl font-bold mb-6">فرم ویرایش محصول</h1>
             <div class="my-8">
               <h1>توضیحات محصول</h1>
-                 {{ listId }}
+               
               <client-only>
                 <tiptap-editor v-model="content" />
               </client-only>
