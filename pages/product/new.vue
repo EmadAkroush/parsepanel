@@ -707,3 +707,10 @@ export default {
   mounted() {},
 };
 </script>
+
+<script setup>
+
+definePageMeta({
+  middleware: "auth",
+});
+</script>

@@ -6,17 +6,22 @@
         <!-- Replace with your actual logo -->
         <img src="../../public/logo.svg.png" alt="Logo"  />
       </div>
-      <form @submit.prevent="handleSubmit" class="space-y-4">
+      <form @submit.prevent="login()" class="space-y-4">
         <div>
+          <div class="alert alert-danger" role="alert">
+            <ul class="mb-0" style="color: red" v-if="errors">
+              <li v-for="(error, index) in errors" :key="index">{{ error }}</li>
+            </ul>
+          </div>
           <label for="username" class="block text-sm font-medium text-gray-700">نام کاربری</label>
           <div class="mt-1 relative rounded-md shadow-sm">
-            <InputText id="username" v-model="form.username" placeholder="نام کاربری" class="block w-full" />
+            <InputText id="username" v-model="formData.name" placeholder="نام کاربری" class="block w-full" />
           </div>
         </div>
         <div>
           <label for="password" class="block text-sm font-medium text-gray-700" >رمز عبور</label>
           <div class="mt-1 relative rounded-md shadow-sm">
-            <InputText id="password" v-model="form.password" type="password" placeholder="رمز عبور" class="block w-full" />
+            <InputText id="password" v-model="formData.password" type="password" placeholder="رمز عبور" class="block w-full" />
             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -29,36 +34,74 @@
         </div>
       </form>
     </div>
+    <Toast />
+
   </div>
   
 
 
   </div>
 </template>
+
 <script setup>
+
+
 definePageMeta({
   layout: false, // This will disable the layout
+  middleware: "guest",
 });
 
-</script>
-<script>
-export default {
-  data() {
-    return {
-      form: {
-        username: '',
-        password: '',
-      },
-    };
-  },
-  methods: {
-    handleSubmit() {
-      // Handle login logic here
-      // console.log("Login Form Submitted", this.form);
-      this.$router.push('/');
-    },
-  },
-};
+const loading = ref(false);
+const errors = ref([]);
+const formData = reactive({
+  name: "",
+  password: "",
+});
+
+const toast = useToast();
+const { authUser } = useAuth();
+
+function validateForm() {
+  // Reset errors
+  errors.value = [];
+
+  // Check if cellphone is valid
+  if (formData.name == null) {
+    errors.value.push("وارد کردن نام کاربری الزامی می باشد");
+  }
+
+  // Check if password is valid
+  if (formData.password.length < 6) {
+    errors.value.push("رمز عبور باید حداقل 6 کاراکتر باشد.");
+  }
+
+  return errors.value.length === 0; // Return true if there are no errors
+}
+
+async function login() {
+  if (!validateForm()) {
+    return; // Exit if validation fails
+  }
+  try {
+    loading.value = true;
+    const user = await $fetch("/api/auth/login", {
+      method: "POST",
+      body: formData,
+    });
+
+    errors.value = null;
+    authUser.value = user;
+    console.log("fff", user);
+    toast.add({ severity: 'success', summary: 'ورود', detail: 'ورود با موفقیت انجام شد', life: 3000 });
+
+    return navigateTo("/");
+  } catch (error) {
+    errors.value = Object.values(error.data.data).flat();
+    console.log("cc", error.data);
+  } finally {
+    loading.value = false;
+  }
+}
 </script>
 
 

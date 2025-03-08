@@ -148,10 +148,72 @@ export default {
           label: "خروج",
           to: "/",
           id: 9,
+          command: () => logout(),
+
         },
         // You can add more items as needed
       ],
     };
   },
 };
+</script>
+
+<script setup>
+
+const items = ref([
+{
+          label: "داشبورد",
+          to: "/",
+          id: 1,
+        },
+        {
+          label: "مدیریت محصولات",
+          to: "/product/main/1",
+          id: 2,
+        },
+        {
+          label: "مدیریت مقالات",
+          to: "/post",
+          id: 3,
+        },
+        {
+          label: "مدیریت سفارشات",
+          to: "/",
+          id: 4,
+        },
+        {
+          label: "مدیریت کاربران",
+          to: "/user",
+          id: 5,
+        },
+        {
+          label: "اطلاعات شخصی",
+          to: "/",
+          id: 6,
+        },
+
+        {
+          label: "خروج",
+          to: "/",
+          id: 9,
+          command: () => logout(),
+
+        },
+]);
+
+
+const { authUser } = useAuth();
+
+async function logout() {
+    const headers = useRequestHeaders(['cookie']);
+ 
+    
+    await useFetch('/api/auth/logout', {
+        method: 'POST',
+        headers
+    });
+
+    authUser.value = null;
+    return navigateTo('/login')
+}
 </script>
