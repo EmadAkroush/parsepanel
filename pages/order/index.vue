@@ -64,7 +64,7 @@
             </template>
 
             <!-- Columns -->
-            <Column field="title" header="عنوان" style="text-align: start" />
+            <Column field="created_at" header="تاریخ" style="text-align: start" />
             <Column
               field="primary_image"
               header="تصویر"
@@ -76,20 +76,23 @@
             </Column>
 
             <Column
-              field="category_name"
-              header="دسته‌بندی"
+              field="paying_amount"
+              header="مبلغ پرداختی"
+              style="text-align: start"
+            />
+            <Column
+              field="payment_status"
+              header="وضعیت پرداخت"
               style="text-align: start"
             />
 
-            <Column field="rating" header="ویرایش" style="text-align: start">
+            <Column field="rating" header="مشاهده" style="text-align: start">
               <template #body="slotProps">
-                <nuxt-link :to="`post/${slotProps.data.id}`">
-                  <i
-                    class="mdi mdi-pencil"
-                    style="font-size: 2.5rem"
-                    @click=""
-                  ></i>
-                </nuxt-link>
+                <i
+                  class="mdi mdi-eye-outline"
+                  style="font-size: 2.5rem"
+                  @click="seeitems(slotProps.data.order_items)"
+                ></i>
               </template>
             </Column>
 
@@ -119,25 +122,62 @@
           <Dialog
             v-model:visible="visible"
             modal
-            header="حذف محصول"
-            :style="{ width: '25rem' }"
+            header="مشهاهده سفارش"
+            :style="{ width: '80rem' }"
           >
-            <span class="text-surface-500 dark:text-surface-400 block mb-8">
-              آیا از حذف محصول اطمینان دارید</span
+       
+          <DataTable
+            class="mt-4"
+            :value="productde"
+            style="width: 100%"
+            :rows="10"
+          >
+            <!-- Header Section -->
+     
+
+            <!-- Columns -->
+            <Column field="name" header="نام" style="text-align: start" />
+            <Column
+              field="primary_image"
+              header="تصویر"
+              style="text-align: start"
             >
-            <div class="flex justify-end gap-2">
-              <Button
-                type="button"
-                label="خیر"
-                severity="secondary"
-                @click="visible = false"
-              ></Button>
-              <Button
-                type="button"
-                label="بله"
-                @click="deleteproduct()"
-              ></Button>
-            </div>
+              <template #body="slotProps">
+                <img :src="slotProps.data.primary_image" class="w-24 rounded" />
+              </template>
+            </Column>
+            <Column field="price" header="قیمت" style="text-align: start">
+              <template #body="slotProps">
+                {{ priceser(slotProps.data?.price) }}
+              </template>
+            </Column>
+            <Column
+              field="Inventory_status"
+              header="وضعیت موجودی"
+              style="text-align: start"
+            />
+            <Column
+              field="category_name"
+              header="دسته بندی محصول"
+              style="text-align: start"
+            />
+            <Column
+              field="productcode"
+              header="کد محصول"
+              style="text-align: start"
+            >
+            </Column>
+        
+        
+
+
+            <!-- Footer Section -->
+            <template #footer>
+              مجموعاً {{ productde.length }} سفارش در لیست وجود دارد.
+            </template>
+          </DataTable>
+         
+          
           </Dialog>
         </div>
       </div>
@@ -178,7 +218,7 @@ export default {
     return {
       productsAll: null,
       visible: false,
-      idproduct: null,
+      productde: null,
       currentPage: null,
       queryParams: null,
       totalRecords: null,
@@ -197,17 +237,20 @@ export default {
   methods: {
     async getproduct(par) {
       try {
-        this.product = await $fetch("/api/post/main", {
+        this.product = await $fetch("/api/order", {
           query: { page: par },
         });
-        this.productsAll = this.product.posts;
-        this.totalRecords = this.product.total;
+        this.productsAll = this.product.data.orders;
+        this.totalRecords = this.product.data.orders.length;
       } catch (error) {
         console.log(error);
       } finally {
         this.product = toRaw(this.product);
-        console.log("pr", toRaw(this.product));
+        console.log("order", toRaw(this.product));
       }
+    },
+    priceser(price) {
+      return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
 
     onPageChange(event) {
@@ -217,9 +260,9 @@ export default {
     },
 
  
-    deletedialog(id) {
+    seeitems(de) {
       this.visible = true;
-      this.idproduct = id;
+      this.productde = de;
     },
  
   },
