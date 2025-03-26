@@ -23,7 +23,7 @@
       <div class="flex flex-row mt-6">
         <div class="p-6 bg-white rounded-lg shadow-md rtl" style="width: 100%">
           <!-- Data Table -->
-    
+
           <hr />
           <DataTable
             class="mt-4"
@@ -52,27 +52,21 @@
                     </div>
                   </div>
                 </div>
-                <nuxt-link to="/post/new">
-                  <Button
-                    label="مقاله جدید"
-                    severity="success"
-                    icon="mdi mdi-plus"
-                    iconPos="right"
-                  />
-                </nuxt-link>
+              
               </div>
             </template>
 
             <!-- Columns -->
-            <Column field="created_at" header="تاریخ" style="text-align: start" />
             <Column
-              field="primary_image"
-              header="تصویر"
+              field="created_at"
+              header="تاریخ"
+              style="text-align: start"
+            />
+            <Column
+              field="status"
+              header="وضعیت سفارش"
               style="text-align: start"
             >
-              <template #body="slotProps">
-                <img :src="slotProps.data.primary_image" class="w-24 rounded" />
-              </template>
             </Column>
 
             <Column
@@ -91,18 +85,16 @@
                 <i
                   class="mdi mdi-eye-outline"
                   style="font-size: 2.5rem"
-                  @click="seeitems(slotProps.data.order_items)"
+                  @click="seeitems(slotProps.data)"
                 ></i>
               </template>
             </Column>
 
-            <Column header="حذف" style="text-align: start" @click="">
+            <Column header="مشاهده آدرس" style="text-align: start" @click="">
               <template #body="slotProps">
-                <i
-                  class="mdi mdi-delete"
-                  style="font-size: 2.5rem"
-                  @click="deletedialog(slotProps.data.id)"
-                ></i>
+                <nuxt-link :to="`/order/${slotProps.data.userid}`">
+                  <Button label="جزئیات" severity="success" iconPos="right" />
+                </nuxt-link>
               </template>
             </Column>
 
@@ -122,62 +114,73 @@
           <Dialog
             v-model:visible="visible"
             modal
-            header="مشهاهده سفارش"
+            header="مشاهده سفارش"
             :style="{ width: '80rem' }"
           >
-       
-          <DataTable
-            class="mt-4"
-            :value="productde"
-            style="width: 100%"
-            :rows="10"
-          >
-            <!-- Header Section -->
-     
-
-            <!-- Columns -->
-            <Column field="name" header="نام" style="text-align: start" />
-            <Column
-              field="primary_image"
-              header="تصویر"
-              style="text-align: start"
-            >
-              <template #body="slotProps">
-                <img :src="slotProps.data.primary_image" class="w-24 rounded" />
-              </template>
-            </Column>
-            <Column field="price" header="قیمت" style="text-align: start">
-              <template #body="slotProps">
-                {{ priceser(slotProps.data?.price) }}
-              </template>
-            </Column>
-            <Column
-              field="Inventory_status"
-              header="وضعیت موجودی"
-              style="text-align: start"
+            <Dropdown
+              v-model="statusmodel"
+              :options="cities"
+              optionLabel="name"
+              :placeholder="productde.status"
+              class="w-full md:w-14rem"
             />
-            <Column
-              field="category_name"
-              header="دسته بندی محصول"
-              style="text-align: start"
+            <Button
+              label="تغییر"
+              severity="success"
+              icon="mdi mdi-plus"
+              iconPos="right"
+              @click="changeStatus(productde.id)"
             />
-            <Column
-              field="productcode"
-              header="کد محصول"
-              style="text-align: start"
+
+            <DataTable
+              class="mt-4"
+              :value="productde.order_items"
+              style="width: 100%"
+              :rows="10"
             >
-            </Column>
-        
-        
+              <!-- Header Section -->
 
+              <!-- Columns -->
+              <Column field="name" header="نام" style="text-align: start" />
+              <Column
+                field="primary_image"
+                header="تصویر"
+                style="text-align: start"
+              >
+                <template #body="slotProps">
+                  <img
+                    :src="slotProps.data.primary_image"
+                    class="w-24 rounded"
+                  />
+                </template>
+              </Column>
+              <Column field="price" header="قیمت" style="text-align: start">
+                <template #body="slotProps">
+                  {{ priceser(slotProps.data?.price) }}
+                </template>
+              </Column>
+              <Column
+                field="Inventory_status"
+                header="وضعیت موجودی"
+                style="text-align: start"
+              />
+              <Column
+                field="category_name"
+                header="دسته بندی محصول"
+                style="text-align: start"
+              />
+              <Column
+                field="productcode"
+                header="کد محصول"
+                style="text-align: start"
+              >
+              </Column>
 
-            <!-- Footer Section -->
-            <template #footer>
-              مجموعاً {{ productde.length }} سفارش در لیست وجود دارد.
-            </template>
-          </DataTable>
-         
-          
+              <!-- Footer Section -->
+              <template #footer>
+                مجموعاً {{ productde.length }} سفارش در لیست وجود دارد.
+              </template>
+            </DataTable>
           </Dialog>
         </div>
       </div>
@@ -223,6 +226,8 @@ export default {
       queryParams: null,
       totalRecords: null,
       product: null,
+      statusmodel: null,
+      data: null,
       products: [
         {
           name: "بررسی دلایل ایجاد صداهای عجیب و غریب در اتومبیل",
@@ -231,6 +236,10 @@ export default {
           category: "موتور خودرو",
           code: "ffff",
         },
+      ],
+      cities: [
+        { name: "ارسال شده", code: "2" },
+        { name: "کنسل شده", code: "3" },
       ],
     };
   },
@@ -249,6 +258,21 @@ export default {
         console.log("order", toRaw(this.product));
       }
     },
+
+    async changeStatus(id) {
+      try {
+        this.data = await $fetch("/api/order/update", {
+          method: "POST",
+          body: { order_id: id, status: this.statusmodel.code },
+        });
+        this.getproduct();
+      } catch (error) {
+        // errors.value = Object.values(error.data.data.message).flat();
+        console.log(error);
+      } finally {
+        console.log("status", toRaw(this.data));
+      }
+    },
     priceser(price) {
       return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
@@ -259,12 +283,10 @@ export default {
       console.log("event", this.currentPage);
     },
 
- 
     seeitems(de) {
       this.visible = true;
       this.productde = de;
     },
- 
   },
   beforeMount() {
     this.getproduct();
@@ -272,7 +294,6 @@ export default {
 };
 </script>
 <script setup>
-
 definePageMeta({
   middleware: "auth",
 });
