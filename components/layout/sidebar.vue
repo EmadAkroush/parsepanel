@@ -178,7 +178,7 @@ const items = ref([
         },
         {
           label: "مدیریت سفارشات",
-          to: "/",
+          to: "/order",
           id: 4,
         },
         {
