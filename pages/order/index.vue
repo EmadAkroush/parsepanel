@@ -73,7 +73,11 @@
               field="paying_amount"
               header="مبلغ پرداختی"
               style="text-align: start"
-            />
+            >
+            <template #body="slotProps">
+                {{ priceser(slotProps.data?.paying_amount) }}
+              </template>
+           </Column>
             <Column
               field="payment_status"
               header="وضعیت پرداخت"
@@ -117,12 +121,13 @@
             header="مشاهده سفارش"
             :style="{ width: '80rem' }"
           >
+          <div class="grid grid-cols-12 gap-4 ">
             <Dropdown
               v-model="statusmodel"
               :options="cities"
               optionLabel="name"
               :placeholder="productde.status"
-              class="w-full md:w-14rem"
+              class="col-span-10"
             />
             <Button
               label="تغییر"
@@ -130,7 +135,11 @@
               icon="mdi mdi-plus"
               iconPos="right"
               @click="changeStatus(productde.id)"
+              class="col-span-2"
             />
+
+          </div>
+   
 
             <DataTable
               class="mt-4"
@@ -160,8 +169,8 @@
                 </template>
               </Column>
               <Column
-                field="Inventory_status"
-                header="وضعیت موجودی"
+                field="quantity"
+                header="تعداد"
                 style="text-align: start"
               />
               <Column

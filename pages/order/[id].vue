@@ -138,10 +138,13 @@ export default {
         console.log(error);
       } finally {
     
-        console.log("order", toRaw(this.product).last);
+        console.log("order", toRaw(this.product));
       }
 
-    }
+    },
+    priceser(price) {
+      return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
   },
   beforeMount() {
     this.getproduct();
