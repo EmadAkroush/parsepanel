@@ -25,20 +25,49 @@
           <!-- Data Table -->
 
           <hr />
-        {{ productsAll  }}
           <div class="grid grid-cols-2 gap-4">
+            <div>
+              <p class="font-bold">استان :</p>
+              <p>{{ productsAll?.province_id }}</p>
+            </div>
+            <div>
+              <p class="font-bold"> شهر :</p>
+              <p>{{ productsAll?.city_id }}</p>
+            </div>
+            
             <div>
               <p class="font-bold">نام :</p>
               <p>{{ productsAll?.name }}</p>
             </div>
             <div>
-              <p class="font-bold">قیمت:</p>
-              <p>{{ productsAll?.price }}</p>
+              <p class="font-bold">فامیل:</p>
+              <p>{{ productsAll?.family }}</p>
+            </div>
+            <div>
+              <p class="font-bold">آدرس:</p>
+              <p>{{ productsAll?.address }}</p>
+            </div>
+            <div>
+              <p class="font-bold">ایمیل:</p>
+              <p>{{ productsAll?.email }}</p>
+            </div>
+            <div>
+              <p class="font-bold">شماره تلفن :</p>
+              <p>{{ productsAll?.cellphone }}</p>
+            </div>
+            <div>
+              <p class="font-bold">کد پستی  :</p>
+              <p>{{ productsAll?.postal_code }}</p>
+            </div>
+            <div>
+              <p class="font-bold"> روش ارسال   :</p>
+              <p>{{ productsAll?.sendway }}</p>
             </div>
             <div>
               <p class="font-bold">توضیحات:</p>
               <p>{{ productsAll?.description }}</p>
             </div>
+       
             <div>
               <p class="font-bold">تاریخ:</p>
               <p>{{ productsAll?.date }}</p>
