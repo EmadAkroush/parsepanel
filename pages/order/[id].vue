@@ -28,11 +28,11 @@
           <div class="grid grid-cols-2 gap-4">
             <div>
               <p class="font-bold">استان :</p>
-              <p>{{ productsAll?.province_id }}</p>
+              <p>{{ productsAll?.provincename }}</p>
             </div>
             <div>
               <p class="font-bold"> شهر :</p>
-              <p>{{ productsAll?.city_id }}</p>
+              <p>{{ productsAll?.cityname }}</p>
             </div>
             
             <div>
