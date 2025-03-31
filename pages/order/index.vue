@@ -62,6 +62,16 @@
               style="text-align: start"
             />
             <Column
+              field="cellphone"
+              header="شماره تلفن"
+              style="text-align: start"
+            />
+            <Column
+              field="family"
+              header="نام خانوادگی"
+              style="text-align: start"
+            />
+            <Column
               field="status"
               header="وضعیت سفارش"
               style="text-align: start"
@@ -148,6 +158,7 @@
 
               <!-- Columns -->
               <Column field="name" header="نام" style="text-align: start" />
+              
               <Column
                 field="primary_image"
                 header="تصویر"
