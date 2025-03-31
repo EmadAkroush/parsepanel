@@ -52,7 +52,6 @@
                     </div>
                   </div>
                 </div>
-              
               </div>
             </template>
 
@@ -74,10 +73,10 @@
               header="مبلغ پرداختی"
               style="text-align: start"
             >
-            <template #body="slotProps">
+              <template #body="slotProps">
                 {{ priceser(slotProps.data?.paying_amount) }}
               </template>
-           </Column>
+            </Column>
             <Column
               field="payment_status"
               header="وضعیت پرداخت"
@@ -121,25 +120,23 @@
             header="مشاهده سفارش"
             :style="{ width: '80rem' }"
           >
-          <div class="grid grid-cols-12 gap-4 ">
-            <Dropdown
-              v-model="statusmodel"
-              :options="cities"
-              optionLabel="name"
-              :placeholder="productde.status"
-              class="col-span-10"
-            />
-            <Button
-              label="تغییر"
-              severity="success"
-              icon="mdi mdi-plus"
-              iconPos="right"
-              @click="changeStatus(productde.id)"
-              class="col-span-2"
-            />
-
-          </div>
-   
+            <div class="grid grid-cols-12 gap-4">
+              <Dropdown
+                v-model="statusmodel"
+                :options="cities"
+                optionLabel="name"
+                :placeholder="productde.status"
+                class="col-span-10"
+              />
+              <Button
+                label="تغییر"
+                severity="success"
+                icon="mdi mdi-plus"
+                iconPos="right"
+                @click="changeStatus(productde.id)"
+                class="col-span-2"
+              />
+            </div>
 
             <DataTable
               class="mt-4"
@@ -187,9 +184,10 @@
 
               <!-- Footer Section -->
               <template #footer>
-                مجموعاً {{ productde.length }} سفارش در لیست وجود دارد.
+                مجموعاً {{ totalRecords }} سفارش در لیست وجود دارد.
               </template>
             </DataTable>
+         
           </Dialog>
         </div>
       </div>
@@ -259,7 +257,7 @@ export default {
           query: { page: par },
         });
         this.productsAll = this.product.data.orders;
-        this.totalRecords = this.product.data.orders.length;
+        this.totalRecords = this.product.data.total;
       } catch (error) {
         console.log(error);
       } finally {
