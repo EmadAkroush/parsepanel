@@ -173,7 +173,7 @@
               </Column>
               <Column field="price" header="قیمت" style="text-align: start">
                 <template #body="slotProps">
-                  {{ priceser(slotProps.data?.price) }}
+                  {{ priceser(slotProps.data?.priceoff) }}
                 </template>
               </Column>
               <Column
