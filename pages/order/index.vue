@@ -87,6 +87,12 @@
                 {{ priceser(slotProps.data?.paying_amount) }}
               </template>
             </Column>
+
+            <Column
+              field="token"
+              header="شماره رهگیری درگاه "
+              style="text-align: start"
+            />
             <Column
               field="payment_status"
               header="وضعیت پرداخت"
@@ -130,6 +136,13 @@
             header="مشاهده سفارش"
             :style="{ width: '80rem' }"
           >
+            <span v-show="false">
+              {{ getstatustoman(productde?.token) }}
+            </span>
+            <h1>
+              {{ toman.payee_readable_status }}
+            </h1>
+
             <div class="grid grid-cols-12 gap-4">
               <Dropdown
                 v-model="statusmodel"
@@ -158,7 +171,7 @@
 
               <!-- Columns -->
               <Column field="name" header="نام" style="text-align: start" />
-              
+
               <Column
                 field="primary_image"
                 header="تصویر"
@@ -198,7 +211,6 @@
                 مجموعاً {{ totalRecords }} سفارش در لیست وجود دارد.
               </template>
             </DataTable>
-         
           </Dialog>
         </div>
       </div>
@@ -246,6 +258,7 @@ export default {
       product: null,
       statusmodel: null,
       data: null,
+      toman: null,
       products: [
         {
           name: "بررسی دلایل ایجاد صداهای عجیب و غریب در اتومبیل",
@@ -277,6 +290,17 @@ export default {
       }
     },
 
+    async getstatustoman(par) {
+      try {
+        this.toman = await $fetch("/api/order/tomanstatus", {
+          query: { page: par },
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+      }
+    },
+
     async changeStatus(id) {
       try {
         this.data = await $fetch("/api/order/update", {
@@ -304,6 +328,7 @@ export default {
     seeitems(de) {
       this.visible = true;
       this.productde = de;
+      console.log("seeitems", this.productde.token);
     },
   },
   beforeMount() {
