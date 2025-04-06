@@ -139,9 +139,20 @@
             <span v-show="false">
               {{ getstatustoman(productde?.token) }}
             </span>
-            <h1>
-              {{ toman.payee_readable_status }}
-            </h1>
+            <div class="flex">
+              <h1>
+                {{ toman?.payee_readable_status }}
+              </h1>
+              <Button
+                label="تایید سفارش"
+                severity="success"
+                icon="mdi mdi-plus"
+                iconPos="right"
+                @click="conform(productde?.token)"
+                class="col-span-4 mr-4 "
+              />
+
+            </div>
 
             <div class="grid grid-cols-12 gap-4">
               <Dropdown
@@ -307,6 +318,21 @@ export default {
           method: "POST",
           body: { order_id: id, status: this.statusmodel.code },
         });
+        this.getproduct();
+      } catch (error) {
+        // errors.value = Object.values(error.data.data.message).flat();
+        console.log(error);
+      } finally {
+        console.log("status", toRaw(this.data));
+      }
+    },
+    async conform(to) {
+      try {
+        let data = await $fetch("/api/order/conform", {
+          method: "POST",
+          body: { trace_number: to  },
+        });
+        console.log("to", data);
         this.getproduct();
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
