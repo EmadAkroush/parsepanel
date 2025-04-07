@@ -128,6 +128,7 @@
             template=" FirstPageLink PrevPageLink PageLinks  NextPageLink  LastPageLink "
             @page="onPageChange"
             :currentPage="currentPage"
+             v-model:first="first"
           />
           <Toast position="top-left" group="tl" />
           <Dialog
@@ -275,10 +276,11 @@
 export default {
   data() {
     return {
+      first: this.$route.params.id,
       productsAll: null,
       visible: false,
       productde: null,
-      currentPage: null,
+      currentPage: (parseInt(this.$route.params.id) + 1)/10,
       queryParams: null,
       totalRecords: null,
       product: null,
@@ -362,8 +364,9 @@ export default {
 
     onPageChange(event) {
       this.currentPage = event.page + 1;
+      this.$router.push({ params: { id: (this.currentPage + '0') - 1 } });
       this.getproduct(this.currentPage);
-      console.log("event", this.currentPage);
+    
     },
 
     seeitems(de) {

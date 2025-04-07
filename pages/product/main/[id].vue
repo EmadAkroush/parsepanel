@@ -401,6 +401,7 @@ export default {
 
     onPageChange(event) {
       this.currentPage = event?.page + 1;
+     this.$router.push({ params: { id: (this.currentPage + '0') - 1 } });
       this.getproduct(this.currentPage);
       console.log("event", this.currentPage);
     },
