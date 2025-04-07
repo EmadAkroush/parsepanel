@@ -232,6 +232,21 @@
 <style lang="scss">
 .main {
   background-color: #f3f4f6;
+  .p-paginator {
+    .p-paginator-first {
+      transform: rotate(180deg)
+    }
+    .p-paginator-prev {
+      transform: rotate(180deg)
+    }
+    .p-paginator-next {
+      transform: rotate(180deg)
+    }
+    .p-paginator-last {
+      transform: rotate(180deg)
+    }
+
+  }
   .sec1 {
     display: flex;
     justify-content: space-between;

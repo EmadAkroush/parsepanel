@@ -129,7 +129,7 @@
           <Paginator
             :rows="10"
             :totalRecords="totalRecords"
-            template="PageLinks "
+            template=" FirstPageLink PrevPageLink PageLinks  NextPageLink  LastPageLink "
             @page="onPageChange"
             :currentPage="currentPage"
           />
@@ -165,6 +165,21 @@
 <style lang="scss">
 .main {
   background-color: #f3f4f6;
+  .p-paginator {
+    .p-paginator-first {
+      transform: rotate(180deg)
+    }
+    .p-paginator-prev {
+      transform: rotate(180deg)
+    }
+    .p-paginator-next {
+      transform: rotate(180deg)
+    }
+    .p-paginator-last {
+      transform: rotate(180deg)
+    }
+
+  }
 
   .sec1 {
     display: flex;
