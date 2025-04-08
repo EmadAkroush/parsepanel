@@ -341,7 +341,7 @@ export default {
           method: "POST",
           body: { order_id: id, status: this.statusmodel.code },
         });
-        this.getproduct();
+        this.getproduct(this.currentPage);
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
         console.log(error);
@@ -356,7 +356,7 @@ export default {
           body: { trace_number: to  },
         });
         console.log("to", data);
-        this.getproduct();
+        this.getproduct(this.currentPage);
       } catch (error) {
         // errors.value = Object.values(error.data.data.message).flat();
         console.log(error);
