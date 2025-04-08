@@ -34,7 +34,7 @@
           >
             <!-- Header Section -->
             <template #header>
-              <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex flex-wrap items-center  gap-2">
                 <div class="flex justify-between items-center mb-4">
                   <div class="flex items-center">
                     <!-- <img class="w-10 h-10 rounded-full ml-4" src="path/to/avatar.png" alt="User Avatar"> -->
@@ -51,6 +51,9 @@
                       />
                     </div>
                   </div>
+                </div>
+                <div class="flex justify-center" v-if="spiner">
+                  <ProgressSpinner />
                 </div>
               </div>
             </template>
@@ -287,6 +290,7 @@ export default {
       statusmodel: null,
       data: null,
       toman: null,
+      spiner: true,
       products: [
         {
           name: "بررسی دلایل ایجاد صداهای عجیب و غریب در اتومبیل",
@@ -308,8 +312,10 @@ export default {
         this.product = await $fetch("/api/order", {
           query: { page: par },
         });
+        
         this.productsAll = this.product.data.orders;
         this.totalRecords = this.product.data.total;
+        this.spiner = false
       } catch (error) {
         console.log(error);
       } finally {
@@ -376,7 +382,8 @@ export default {
     },
   },
   beforeMount() {
-    this.getproduct();
+    const totalPages = Math.ceil(this.first / 10);
+    this.getproduct(totalPages);
   },
 };
 </script>
